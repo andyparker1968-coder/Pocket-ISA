@@ -4,63 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>My Portfolio · Pocket ISA offline copy</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232e7567'/%3E%3Cpath d='M8 23l5-8 4 4 7-11' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
 :root{--bg:#f4f0e7;--fg:#263d40;--card:#faf8f2;--border:#ded8cb;--muted:#e7e2d8;--muted-fg:#586969;--primary:#2e7567;--danger:#bf5549;--warm:#b68128;--blue:#4d8fe8;--shadow:0 6px 16px rgba(25,50,53,.06);--sans:"DM Sans","Trebuchet MS",sans-serif;--serif:Georgia,"Times New Roman",serif;--mono:"DM Mono","Courier New",monospace}
 *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px}button{font:inherit;color:inherit}.app-shell{min-height:100vh;display:flex}.sidebar{width:252px;flex:0 0 252px;background:#29464a;color:#f9f5eb;padding:26px 20px;display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:12px;padding:0 8px}.brand-mark{display:inline-grid;width:40px;height:40px;flex:0 0 40px;place-items:center;overflow:hidden;border-radius:14px}.brand-mark svg{display:block;width:100%;height:100%}.brand h2{margin:0;font:600 21px/1 var(--serif);letter-spacing:-.03em}.brand p{margin:5px 0 0;font:9px var(--mono);letter-spacing:.18em;text-transform:uppercase;opacity:.5}.sidebar-label{margin:56px 14px 12px;font:9px var(--mono);letter-spacing:.18em;text-transform:uppercase;opacity:.45}.nav-item{display:flex;align-items:center;gap:12px;min-height:48px;border-radius:16px;padding:0 14px;color:rgba(249,245,235,.7);font-weight:600}.nav-item.active{background:#34565a;color:#f9f5eb;box-shadow:inset 3px 0 #ed8767}.nav-icon{width:18px;text-align:center;color:#ed8767;font-size:16px}.main{width:min(100%,1160px);margin:0 auto;padding:48px 48px 60px}.topbar{display:none}.content{max-width:930px;margin:0 auto}.portfolio-tabs{display:flex;align-items:center;gap:8px;overflow:hidden;margin-bottom:28px}.tab{border:1px solid var(--border);background:var(--card);border-radius:16px;padding:7px 14px;font:600 12px var(--mono);white-space:nowrap}.tab.active{border-color:var(--fg);background:var(--fg);color:var(--bg)}.tab-add{color:var(--muted-fg);border-style:dashed;padding:7px 11px}.page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px}.eyebrow{margin:0;color:var(--muted-fg);font:500 10px var(--mono);letter-spacing:.2em;text-transform:uppercase}.page-title{margin:12px 0 0;font:600 clamp(42px,6vw,70px)/.96 var(--serif);letter-spacing:-.055em}.day-change{display:flex;align-items:center;gap:7px;margin-top:10px;font:13px var(--mono)}.positive{color:var(--primary)}.negative{color:var(--danger)}.muted{color:var(--muted-fg)}.badge{display:inline-block;border-radius:999px;padding:3px 8px;font:700 9px var(--mono);letter-spacing:.04em}.badge.positive{background:#dcece2}.badge.warm{background:#f2e8ce;color:var(--warm)}.badge.muted{background:var(--muted);color:var(--muted-fg)}.actions{display:flex;gap:8px}.button{display:inline-flex;align-items:center;gap:8px;min-height:44px;border:1px solid var(--border);border-radius:16px;background:var(--card);padding:0 15px;font:600 12px var(--mono)}.button.primary{border-color:var(--primary);background:var(--primary);color:var(--card)}.snapshot-note{margin-top:10px;color:var(--muted-fg);font:10px var(--mono);line-height:1.5}.panel{margin-top:40px;overflow:hidden;border:1px solid var(--border);border-radius:28px;background:var(--card);box-shadow:var(--shadow)}.panel-head{display:flex;align-items:center;border-bottom:1px solid var(--border);padding:16px 20px}.panel-head span{flex:1;color:var(--muted-fg);font:10px var(--mono);letter-spacing:.18em;text-transform:uppercase}.table-head{display:grid;grid-template-columns:1fr 120px 120px;padding:16px 20px;border-bottom:1px solid var(--border);color:var(--muted-fg);font:10px var(--mono);letter-spacing:.18em;text-transform:uppercase}.holding-row{display:grid;grid-template-columns:1fr 120px 120px;align-items:center;min-height:82px;padding:18px 20px;border-bottom:1px solid rgba(222,216,203,.72)}.holding-row:last-child{border-bottom:0}.holding-name,.holding-price,.holding-value{min-width:0}.holding-name strong,.holding-price strong,.holding-value strong{display:block;font-family:var(--mono);font-size:14px}.holding-name strong{font-family:var(--sans);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.holding-name span,.holding-price span,.holding-value span,.holding-value small{display:block;margin-top:5px;color:var(--muted-fg);font:10px var(--mono)}.holding-price,.holding-value{text-align:right}.holding-value strong{font-size:14px}.holding-value small{color:rgba(46,117,103,.75);font-size:9px}.cash-row{min-height:70px}.regular-row{background:rgba(46,117,103,.04)}.projection{margin-top:20px}.projection-toggle{width:100%;display:flex;align-items:center;gap:12px;border:0;background:none;padding:17px 20px;text-align:left;cursor:pointer}.projection-toggle .projection-title{flex:1}.projection-title strong{display:block;color:var(--muted-fg);font:10px var(--mono);letter-spacing:.18em;text-transform:uppercase}.projection-title span{display:block;margin-top:5px;font:600 13px var(--mono)}.chevron{font-size:17px;color:var(--muted-fg)}.projection-body{display:none;border-top:1px solid var(--border);padding:20px}.projection-body.open{display:block}.input-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.field{min-width:0}.field label{display:block;margin-bottom:8px;color:var(--muted-fg);font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase}.field-value{display:block;width:100%;min-width:0;max-width:100%;min-height:44px;border:1px solid var(--border);border-radius:16px;padding:12px 14px;font:13px var(--mono);background:rgba(255,255,255,.12)}.field-note{margin-top:6px;color:var(--muted-fg);font:10px var(--mono)}.results{margin-top:20px}.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.result-card{border:1px solid var(--border);border-radius:16px;background:rgba(231,226,216,.3);padding:16px}.result-card.result-positive{border-color:rgba(46,117,103,.3);background:rgba(46,117,103,.06)}.result-card.result-warning{border-color:rgba(191,85,73,.3);background:rgba(191,85,73,.05)}.result-value{margin:10px 0 0;font:600 28px/1 var(--serif)}.result-value.positive{color:var(--primary)}.result-value.negative{color:var(--danger)}.result-note{margin:9px 0 0;color:var(--muted-fg);font-size:11px;line-height:1.5}.small-note{margin:8px 0 0;color:rgba(110,125,125,.8);font:10px var(--mono)}.projection-placeholder{border-radius:16px;background:rgba(231,226,216,.5);padding:16px;color:var(--muted-fg);font-size:13px}.chart-panel{margin-top:24px}.chart-wrap{padding:16px 5px 13px}.portfolio-chart{display:block;width:100%;height:auto;min-height:250px;overflow:visible}.chart-grid{stroke:#e4dfd5;stroke-width:1}.chart-axis{fill:#788585;font:10px var(--mono)}.chart-marker{font:9px var(--mono)}.chart-dot{opacity:0;transition:opacity .15s}.portfolio-chart:hover .chart-dot{opacity:.95}.chart-empty{padding:48px 20px;text-align:center;color:var(--muted-fg);font-size:13px}.legend{display:flex;align-items:center;gap:18px;padding:3px 15px 5px;color:var(--muted-fg);font:10px var(--mono)}.legend i{display:inline-block;width:16px;height:8px;border-radius:5px;margin-right:6px;vertical-align:middle}.legend .actual{background:var(--blue)}.legend .projected{height:2px;border-radius:0;background:repeating-linear-gradient(90deg,#7b8790 0 5px,transparent 5px 8px)}.legend .growth{background:var(--danger)}.footer-note{margin:18px 3px 0;color:var(--muted-fg);font:10px/1.6 var(--mono)}@media(max-width:767px){.sidebar{display:none}.main{padding:18px 20px 56px}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.topbar .brand h2{font-size:22px}.topbar .brand p{display:none}.content{max-width:none}.page-header{align-items:flex-start;flex-direction:column}.actions{width:100%}.actions .button{flex:1;justify-content:center}.panel{margin-top:30px;border-radius:24px}.table-head{grid-template-columns:1fr 92px 102px;padding:14px 14px;font-size:9px}.holding-row{grid-template-columns:1fr 92px 102px;padding:15px 14px;min-height:76px}.holding-name strong{font-size:13px}.holding-price strong,.holding-value strong{font-size:12px}.holding-name span,.holding-price span,.holding-value span{font-size:9px}.input-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}.result-grid{grid-template-columns:1fr}.legend{gap:10px;padding-left:8px;flex-wrap:wrap}.snapshot-note{max-width:300px}}@media print{.sidebar,.topbar,.actions{display:none!important}.main{padding:20px}.panel{box-shadow:none;break-inside:avoid}.projection-body{display:block!important}.chart-panel{break-before:auto}}
  </style>
-   <style>
-     /* Match the rectangular appearance controls used by Pocket Pension and Mortgage. */
-     .appearance-grid input[type="color"] {
-       -webkit-appearance: none;
-       appearance: none;
-       display: block;
-       width: 100%;
-       height: 42px;
-       min-height: 42px;
-       border: 1px solid var(--border);
-       border-radius: 6px;
-       padding: 4px;
-       background: #fffefa;
-       overflow: hidden;
-     }
-     .appearance-grid input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-     .appearance-grid input[type="color"]::-webkit-color-swatch {
-       border: 0;
-       border-radius: 3px;
-     }
-     .appearance-grid input[type="color"]::-moz-color-swatch {
-       border: 0;
-       border-radius: 3px;
-     }
-     .appearance-grid select,
-     .appearance-grid .check-field .check-line {
-       border-radius: 6px;
-     }
-     .chart-wrap { position: relative; }
-     .chart-hover-tooltip {
-       position: absolute;
-       z-index: 5;
-       display: none;
-       min-width: 150px;
-       max-width: 220px;
-       border: 1px solid var(--border);
-       border-radius: 12px;
-       background: var(--card);
-       padding: 9px 11px;
-       color: var(--fg);
-       box-shadow: var(--shadow);
-       font-size: 11px;
-       line-height: 1.5;
-       pointer-events: none;
-     }
-     .chart-hover-tooltip.visible { display: block; }
-     .chart-hover-tooltip strong { display: block; margin-bottom: 3px; }
-     .chart-hover-line {
-       display: none;
-       pointer-events: none;
-     }
-   </style>
  <style>
  .panel-actions{display:flex;gap:7px}.row-actions{display:flex;justify-content:flex-end;gap:5px}.icon-button{border:1px solid var(--border);border-radius:10px;background:var(--card);padding:6px 8px;color:var(--muted-fg);font:600 10px var(--mono);cursor:pointer}.icon-button:hover{border-color:var(--primary);color:var(--primary)}.danger-button:hover{border-color:var(--danger);color:var(--danger)}.field-value{width:100%;color:var(--fg);font:13px var(--mono);outline:none}.field-value:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(46,117,103,.12)}.offline-status{margin:12px 0 0;color:var(--primary);font:10px var(--mono)}@media(max-width:767px){.panel-actions{gap:4px}.icon-button{padding:6px 5px;font-size:9px}.row-actions{flex-direction:column;align-items:flex-end}.table-head,.holding-row{grid-template-columns:1fr 92px 102px 45px}}
  </style>
@@ -345,19 +292,17 @@
     <text x="68" y="266" text-anchor="start" class="chart-axis">Jan 2025</text><text x="484" y="266" text-anchor="middle" class="chart-axis">Nov 2030</text><text x="900" y="266" text-anchor="end" class="chart-axis">Sept 2036</text>
    </svg><div class="legend" id="chart-legend"><span><i class="actual"></i>Portfolio history</span><span><i class="projected"></i>Average-growth forecast (8.1% pa)</span><span><i class="growth"></i>Your projection (6.9% net)</span></div></div></section>
        <div class="appearance-tools"><button type="button" class="appearance-link" id="appearance-toggle" aria-expanded="false" aria-controls="appearance-panel">Customise appearance</button><div class="appearance-panel hidden" id="appearance-panel"><div class="appearance-grid"><div class="field"><label for="theme-background">Background</label><input id="theme-background" type="color"></div><div class="field"><label for="theme-card">Panels</label><input id="theme-card" type="color"></div><div class="field"><label for="theme-text">Text</label><input id="theme-text" type="color"></div><div class="field"><label for="theme-accent">Accent color</label><input id="theme-accent" type="color"></div><div class="field"><label for="theme-font">Font style</label><select id="theme-font"><option value="classic">Classic</option><option value="modern">Modern</option><option value="rounded">Rounded</option><option value="mono">Monospace</option></select></div><div class="field check-field"><label for="theme-heading-bold">Heading weight</label><label class="check-line" for="theme-heading-bold"><input id="theme-heading-bold" type="checkbox"><span>Bold headings</span></label></div></div><div class="appearance-actions"><button type="button" class="button" id="appearance-reset">Reset appearance</button></div></div></div>
-       <p class="footer-note">This is a self-contained Pocket ISA portfolio page. It works offline, saves edits in this browser, and only contacts the Yahoo-backed service when you search or click Refresh prices.</p>
+       <p class="footer-note">This is a self-contained Pocket ISA portfolio page. It works offline, saves edits in this browser, and reads the published Google Finance sheet when you click Refresh prices.</p>
     </div>
   </main>
 </div>
 <script>
-const DATA = {"exportedAt":"2026-09-04T14:00:00.000Z","apiBaseUrl":"https://app.yourpocketapps.com","portfolioName":"My Portfolio","displayCurrency":"GBP","currencySymbol":"£","marketState":"CLOSED","totalValue":12500,"totalDayChange":42,"totalDayChangePercent":0.34,"priceAsOf":"2026-09-04T13:58:00.000Z","holdings":[{"symbol":"VUSA.L","name":"Vanguard S&P 500","shares":10,"purchaseDate":"2025-01-15","currentPrice":800,"value":8000,"changePercent":0.5,"gain":1000,"gainPct":14.3,"costBasis":7000,"effectiveShares":10,"effectiveValue":8000,"effectiveGain":1000,"effectiveGainPct":14.3,"depositedFromProjection":0,"quoteAsOf":"2026-09-04T13:58:00.000Z"}],"cashItems":[{"label":"Cash","depositDate":"2025-01-01","depositAmount":2500,"monthlyPurchase":100,"interestRate":4.5,"value":4769.3,"cashGain":269.3,"deposited":4500}],"regularDeposits":null,"projection":{"startDate":"2025-01-01","manualStartValue":"","monthlyDeposit":"500","depositSplit":"50/50","annualGrowthRate":"7","annualFeePct":"0.1","drawdownStartDate":"","monthlyDrawdown":"","targetDate":"2036-09-04","lumpSumDate":"2028-01-01","lumpSumAmount":"5000","inferredStartValue":9000,"netGrowthRate":6.9,"autoGrowthRate":8.1,"monthsSinceStart":20,"monthsUntilDrawdown":0,"valueWhenDrawdownStarts":12500,"valueAtMaturity":136473,"targetMonthsFromNow":120,"targetSurvives":true,"projectionKind":null,"totalMonthsToZero":null,"depletionDate":null,"totalDepositedAtMaturity":75000,"maxSustainableDrawdown":68},"chart":{"points":[{"month":-1,"label":"Aug 2026","histValue":12000,"actualHistValue":11950,"drawValue":null},{"month":0,"label":"Sep 2026","histValue":12500,"actualHistValue":12500,"drawValue":12500},{"month":1,"label":"Oct 2026","histValue":13000,"actualHistValue":null,"drawValue":13000}],"showActual":true,"showProjected":true,"autoGrowthRate":8.1,"monthsSinceStart":20,"monthsUntilDrawdown":0,"targetMonthsFromNow":120,"lumpSumMonths":16,"historical":{"version":3,"key":"2025-01-15||VUSA.L|2025-01-15|10||cash|Cash|2025-01-01|4500|100|4.5","from":"2025-01-15","points":[{"month":-20,"label":"Jan 2025","value":6500},{"month":-10,"label":"Nov 2025","value":10300},{"month":0,"label":"Sep 2026","value":11950}],"rate":8.1}},"appearance":{"background":"#f4f0e7","card":"#faf8f2","text":"#263d40","accent":"#2e7567","font":"classic","headingBold":false}};
+const DATA = {"exportedAt":"2026-09-04T14:00:00.000Z","apiBaseUrl":"","portfolioName":"My Portfolio","displayCurrency":"GBP","currencySymbol":"£","marketState":"CLOSED","totalValue":12500,"totalDayChange":42,"totalDayChangePercent":0.34,"priceAsOf":"2026-09-04T13:58:00.000Z","holdings":[{"symbol":"VUSA.L","name":"Vanguard S&P 500","shares":10,"purchaseDate":"2025-01-15","currentPrice":800,"value":8000,"changePercent":0.5,"gain":1000,"gainPct":14.3,"costBasis":7000,"effectiveShares":10,"effectiveValue":8000,"effectiveGain":1000,"effectiveGainPct":14.3,"depositedFromProjection":0,"quoteAsOf":"2026-09-04T13:58:00.000Z"}],"cashItems":[{"label":"Cash","depositDate":"2025-01-01","depositAmount":2500,"monthlyPurchase":100,"interestRate":4.5,"value":4769.3,"cashGain":269.3,"deposited":4500}],"regularDeposits":null,"projection":{"startDate":"2025-01-01","manualStartValue":"","monthlyDeposit":"500","depositSplit":"50/50","annualGrowthRate":"7","annualFeePct":"0.1","drawdownStartDate":"","monthlyDrawdown":"","targetDate":"2036-09-04","lumpSumDate":"2028-01-01","lumpSumAmount":"5000","inferredStartValue":9000,"netGrowthRate":6.9,"autoGrowthRate":8.1,"monthsSinceStart":20,"valueWhenDrawdownStarts":12500,"valueAtMaturity":136473,"targetMonthsFromNow":120,"targetSurvives":true,"projectionKind":null,"totalMonthsToZero":null,"depletionDate":null,"totalDepositedAtMaturity":75000,"maxSustainableDrawdown":68},"chart":{"points":[{"month":-1,"label":"Aug 2026","histValue":12000,"actualHistValue":11950,"drawValue":null},{"month":0,"label":"Sep 2026","histValue":12500,"actualHistValue":12500,"drawValue":12500},{"month":1,"label":"Oct 2026","histValue":13000,"actualHistValue":null,"drawValue":13000}],"showActual":true,"showProjected":true,"autoGrowthRate":8.1,"monthsSinceStart":20,"monthsUntilDrawdown":120,"targetMonthsFromNow":120,"lumpSumMonths":16,"historical":{"version":3,"key":"2025-01-15||VUSA.L|2025-01-15|10||cash|Cash|2025-01-01|4500|100|4.5","from":"2025-01-15","points":[{"month":-20,"label":"Jan 2025","value":6500},{"month":-10,"label":"Nov 2025","value":10300},{"month":0,"label":"Sep 2026","value":11950}],"rate":8.1}},"appearance":{"background":"#f4f0e7","card":"#faf8f2","text":"#263d40","accent":"#2e7567","font":"classic","headingBold":false}};
+DATA.apiBaseUrl = '';
 const STORAGE_KEY = 'pocket_isa_offline_' + (DATA.portfolioName || 'portfolio');
-const STABLE_API_BASE = 'https://app.yourpocketapps.com';
-const API_BASES = Array.from(new Set([
-  String(DATA.apiBaseUrl || '').replace(new RegExp('/$'), ''),
-  STABLE_API_BASE,
-  location.protocol === 'http:' || location.protocol === 'https:' ? location.origin.replace(new RegExp('/$'), '') : '',
-].filter(Boolean)));
+// Google Finance runs inside Google Sheets. This page reads a published sheet
+// with JSONP, so it can remain a static hosted webpage with no server relay.
+const GOOGLE_SHEET_STORAGE_KEY = 'pocket_isa_google_sheet_url';
 let state;
 try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || JSON.parse(JSON.stringify(DATA)); } catch (_) { state = JSON.parse(JSON.stringify(DATA)); }
   state.chart = state.chart || {};
@@ -476,24 +421,108 @@ const saveAppearance = () => {
   save();
   applyAppearance();
 };
-const fetchJson = async path => {
-  let lastError = null;
-  for (const base of API_BASES) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12000);
-    try {
-      const response = await fetch(base + path, { headers: { Accept: 'application/json' }, signal: controller.signal });
-      if (!response.ok) throw new Error('Live market request failed (' + response.status + ').');
-      return await response.json();
-    } catch (error) {
-      lastError = error;
-    } finally {
-      clearTimeout(timeout);
+const googleSheetUrl = () => {
+  let value = '';
+  try { value = localStorage.getItem(GOOGLE_SHEET_STORAGE_KEY) || ''; } catch (_) {}
+  if (!value) {
+    value = window.prompt(
+      'Paste the published Google Sheet gviz URL. Example: https://docs.google.com/spreadsheets/d/YOUR_ID/gviz/tq',
+      ''
+    ) || '';
+    if (value) {
+      try { localStorage.setItem(GOOGLE_SHEET_STORAGE_KEY, value.trim()); } catch (_) {}
     }
   }
-  throw new Error(lastError && lastError.name === 'AbortError'
-    ? 'Live prices timed out. Your saved prices are unchanged.'
-    : 'Live prices are unavailable. Your saved prices are unchanged.');
+  if (!value) throw new Error('Google Finance sheet is not configured. Refresh again and paste its published gviz URL.');
+  return value.trim();
+};
+const googleCell = cell => {
+  const value = cell && cell.v;
+  if (typeof value !== 'string') return value;
+  const dateMatch = value.match(/^Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)$/);
+  if (!dateMatch) return value;
+  const date = new Date(Date.UTC(Number(dateMatch[1]), Number(dateMatch[2]), Number(dateMatch[3]), Number(dateMatch[4] || 0), Number(dateMatch[5] || 0), Number(dateMatch[6] || 0)));
+  return date.toISOString().slice(0, 10);
+};
+const googleTable = sheetName => new Promise((resolve, reject) => {
+  const callback = '__pocketIsaGoogle_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+  let finished = false;
+  const script = document.createElement('script');
+  const finish = (error, value) => {
+    if (finished) return;
+    finished = true;
+    clearTimeout(timeout);
+    delete window[callback];
+    script.remove();
+    if (error) reject(error); else resolve(value);
+  };
+  const timeout = setTimeout(() => finish(new Error('Google Finance sheet timed out.')), 15000);
+  window[callback] = payload => {
+    try {
+      const table = payload && payload.table;
+      if (!table) throw new Error('Google Finance returned no table data.');
+      const headings = (table.cols || []).map((column, index) => String(column.label || column.id || 'column_' + index).trim().toLowerCase().replace(/[^a-z0-9]+/g, '_'));
+      const rows = (table.rows || []).map(row => {
+        const result = {};
+        headings.forEach((heading, index) => { result[heading] = googleCell(row.c && row.c[index]); });
+        return result;
+      });
+      finish(null, rows);
+    } catch (error) {
+      finish(error);
+    }
+  };
+  try {
+    const url = new URL(googleSheetUrl());
+    url.searchParams.set('sheet', sheetName);
+    url.searchParams.set('tqx', 'out:json;responseHandler:' + callback);
+    script.src = url.toString();
+    script.onerror = () => finish(new Error('Google Finance sheet could not be loaded. Check that it is published to the web.'));
+    document.head.appendChild(script);
+  } catch (error) {
+    finish(error);
+  }
+});
+const googleNumber = value => {
+  const result = Number(String(value == null ? '' : value).replace(/,/g, ''));
+  return Number.isFinite(result) ? result : NaN;
+};
+const fetchJson = async path => {
+  const parsed = new URL(path, 'https://pocket-isa.invalid');
+  const symbols = String(parsed.searchParams.get('symbols') || '')
+    .split(',').map(item => item.trim().toUpperCase()).filter(Boolean);
+  if (parsed.pathname === '/api/market/quote') {
+    const rows = await googleTable('Quotes');
+    return rows.filter(row => symbols.includes(String(row.symbol || '').trim().toUpperCase())).map(row => {
+      const symbolValue = String(row.symbol || '').trim().toUpperCase();
+      const price = googleNumber(row.display_price != null ? row.display_price : row.price);
+      return {
+        symbol: symbolValue,
+        price,
+        displayPrice: price,
+        currency: row.currency || DATA.displayCurrency || 'GBP',
+        shortName: row.name || symbolValue,
+        longName: row.name || symbolValue,
+        changePercent: googleNumber(row.change_percent),
+        asOf: row.as_of || new Date().toISOString(),
+        marketState: row.market_state || 'CLOSED',
+      };
+    }).filter(row => Number.isFinite(row.price) && row.price > 0);
+  }
+  if (parsed.pathname === '/api/market/history-monthly') {
+    const rows = await googleTable('History');
+    const from = parsed.searchParams.get('from') || '';
+    return symbols.map(symbol => ({
+      symbol,
+      points: rows.filter(row => String(row.symbol || '').trim().toUpperCase() === symbol && String(row.date || '') >= from)
+        .map(row => ({ date: String(row.date || ''), close: googleNumber(row.close) }))
+        .filter(point => point.date && Number.isFinite(point.close) && point.close > 0),
+    }));
+  }
+  if (parsed.pathname === '/api/market/search') {
+    throw new Error('Google Finance has no public symbol-search endpoint. Enter the exchange-qualified ticker manually, such as LON:VUSA.');
+  }
+  throw new Error('Unsupported Google Finance request');
 };
 const setLiveStatus = (message, error) => {
   const node = document.getElementById('live-status');
@@ -528,14 +557,10 @@ const displayRate = (sourceCurrency, targetCurrency, rates) => {
 };
 const addDisplayPrices = async quotes => {
   const list = Array.isArray(quotes) ? quotes : [];
-  const fxSymbols = fxSymbolsFor(list.map(q => q.currency).concat(DATA.displayCurrency || 'GBP'));
-  const fxQuotes = await fetchJson('/api/market/quote?symbols=' + encodeURIComponent(fxSymbols.join(',')));
-  const rates = { USD: 1 };
-  (Array.isArray(fxQuotes) ? fxQuotes : []).forEach(q => {
-    const match = String(q.symbol || '').match(/^([A-Z]{3})USD=X$/i);
-    if (match && Number(q.price) > 0) rates[match[1].toUpperCase()] = Number(q.price);
-  });
-  return list.map(q => Object.assign({}, q, { nativePrice: Number(q.price), displayPrice: Number(q.price) * displayRate(q.currency, DATA.displayCurrency || 'GBP', rates) }));
+  return list.map(q => Object.assign({}, q, {
+    nativePrice: Number(q.price),
+    displayPrice: Number(q.displayPrice != null ? q.displayPrice : q.price),
+  }));
 };
 async function refreshHistoricalData(force) {
   const identity = holdingHistoryKey();
@@ -760,63 +785,10 @@ function renderChart(result) {
     });
   }
   points.sort((a, b) => a.month - b.month);
-  document.getElementById('chart-wrap').innerHTML = offlineChartSvg(points, { todayMonth: 0, lumpSumMonth: result.hasLumpSum ? result.lumpSumMonths : null, maturityMonth: result.targetMonths }) + '<div class="legend">' +
+  document.getElementById('chart-wrap').innerHTML = offlineChartSvg(points, { todayMonth: 0, lumpSumMonth: result.hasLumpSum ? result.lumpSumMonths : null }) + '<div class="legend">' +
     (historical.length > 1 ? '<span><i class="actual"></i>Portfolio history</span>' : '') +
     (effectiveHistoricalRate !== null ? '<span><i class="projected"></i>Average-growth forecast (' + effectiveHistoricalRate.toFixed(1) + '% pa)</span>' : '') +
-    '<span><i class="growth"></i>Projection to maturity (' + result.netRate.toFixed(1) + '% net)</span></div><div class="chart-hover-tooltip" id="chart-hover-tooltip" role="status" aria-live="polite"></div>';
-  setupChartInteraction(points);
-}
-function setupChartInteraction(points) {
-  const wrap = document.getElementById('chart-wrap');
-  const svg = wrap && wrap.querySelector('.portfolio-chart');
-  const tooltip = document.getElementById('chart-hover-tooltip');
-  const hoverLine = svg && svg.querySelector('.chart-hover-line');
-  if (!svg || !tooltip || !points.length) return;
-  const show = event => {
-    const rect = svg.getBoundingClientRect();
-    if (!rect.width) return;
-    const viewBox = svg.viewBox.baseVal;
-    const mobile = viewBox.width <= 400;
-    const left = mobile ? 61 : 68;
-    const right = mobile ? 12 : 20;
-    const localX = (event.clientX - rect.left) / rect.width * viewBox.width;
-    const minMonth = Math.min.apply(null, points.map(point => Number(point.month)));
-    const maxMonth = Math.max.apply(null, points.map(point => Number(point.month)));
-    const monthAtPointer = minMonth + Math.max(0, Math.min(1, (localX - left) / Math.max(1, viewBox.width - left - right))) * (maxMonth - minMonth);
-    const point = points.reduce((best, item) => Math.abs(Number(item.month) - monthAtPointer) < Math.abs(Number(best.month) - monthAtPointer) ? item : best, points[0]);
-    const pointX = left + (Number(point.month) - minMonth) / Math.max(1, maxMonth - minMonth) * (viewBox.width - left - right);
-    if (hoverLine) {
-      hoverLine.setAttribute('x1', pointX);
-      hoverLine.setAttribute('x2', pointX);
-      hoverLine.style.display = 'block';
-    }
-    const date = new Date();
-    date.setDate(1);
-    date.setMonth(date.getMonth() + Number(point.month || 0));
-    const dateLabel = Number(point.month) === 0 ? 'Today · ' + date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
-      : Number(point.month) > 0 ? date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })
-      : (point.label || date.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }));
-    const rows = [];
-    const hasValue = value => value !== null && value !== undefined && Number.isFinite(Number(value));
-    if (hasValue(point.actualHistValue)) rows.push('Portfolio value: ' + whole(Number(point.actualHistValue)));
-    if (hasValue(point.histValue)) rows.push('Average-growth forecast: ' + whole(Number(point.histValue)));
-    if (hasValue(point.drawValue)) rows.push('Projection to maturity: ' + whole(Number(point.drawValue)));
-    tooltip.innerHTML = '<strong>' + esc(dateLabel) + '</strong>' + rows.map(row => '<span>' + esc(row) + '</span>').join('<br>');
-    tooltip.classList.add('visible');
-    const wrapRect = wrap.getBoundingClientRect();
-    const desiredLeft = event.clientX - wrapRect.left + 12;
-    const desiredTop = event.clientY - wrapRect.top - 14;
-    const tooltipWidth = tooltip.offsetWidth;
-    tooltip.style.left = Math.max(4, Math.min(wrap.clientWidth - tooltipWidth - 4, desiredLeft)) + 'px';
-    tooltip.style.top = Math.max(4, desiredTop) + 'px';
-  };
-  svg.addEventListener('pointermove', show);
-  svg.addEventListener('pointerdown', show);
-  svg.addEventListener('click', show);
-  svg.addEventListener('pointerleave', () => {
-    tooltip.classList.remove('visible');
-    if (hoverLine) hoverLine.style.display = 'none';
-  });
+    '<span><i class="growth"></i>Your projection (' + result.netRate.toFixed(1) + '% net)</span></div>';
 }
 function offlineChartSvg(points, markers) {
   if (points.length < 2) return '<div class="chart-empty">Add projection inputs to draw the portfolio graph.</div>';
@@ -904,21 +876,47 @@ function offlineChartSvg(points, markers) {
   return '<svg class="portfolio-chart" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Portfolio value over time">' + grid +
     marker(markers && markers.todayMonth, 'Today', '#8c989b', 0) +
     marker(markers && markers.lumpSumMonth, 'Lump sum deposit', '#d79b2f', 1) +
-    marker(markers && markers.maturityMonth, 'Maturity', '#bd3f32', 2) +
     '<g stroke="#2f75c8" stroke-width="' + (mobile ? '5' : '4') + '">' + path('actualHistValue') + '</g>' +
     '<g stroke="#4c5b5d" stroke-width="' + (mobile ? '4.5' : '3.5') + '" stroke-dasharray="' + (mobile ? '9 6' : '10 6') + '">' + path('histValue') + '</g>' +
     '<g stroke="#bd3f32" stroke-width="' + (mobile ? '5' : '4') + '">' + path('drawValue') + '</g>' +
-    dots + '<line class="chart-hover-line" x1="0" x2="0" y1="' + top + '" y2="' + (height - bottom) + '" stroke="#263d40" stroke-width="' + (mobile ? '2' : '1.5') + '"/>' + labels + '</svg>';
+    dots + labels + '</svg>';
 }
 function wireProjection() {
   const fields = [['projection-start-date','startDate'],['projection-start-value','manualStartValue'],['projection-monthly-deposit','monthlyDeposit'],['projection-growth-rate','annualGrowthRate'],['projection-fee','annualFeePct'],['projection-target-date','targetDate'],['projection-lump-sum-date','lumpSumDate'],['projection-lump-sum-amount','lumpSumAmount']];
   fields.forEach(pair => { const node = input(pair[0]); if (node) node.addEventListener('input', () => { state.projection[pair[1]] = node.value; render(); }); });
 }
+function manualRefreshPrices() {
+  const now = new Date().toISOString();
+  let updated = 0;
+  state.holdings = state.holdings.map(holding => {
+    const answer = window.prompt(
+      'Google Finance is unavailable. Enter the current ' + (DATA.displayCurrency || 'display-currency') + ' price for ' + holding.symbol + ' (Cancel to leave unchanged):',
+      String(holding.currentPrice == null ? '' : holding.currentPrice)
+    );
+    if (answer === null) return holding;
+    const value = Number.parseFloat(String(answer).replace(/,/g, ''));
+    if (!Number.isFinite(value) || value < 0) return holding;
+    updated += 1;
+    return Object.assign({}, holding, {
+      currentPrice: value,
+      nativePrice: value,
+      quoteCurrency: DATA.displayCurrency || holding.quoteCurrency,
+      quoteAsOf: now,
+      changePercent: null,
+    });
+  });
+  if (updated) {
+    state.priceAsOf = now;
+    render();
+    setLiveStatus(updated + ' price' + (updated === 1 ? '' : 's') + ' saved manually · Google Finance unavailable', true);
+  }
+  return updated;
+}
 async function refreshPrices() {
   const button = document.getElementById('refresh-prices');
   if (!state.holdings.length) { setLiveStatus('Add a holding first', true); return; }
   if (button) { button.disabled = true; button.textContent = 'Refreshing…'; }
-  setLiveStatus('Fetching Yahoo prices…', false);
+  setLiveStatus('Fetching Google Finance prices…', false);
   try {
     const rawQuotes = await fetchJson('/api/market/quote?symbols=' + encodeURIComponent(state.holdings.map(h => h.symbol).join(',')));
     const quotes = await addDisplayPrices(rawQuotes);
@@ -944,7 +942,8 @@ async function refreshPrices() {
     render();
     setLiveStatus(updated + ' price' + (updated === 1 ? '' : 's') + ' refreshed' + (historyUpdated ? ' · graph updated' : ' · graph history unchanged'), false);
   } catch (error) {
-    setLiveStatus(error && error.message ? error.message : 'Live refresh unavailable', true);
+    const manuallyUpdated = manualRefreshPrices();
+    if (!manuallyUpdated) setLiveStatus(error && error.message ? error.message : 'Live refresh unavailable', true);
   } finally {
     if (button) { button.disabled = false; button.textContent = 'Refresh prices'; }
   }
@@ -953,7 +952,7 @@ async function addHolding(existing) {
   let selected = existing || null;
   let quote = null;
   try {
-    const query = window.prompt(existing ? 'Search ticker or company to edit' : 'Search Yahoo ticker or company', existing ? existing.symbol : '');
+    const query = window.prompt(existing ? 'Enter exchange-qualified ticker to edit' : 'Enter exchange-qualified Google Finance ticker', existing ? existing.symbol : '');
     if (!query) return;
     const results = await fetchJson('/api/market/search?q=' + encodeURIComponent(query.trim()));
     if (!Array.isArray(results) || results.length === 0) throw new Error('No symbols found for "' + query + '".');
@@ -990,7 +989,7 @@ async function addHolding(existing) {
   }
   render();
   if (!document.getElementById('live-status').classList.contains('negative')) {
-    setLiveStatus(quote ? 'Saved with Yahoo price and historical data' : 'Saved with captured price and historical data', !quote);
+    setLiveStatus(quote ? 'Saved with Google Finance price and historical data' : 'Saved with captured price and historical data', !quote);
   }
 }
 async function addCash(existing) {
