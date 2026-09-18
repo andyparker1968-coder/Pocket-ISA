@@ -296,14 +296,13 @@
     </div>
   </main>
 </div>
-<script src="config.js?=v3"></script>
+<script src="config.js"></script>
 <script>
 const DATA = {"exportedAt":"2026-09-04T14:00:00.000Z","apiBaseUrl":"","portfolioName":"My Portfolio","displayCurrency":"GBP","currencySymbol":"£","marketState":"CLOSED","totalValue":12500,"totalDayChange":42,"totalDayChangePercent":0.34,"priceAsOf":"2026-09-04T13:58:00.000Z","holdings":[{"symbol":"VUSA.L","name":"Vanguard S&P 500","shares":10,"purchaseDate":"2025-01-15","currentPrice":800,"value":8000,"changePercent":0.5,"gain":1000,"gainPct":14.3,"costBasis":7000,"effectiveShares":10,"effectiveValue":8000,"effectiveGain":1000,"effectiveGainPct":14.3,"depositedFromProjection":0,"quoteAsOf":"2026-09-04T13:58:00.000Z"}],"cashItems":[{"label":"Cash","depositDate":"2025-01-01","depositAmount":2500,"monthlyPurchase":100,"interestRate":4.5,"value":4769.3,"cashGain":269.3,"deposited":4500}],"regularDeposits":null,"projection":{"startDate":"2025-01-01","manualStartValue":"","monthlyDeposit":"500","depositSplit":"50/50","annualGrowthRate":"7","annualFeePct":"0.1","drawdownStartDate":"","monthlyDrawdown":"","targetDate":"2036-09-04","lumpSumDate":"2028-01-01","lumpSumAmount":"5000","inferredStartValue":9000,"netGrowthRate":6.9,"autoGrowthRate":8.1,"monthsSinceStart":20,"valueWhenDrawdownStarts":12500,"valueAtMaturity":136473,"targetMonthsFromNow":120,"targetSurvives":true,"projectionKind":null,"totalMonthsToZero":null,"depletionDate":null,"totalDepositedAtMaturity":75000,"maxSustainableDrawdown":68},"chart":{"points":[{"month":-1,"label":"Aug 2026","histValue":12000,"actualHistValue":11950,"drawValue":null},{"month":0,"label":"Sep 2026","histValue":12500,"actualHistValue":12500,"drawValue":12500},{"month":1,"label":"Oct 2026","histValue":13000,"actualHistValue":null,"drawValue":13000}],"showActual":true,"showProjected":true,"autoGrowthRate":8.1,"monthsSinceStart":20,"monthsUntilDrawdown":120,"targetMonthsFromNow":120,"lumpSumMonths":16,"historical":{"version":3,"key":"2025-01-15||VUSA.L|2025-01-15|10||cash|Cash|2025-01-01|4500|100|4.5","from":"2025-01-15","points":[{"month":-20,"label":"Jan 2025","value":6500},{"month":-10,"label":"Nov 2025","value":10300},{"month":0,"label":"Sep 2026","value":11950}],"rate":8.1}},"appearance":{"background":"#f4f0e7","card":"#faf8f2","text":"#263d40","accent":"#2e7567","font":"classic","headingBold":false}};
 DATA.apiBaseUrl = '';
 const STORAGE_KEY = 'pocket_isa_offline_' + (DATA.portfolioName || 'portfolio');
-// Direct Finnhub browser adapter. The key is intentionally supplied in the
-// local config.js file for this public static version; it is not a secret once
-// published. localStorage keeps the latest successful state for offline use.
+// The browser calls the configured serverless relay. The Finnhub key stays
+// server-side; localStorage keeps the latest successful state for offline use.
 let state;
 try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || JSON.parse(JSON.stringify(DATA)); } catch (_) { state = JSON.parse(JSON.stringify(DATA)); }
   state.chart = state.chart || {};
@@ -436,90 +435,41 @@ const marketSymbolParts = value => {
   if (original.endsWith('.L')) return { symbol: original.slice(0, -2), exchange: 'LSE' };
   return { symbol: original, exchange: '' };
 };
-const finnhubApiRequest = async (path, params) => {
-  const key = String(window.FINNHUB_API_KEY || '').trim();
-  if (!key || key === 'PASTE_YOUR_FINNHUB_KEY_HERE') throw new Error('Finnhub API key is not configured in config.js.');
-  const url = new URL('https://finnhub.io/api/v1' + path);
+const relayRequest = async (path, params) => {
+  const configuredApiBase = String(window.POCKET_ISA_API_BASE || '').replace(/\/+$/, '');
+  const url = new URL(path, configuredApiBase || window.location.origin);
   Object.entries(params || {}).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, value);
   });
-  url.searchParams.set('token', key);
   let response;
   try {
     response = await fetch(url.toString(), { headers: { Accept: 'application/json' } });
   } catch (_) {
-    throw new Error('Finnhub could not be reached from this browser. Saved prices remain available offline.');
+    throw new Error('The live market-data relay could not be reached. Saved prices remain available offline.');
   }
   let payload = null;
   try { payload = await response.json(); } catch (_) {}
   if (!response.ok || (payload && payload.error)) {
-    throw new Error(payload && payload.error ? String(payload.error) : 'Finnhub returned an error.');
+    throw new Error(payload && payload.error ? String(payload.error) : 'The market-data relay returned an error.');
   }
   return payload;
-};
-const finnhubSymbol = value => {
-  const original = String(value || '').trim().toUpperCase();
-  if (original.startsWith('LON:')) return original.slice(4) + '.L';
-  return original;
-};
-const quoteFromFinnhub = (requestedSymbol, payload) => {
-  const parts = marketSymbolParts(requestedSymbol);
-  const price = googleNumber(payload && payload.c);
-  if (!Number.isFinite(price) || price <= 0) return null;
-  const asOf = payload.t ? new Date(Number(payload.t) * 1000).toISOString() : new Date().toISOString();
-  return {
-    symbol: String(requestedSymbol).trim().toUpperCase(),
-    price,
-    displayPrice: price,
-    currency: DATA.displayCurrency || 'GBP',
-    shortName: parts.symbol || requestedSymbol,
-    longName: parts.symbol || requestedSymbol,
-    changePercent: googleNumber(payload.dp),
-    asOf,
-    marketState: 'UNKNOWN',
-  };
 };
 const fetchJson = async path => {
   const parsed = new URL(path, 'https://pocket-isa.invalid');
   const symbols = String(parsed.searchParams.get('symbols') || '')
     .split(',').map(item => item.trim().toUpperCase()).filter(Boolean);
   if (parsed.pathname === '/api/market/quote') {
-    return (await Promise.all(symbols.map(async requestedSymbol => {
-      const payload = await finnhubApiRequest('/quote', { symbol: finnhubSymbol(requestedSymbol) });
-      return quoteFromFinnhub(requestedSymbol, payload);
-    }))).filter(Boolean);
+    return relayRequest('/api/market/quote', { symbols: symbols.join(',') });
   }
   if (parsed.pathname === '/api/market/history-monthly') {
     const from = parsed.searchParams.get('from') || '';
-    return Promise.all(symbols.map(async requestedSymbol => {
-      const fromDate = from ? new Date(from + 'T00:00:00') : new Date(Date.now() - 5 * 365 * 24 * 60 * 60 * 1000);
-      const payload = await finnhubApiRequest('/stock/candle', {
-        symbol: finnhubSymbol(requestedSymbol),
-        resolution: 'M',
-        from: Math.floor(fromDate.getTime() / 1000),
-        to: Math.floor(Date.now() / 1000),
-      });
-      const points = Array.isArray(payload && payload.t) && Array.isArray(payload.c)
-        ? payload.t.map((timestamp, index) => ({
-          date: new Date(Number(timestamp) * 1000).toISOString().slice(0, 10),
-          close: googleNumber(payload.c[index]),
-        })).filter(point => point.date && Number.isFinite(point.close) && point.close > 0)
-        : [];
-      return { symbol: requestedSymbol, points };
-    }));
+    return relayRequest('/api/market/history-monthly', { symbols: symbols.join(','), from });
   }
   if (parsed.pathname === '/api/market/search') {
     const query = parsed.searchParams.get('q') || '';
-    const payload = await finnhubApiRequest('/search', { q: query });
-    return (Array.isArray(payload && payload.result) ? payload.result : []).map(item => ({
-      symbol: String(item.symbol || ''),
-      shortName: item.description || item.displaySymbol || item.symbol,
-      longName: item.description || item.displaySymbol || item.symbol,
-      exchange: item.type || '',
-      currency: '',
-    })).filter(item => item.symbol);
+    return relayRequest('/api/market/search', { q: query });
   }
-  throw new Error('Unsupported Finnhub request');
+  throw new Error('Unsupported market-data request');
 };
 const setLiveStatus = (message, error) => {
   const node = document.getElementById('live-status');
