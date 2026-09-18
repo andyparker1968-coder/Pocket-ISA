@@ -1,14 +1,14 @@
-# Pocket ISA GitHub Pages + Netlify Finnhub relay
+# Pocket ISA GitHub Pages + Netlify Yahoo Finance relay
 
 This version uses:
 
 ```text
-Squarespace or GitHub Pages → Netlify Function → Finnhub
+Squarespace or GitHub Pages → Netlify Function → Yahoo Finance
 ```
 
-The Pocket ISA page remains public, but the Finnhub key stays in Vercel and
-never reaches the iPhone or any visitor's browser. This avoids the direct
-Yahoo/Finnhub browser request that was failing on iPhone Safari.
+The Pocket ISA page remains public, and Yahoo Finance is called only from the
+Netlify Function. Yahoo never receives a browser request from Squarespace or
+iPhone Safari.
 
 ## Netlify relay
 
@@ -19,21 +19,13 @@ netlify.toml
 netlify/functions/market.js
 ```
 
-Add this Netlify environment variable:
-
-   ```text
-   FINNHUB_API_KEY=your_replacement_key_here
-   ```
-
-Use a newly generated key. The key previously posted in chat should be
-revoked and must not be reused.
-
-Set `FRONTEND_ORIGIN` to the site that displays Pocket ISA. For Squarespace,
-use both origins if needed:
+Set the frontend origin in Netlify:
 
    ```text
    FRONTEND_ORIGIN=https://www.yourpocketapps.com,https://yourpocketapps.com
    ```
+
+No Yahoo or Finnhub API key is needed in this relay.
 
 Deploy the Netlify site. This bundle is already configured to use:
 
@@ -64,9 +56,9 @@ successful portfolio state locally for offline viewing.
 
 ## Data coverage
 
-Finnhub's free real-time coverage is strongest for US markets. London-listed
-and other international instruments may be delayed or end-of-day. Search
-returns instruments covered by Finnhub.
+Yahoo Finance data may be delayed, rate-limited, or changed without notice.
+London-listed symbols such as `VUSA.L` are requested server-side and Yahoo's
+`GBp` pence prices are converted to pounds for the Pocket ISA display.
 
 Documentation:
-https://api.finnhub.io/docs/api
+https://finance.yahoo.com/
