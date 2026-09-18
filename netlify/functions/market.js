@@ -88,7 +88,10 @@ const routeName = (url, params) => {
   if (fromQuery) return fromQuery;
   const marker = '/.netlify/functions/market';
   const index = url.pathname.indexOf(marker);
-  return index >= 0 ? url.pathname.slice(index + marker.length).replace(/^\/+/, '') : '';
+  if (index >= 0) return url.pathname.slice(index + marker.length).replace(/^\/+/, '');
+  const apiMarker = '/api/market/';
+  const apiIndex = url.pathname.indexOf(apiMarker);
+  return apiIndex >= 0 ? url.pathname.slice(apiIndex + apiMarker.length).replace(/^\/+/, '') : '';
 };
 
 exports.handler = async event => {
