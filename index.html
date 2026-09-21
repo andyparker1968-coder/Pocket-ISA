@@ -929,6 +929,7 @@ async function addHolding(existing) {
   const costValue = window.prompt('Average cost per share', selected.avgCost != null ? selected.avgCost : priceValue);
   const item = Object.assign({}, selected, { symbol: symbolValue, name: nameValue.trim(), shares: number(sharesValue), purchaseDate: purchaseDateValue, currentPrice: number(priceValue), nativePrice: quote ? Number(quote.nativePrice) : selected.nativePrice, quoteCurrency: quote ? quote.currency : selected.quoteCurrency, avgCost: number(costValue), changePercent: quote ? Number(quote.changePercent) || 0 : (selected.changePercent || null), quoteAsOf: quote ? quote.asOf : selected.quoteAsOf });
   if (existing) state.holdings = state.holdings.map(h => h.symbol === existing.symbol ? item : h); else state.holdings.push(item);
+  save();
   try {
     await refreshHistoricalData(true);
   } catch (error) {
