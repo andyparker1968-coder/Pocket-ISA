@@ -449,7 +449,7 @@ const marketSymbolParts = value => {
   return { symbol: original, exchange: '' };
 };
 const relayRequest = async (path, params) => {
-  const configuredApiBase = String(window.POCKET_ISA_API_BASE || '').replace(/\/+$/, '');
+  const configuredApiBase = String(DATA.apiBaseUrl || '').replace(/\/+$/, '');
   const url = new URL(path, configuredApiBase || window.location.origin);
   Object.entries(params || {}).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, value);
