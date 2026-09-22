@@ -1,276 +1,1010 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Pocket Pension — an offline retirement portfolio tracker and projection tool.">
-  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon.png">
-  <link rel="shortcut icon" href="./icons/favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
-  <title>Pocket Pension · Offline copy</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon.png">
+<link rel="shortcut icon" href="./icons/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+<title>Pocket ISA</title>
+<style>
+:root{--bg:#f4f0e7;--fg:#263d40;--card:#faf8f2;--border:#ded8cb;--muted:#e7e2d8;--muted-fg:#586969;--primary:#2e7567;--danger:#bf5549;--warm:#b68128;--blue:#4d8fe8;--shadow:0 6px 16px rgba(25,50,53,.06);--sans:"DM Sans","Trebuchet MS",sans-serif;--serif:Georgia,"Times New Roman",serif;--mono:"DM Mono","Courier New",monospace}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px}button{font:inherit;color:inherit}.app-shell{min-height:100vh;display:flex}.sidebar{width:252px;flex:0 0 252px;background:#29464a;color:#f9f5eb;padding:26px 20px;display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:12px;padding:0 8px}.brand-mark{display:inline-grid;width:40px;height:40px;flex:0 0 40px;place-items:center;overflow:hidden;border-radius:14px}.brand-mark svg{display:block;width:100%;height:100%}.brand h2{margin:0;font:600 21px/1 var(--serif);letter-spacing:-.03em}.brand p{margin:5px 0 0;font:9px var(--mono);letter-spacing:.18em;text-transform:uppercase;opacity:.5}.sidebar-label{margin:56px 14px 12px;font:9px var(--mono);letter-spacing:.18em;text-transform:uppercase;opacity:.45}.nav-item{display:flex;align-items:center;gap:12px;min-height:48px;border-radius:16px;padding:0 14px;color:rgba(249,245,235,.7);font-weight:600}.nav-item.active{background:#34565a;color:#f9f5eb;box-shadow:inset 3px 0 #ed8767}.nav-icon{width:18px;text-align:center;color:#ed8767;font-size:16px}.main{width:min(100%,1160px);margin:0 auto;padding:48px 48px 60px}.topbar{display:none}.content{max-width:930px;margin:0 auto}.portfolio-tabs{display:flex;align-items:center;gap:8px;overflow:hidden;margin-bottom:28px}.tab{border:1px solid var(--border);background:var(--card);border-radius:16px;padding:7px 14px;font:600 12px var(--mono);white-space:nowrap}.tab.active{border-color:var(--fg);background:var(--fg);color:var(--bg)}.tab-add{color:var(--muted-fg);border-style:dashed;padding:7px 11px}.page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px}.eyebrow{margin:0;color:var(--muted-fg);font:500 10px var(--mono);letter-spacing:.2em;text-transform:uppercase}.page-title{margin:12px 0 0;font:600 clamp(42px,6vw,70px)/.96 var(--serif);letter-spacing:-.055em}.day-change{display:flex;align-items:center;gap:7px;margin-top:10px;font:13px var(--mono)}.positive{color:var(--primary)}.negative{color:var(--danger)}.muted{color:var(--muted-fg)}.badge{display:inline-block;border-radius:999px;padding:3px 8px;font:700 9px var(--mono);letter-spacing:.04em}.badge.positive{background:#dcece2}.badge.warm{background:#f2e8ce;color:var(--warm)}.badge.muted{background:var(--muted);color:var(--muted-fg)}.actions{display:flex;gap:8px}.button{display:inline-flex;align-items:center;gap:8px;min-height:44px;border:1px solid var(--border);border-radius:16px;background:var(--card);padding:0 15px;font:600 12px var(--mono)}.button.primary{border-color:var(--primary);background:var(--primary);color:var(--card)}.snapshot-note{margin-top:10px;color:var(--muted-fg);font:10px var(--mono);line-height:1.5}.panel{margin-top:40px;overflow:hidden;border:1px solid var(--border);border-radius:28px;background:var(--card);box-shadow:var(--shadow)}.panel-head{display:flex;align-items:center;border-bottom:1px solid var(--border);padding:16px 20px}.panel-head span{flex:1;color:var(--muted-fg);font:10px var(--mono);letter-spacing:.18em;text-transform:uppercase}.table-head{display:grid;grid-template-columns:1fr 120px 120px;padding:16px 20px;border-bottom:1px solid var(--border);color:var(--muted-fg);font:10px var(--mono);letter-spacing:.18em;text-transform:uppercase}.holding-row{display:grid;grid-template-columns:1fr 120px 120px;align-items:center;min-height:82px;padding:18px 20px;border-bottom:1px solid rgba(222,216,203,.72)}.holding-row:last-child{border-bottom:0}.holding-name,.holding-price,.holding-value{min-width:0}.holding-name strong,.holding-price strong,.holding-value strong{display:block;font-family:var(--mono);font-size:14px}.holding-name strong{font-family:var(--sans);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.holding-name span,.holding-price span,.holding-value span,.holding-value small{display:block;margin-top:5px;color:var(--muted-fg);font:10px var(--mono)}.holding-price,.holding-value{text-align:right}.holding-value strong{font-size:14px}.holding-value small{color:rgba(46,117,103,.75);font-size:9px}.cash-row{min-height:70px}.regular-row{background:rgba(46,117,103,.04)}.projection{margin-top:20px}.projection-toggle{width:100%;display:flex;align-items:center;gap:12px;border:0;background:none;padding:17px 20px;text-align:left;cursor:pointer}.projection-toggle .projection-title{flex:1}.projection-title strong{display:block;color:var(--muted-fg);font:10px var(--mono);letter-spacing:.18em;text-transform:uppercase}.projection-title span{display:block;margin-top:5px;font:600 13px var(--mono)}.chevron{font-size:17px;color:var(--muted-fg)}.projection-body{display:none;border-top:1px solid var(--border);padding:20px}.projection-body.open{display:block}.input-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.field{min-width:0}.field label{display:block;margin-bottom:8px;color:var(--muted-fg);font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase}.field-value{display:block;width:100%;min-width:0;max-width:100%;min-height:44px;border:1px solid var(--border);border-radius:16px;padding:12px 14px;font:13px var(--mono);background:rgba(255,255,255,.12)}.field-note{margin-top:6px;color:var(--muted-fg);font:10px var(--mono)}.results{margin-top:20px}.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.result-card{border:1px solid var(--border);border-radius:16px;background:rgba(231,226,216,.3);padding:16px}.result-card.result-positive{border-color:rgba(46,117,103,.3);background:rgba(46,117,103,.06)}.result-card.result-warning{border-color:rgba(191,85,73,.3);background:rgba(191,85,73,.05)}.result-value{margin:10px 0 0;font:600 28px/1 var(--serif)}.result-value.positive{color:var(--primary)}.result-value.negative{color:var(--danger)}.result-note{margin:9px 0 0;color:var(--muted-fg);font-size:11px;line-height:1.5}.small-note{margin:8px 0 0;color:rgba(110,125,125,.8);font:10px var(--mono)}.projection-placeholder{border-radius:16px;background:rgba(231,226,216,.5);padding:16px;color:var(--muted-fg);font-size:13px}.chart-panel{margin-top:24px}.chart-wrap{padding:16px 5px 13px}.portfolio-chart{display:block;width:100%;height:auto;min-height:250px;overflow:visible}.chart-grid{stroke:#e4dfd5;stroke-width:1}.chart-axis{fill:#788585;font:10px var(--mono)}.chart-marker{font:9px var(--mono)}.chart-dot{opacity:0;transition:opacity .15s}.portfolio-chart:hover .chart-dot{opacity:.95}.chart-empty{padding:48px 20px;text-align:center;color:var(--muted-fg);font-size:13px}.legend{display:flex;align-items:center;gap:18px;padding:3px 15px 5px;color:var(--muted-fg);font:10px var(--mono)}.legend i{display:inline-block;width:16px;height:8px;border-radius:5px;margin-right:6px;vertical-align:middle}.legend .actual{background:var(--blue)}.legend .projected{height:2px;border-radius:0;background:repeating-linear-gradient(90deg,#7b8790 0 5px,transparent 5px 8px)}.legend .growth{background:var(--danger)}.footer-note{margin:18px 3px 0;color:var(--muted-fg);font:10px/1.6 var(--mono)}@media(max-width:767px){.sidebar{display:none}.main{padding:18px 20px 56px}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.topbar .brand h2{font-size:22px}.topbar .brand p{display:none}.content{max-width:none}.page-header{align-items:flex-start;flex-direction:column}.actions{width:100%}.actions .button{flex:1;justify-content:center}.panel{margin-top:30px;border-radius:24px}.table-head{grid-template-columns:1fr 92px 102px;padding:14px 14px;font-size:9px}.holding-row{grid-template-columns:1fr 92px 102px;padding:15px 14px;min-height:76px}.holding-name strong{font-size:13px}.holding-price strong,.holding-value strong{font-size:12px}.holding-name span,.holding-price span,.holding-value span{font-size:9px}.input-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}.result-grid{grid-template-columns:1fr}.legend{gap:10px;padding-left:8px;flex-wrap:wrap}.snapshot-note{max-width:300px}}@media print{.sidebar,.topbar,.actions{display:none!important}.main{padding:20px}.panel{box-shadow:none;break-inside:avoid}.projection-body{display:block!important}.chart-panel{break-before:auto}}
+ </style>
+ <style>
+ .panel-actions{display:flex;gap:7px}.row-actions{display:flex;justify-content:flex-end;gap:5px}.icon-button{border:1px solid var(--border);border-radius:10px;background:var(--card);padding:6px 8px;color:var(--muted-fg);font:600 10px var(--mono);cursor:pointer}.icon-button:hover{border-color:var(--primary);color:var(--primary)}.danger-button:hover{border-color:var(--danger);color:var(--danger)}.field-value{width:100%;color:var(--fg);font:13px var(--mono);outline:none}.field-value:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(46,117,103,.12)}.offline-status{margin:12px 0 0;color:var(--primary);font:10px var(--mono)}@media(max-width:767px){.panel-actions{gap:4px}.icon-button{padding:6px 5px;font-size:9px}.row-actions{flex-direction:column;align-items:flex-end}.table-head,.holding-row{grid-template-columns:1fr 92px 102px 45px}}
+ </style>
   <style>
-    :root{--bg:#f4f0e7;--fg:#263d40;--card:#faf8f2;--border:#ded8cb;--muted:#e7e2d8;--muted-fg:#6e7d7d;--primary:#2e7567;--primary-soft:#dcece2;--accent:#b68128;--accent-soft:#f2e8ce;--danger:#bf5549;--blue:#4d8fe8;--shadow:0 6px 16px rgba(25,50,53,.06);--sans:"DM Sans","Trebuchet MS",sans-serif;--serif:Georgia,"Times New Roman",serif;--mono:"DM Mono","Courier New",monospace}
-    *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px}button,input,select{font:inherit;color:inherit}button{cursor:pointer}.app-shell{min-height:100vh}.main{width:min(1160px,100%);margin:0 auto;padding:28px 28px 60px}.content{max-width:980px;margin:0 auto}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:34px}.brand{display:flex;align-items:center;gap:12px}.brand-mark{display:grid;width:40px;height:40px;place-items:center;border-radius:14px;background:#eee9df;overflow:hidden}.brand-mark svg{display:block;width:100%;height:100%}.brand h1{margin:0;font:600 22px/1 var(--serif);letter-spacing:-.03em}.brand p{margin:5px 0 0;font:9px var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--muted-fg)}.badge{border-radius:999px;padding:4px 9px;background:var(--muted);color:var(--muted-fg);font:700 9px var(--mono);letter-spacing:.06em;text-transform:uppercase}.page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:22px}.eyebrow{margin:0;color:var(--muted-fg);font:500 10px var(--mono);letter-spacing:.2em;text-transform:uppercase}.page-title{margin:12px 0 0;font:600 clamp(42px,7vw,70px)/.94 var(--serif);letter-spacing:-.055em}.hero-note{margin:11px 0 0;color:var(--muted-fg);font:11px var(--mono)}.actions{display:flex;gap:8px;flex-wrap:wrap}.button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;border:1px solid var(--border);border-radius:15px;background:var(--card);padding:0 14px;font:600 11px var(--mono)}.button.primary{border-color:var(--primary);background:var(--primary);color:var(--card)}.button.accent{border-color:var(--accent);background:var(--accent);color:#fff}.button.danger{color:var(--danger)}.button:disabled{cursor:wait;opacity:.6}.snapshot-note{margin:10px 0 0;color:var(--muted-fg);font:10px/1.5 var(--mono)}.panel{margin-top:30px;overflow:hidden;border:1px solid var(--border);border-radius:27px;background:var(--card);box-shadow:var(--shadow)}.panel-head{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);padding:16px 20px}.panel-head h2{flex:1;margin:0;color:var(--muted-fg);font:500 10px var(--mono);letter-spacing:.18em;text-transform:uppercase}.table-head,.item-row{display:grid;grid-template-columns:minmax(0,1fr) 150px 155px 92px;gap:12px;align-items:center}.table-head{padding:14px 20px;border-bottom:1px solid var(--border);color:var(--muted-fg);font:10px var(--mono);letter-spacing:.16em;text-transform:uppercase}.item-row{min-height:84px;padding:17px 20px;border-bottom:1px solid rgba(222,216,203,.72)}.item-row:last-child{border-bottom:0}.item-name strong,.item-value strong{display:block;font-size:14px}.item-name strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item-name span,.item-price span,.item-value span,.item-value small{display:block;margin-top:5px;color:var(--muted-fg);font:10px var(--mono)}.item-price,.item-value{text-align:right}.item-value strong{font:600 15px var(--mono)}.item-value small{font-size:9px;color:rgba(46,117,103,.78)}.item-actions{display:flex;justify-content:flex-end;gap:5px}.icon-button{border:1px solid var(--border);border-radius:10px;background:var(--card);padding:6px 8px;color:var(--muted-fg);font:600 10px var(--mono)}.icon-button:hover{border-color:var(--primary);color:var(--primary)}.icon-button.danger:hover{border-color:var(--danger);color:var(--danger)}.empty{padding:26px 20px;color:var(--muted-fg);font:13px/1.5 var(--mono)}.status{margin-left:auto;color:var(--primary);font:10px var(--mono)}.status.error{color:var(--danger)}.projection-head{display:flex;align-items:center;gap:12px;padding:17px 20px}.projection-head h2{flex:1;margin:0;color:var(--muted-fg);font:500 10px var(--mono);letter-spacing:.18em;text-transform:uppercase}.projection-head strong{font:600 13px var(--mono)}.projection-body{border-top:1px solid var(--border);padding:20px}.field-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.field label{display:block;margin-bottom:7px;color:var(--muted-fg);font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase}.field input,.field select{width:100%;min-height:42px;border:1px solid var(--border);border-radius:13px;background:#fffefa;padding:10px 11px;outline:none}.field input:focus,.field select:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(46,117,103,.12)}.field-note{margin-top:5px;color:var(--muted-fg);font:10px/1.35 var(--mono)}.settings-actions{display:flex;justify-content:flex-end;margin-top:15px}.result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-top:20px}.result-card{border:1px solid var(--border);border-radius:16px;background:rgba(231,226,216,.3);padding:15px}.result-card.positive{border-color:rgba(46,117,103,.28);background:rgba(46,117,103,.06)}.result-card.warning{border-color:rgba(191,85,73,.28);background:rgba(191,85,73,.05)}.result-card .eyebrow{letter-spacing:.1em}.result-value{margin:9px 0 0;font:600 25px/1 var(--serif)}.positive-text{color:var(--primary)}.negative-text{color:var(--danger)}.result-note{margin:8px 0 0;color:var(--muted-fg);font-size:11px;line-height:1.45}.chart-panel{margin-top:24px}.chart-wrap{padding:16px 5px 12px}.pension-chart{display:block;width:100%;height:auto;min-height:250px;overflow:visible;touch-action:none}.chart-grid{stroke:#e4dfd5;stroke-width:1}.chart-axis{fill:#788585;font:10px var(--mono)}.chart-marker{font:9px var(--mono)}.chart-marker-value{font-weight:700}.chart-hit{cursor:crosshair}.chart-tooltip{pointer-events:none}.legend{display:flex;flex-wrap:wrap;align-items:center;gap:17px;padding:3px 15px 7px;color:var(--muted-fg);font:10px var(--mono)}.legend i{display:inline-block;width:16px;height:8px;border-radius:5px;margin-right:6px;vertical-align:middle}.legend .acc{background:var(--blue)}.legend .draw{background:var(--danger)}.legend .retire{width:2px;height:13px;border-radius:0;background:repeating-linear-gradient(180deg,var(--accent) 0 5px,transparent 5px 8px)}.legend .lump{width:2px;height:13px;border-radius:0;background:repeating-linear-gradient(180deg,var(--danger) 0 5px,transparent 5px 8px)}.footer{margin:18px 3px 0;color:var(--muted-fg);font:10px/1.6 var(--mono)}.modal-backdrop{position:fixed;inset:0;display:grid;place-items:center;padding:18px;background:rgba(38,61,64,.34);z-index:5}.modal{width:min(570px,100%);max-height:min(790px,calc(100vh - 36px));overflow:auto;border:1px solid var(--border);border-radius:24px;background:var(--card);box-shadow:0 20px 60px rgba(25,50,53,.2);padding:20px}.modal-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}.modal-head h2{flex:1;margin:0;font:600 24px var(--serif)}.modal-close{border:0;background:none;color:var(--muted-fg);font-size:22px}.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.modal-grid .full{grid-column:1/-1}.search-line{display:flex;gap:8px}.search-line input{flex:1}.search-line .button{min-height:42px}.search-results{margin-top:8px}.search-results select{width:100%}.modal-status{margin:7px 0 0;color:var(--muted-fg);font:10px/1.4 var(--mono)}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.hidden{display:none!important}@media(max-width:860px){.result-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:760px){.main{padding:18px 15px 50px}.topbar{margin-bottom:25px}.page-header{align-items:flex-start;flex-direction:column}.actions{width:100%}.actions .button{flex:1}.panel{border-radius:22px}.table-head{display:none}.item-row{grid-template-columns:minmax(0,1fr) 108px 100px;gap:8px;padding:15px 14px}.item-price{display:none}.item-actions{grid-column:2/-1;grid-row:2;justify-content:flex-end}.field-grid{grid-template-columns:1fr 1fr}.result-grid{grid-template-columns:1fr}.projection-head{align-items:flex-start;flex-direction:column}.projection-head strong{width:100%}.modal-grid{grid-template-columns:1fr}.modal-grid .full{grid-column:auto}.chart-wrap{padding-inline:0}.legend{gap:10px;padding-inline:8px}}@media(max-width:450px){.field-grid{grid-template-columns:1fr}.page-title{font-size:47px}.item-row{grid-template-columns:minmax(0,1fr) 94px}.item-actions{grid-column:1/-1}.item-value{grid-column:2;grid-row:1}.item-name{grid-column:1;grid-row:1}}
-    #total-value{display:block;max-width:100%;white-space:nowrap;overflow-x:clip;overflow-y:visible;font-size:clamp(30px,10vw,58px)!important;line-height:1.12!important;padding-bottom:.08em;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
-    .item-value strong{white-space:nowrap;font-size:clamp(12px,3.8vw,15px)}
-    .legend .drawdown-marker{width:2px;height:13px;border-radius:0;background:repeating-linear-gradient(180deg,var(--blue) 0 5px,transparent 5px 8px)}
-    .field .check-line{display:flex;align-items:center;gap:8px;margin:8px 0 0;color:var(--fg);font:500 11px var(--sans);letter-spacing:0;text-transform:none}.field .check-line input{width:17px;height:17px;min-height:0;margin:0;padding:0;accent-color:var(--primary)}
-    .projection-results{border-top:1px solid var(--border);padding:0 20px 20px}
-    .projection-head{cursor:pointer}.projection-toggle{display:grid;flex:0 0 34px;width:34px;height:34px;place-items:center;border:1px solid var(--border);border-radius:11px;background:var(--card);color:var(--muted-fg);font:700 18px/1 var(--sans)}.projection-body.collapsed{display:none}
-    .appearance-tools{margin-top:20px;text-align:center}.appearance-link{border:0;background:none;padding:8px;color:var(--primary);font:600 11px var(--mono);text-decoration:underline;text-underline-offset:3px}.appearance-panel{margin:10px auto 0;max-width:720px;border:1px solid var(--border);border-radius:18px;background:var(--card);padding:18px;text-align:left;box-shadow:var(--shadow)}.appearance-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.appearance-grid input[type="color"]{height:42px;padding:4px}.appearance-actions{display:flex;justify-content:flex-end;margin-top:14px}@media(max-width:760px){.appearance-grid{grid-template-columns:1fr 1fr}}@media(max-width:450px){.appearance-grid{grid-template-columns:1fr}}
-    .heading-bold h1,.heading-bold h2,.heading-bold h3,.heading-bold strong,.heading-bold .brand h1,.heading-bold .page-title,.heading-bold .panel-head h2,.heading-bold .projection-head h2,.heading-bold .projection-head strong,.heading-bold .eyebrow,.heading-bold .field label,.heading-bold .result-value,.heading-bold #total-value,.heading-bold .item-value strong,.heading-bold .modal-head h2{font-weight:800!important}.appearance-grid .check-field{display:flex;flex-direction:column}.appearance-grid .check-field .check-line{min-height:42px;margin:0;border:1px solid var(--border);border-radius:13px;background:#fffefa;padding:10px 11px}
-    .field input[type="date"]{-webkit-appearance:none;appearance:none;display:flex;align-items:center;justify-content:center;margin-inline:auto;text-align:center;text-align-last:center}.field input[type="date"]::-webkit-date-and-time-value{display:block;width:100%;min-width:100%;margin:0;text-align:center}.field input[type="date"]::-webkit-datetime-edit{display:block;width:100%;padding:0;text-align:center}.field input[type="date"]::-webkit-datetime-edit-fields-wrapper{display:flex;width:100%;justify-content:center}
-    html,body{min-height:100%;background:var(--bg)}.app-shell,.main,.content{min-height:100vh;min-height:100svh;background:var(--bg)}.panel,.modal,.appearance-panel{background:var(--card)}.result-card{background:var(--card)}button,input,select,textarea{font-family:var(--sans);font-weight:inherit}.field input,.field select{font-family:var(--sans)}.pension-chart,.pension-chart text{font-family:var(--mono)}.field input[type="date"],.field select{font-size:inherit;line-height:inherit}.field input[type="date"]{-webkit-text-size-adjust:100%}
-    .method{background:var(--card)}
-    @media(max-width:760px){.projection-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}.projection-head h2{grid-column:1;grid-row:1}.projection-head strong{grid-column:1;grid-row:2}.projection-toggle{grid-column:2;grid-row:1/3}.projection-body{padding-inline:16px}.field-grid,.field{min-width:0;width:100%}.field input[type="date"]{width:100%;max-width:100%}.item-row{grid-template-columns:minmax(0,1fr) 122px}.item-value{min-width:0}}
+    .app-shell { display: block; }
+    .sidebar { display: none; }
+    .main { width: min(1160px, calc(100% - 40px)); padding: 26px 0 64px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 44px; }
+    .content { max-width: none; margin: 0; }
+    .table-head, .holding-row { grid-template-columns: minmax(0, 1fr) 120px 150px 110px; }
+    @media (max-width: 767px) {
+      .main { width: 100%; padding: 20px 20px 56px; }
+      .topbar { margin-bottom: 30px; }
+      .table-head, .holding-row { grid-template-columns: minmax(0, 1fr) 92px 110px 60px; }
+    }
   </style>
+  <style>
+  @media(max-width:767px){.input-grid{grid-template-columns:1fr;gap:16px}}
+  </style>
+  <style>
+    :root { --muted-fg: #3f5051; }
+    .chart-axis { fill: #4f5e5f; }
+    .small-note { color: rgba(63, 80, 81, .92); }
+    .holding-value small { color: rgba(46, 117, 103, .9); }
+    .legend { font-size: 11px; font-weight: 600; row-gap: 12px; }
+    .legend .actual { background: #2f75c8; }
+    .legend .projected { height: 3px; background: repeating-linear-gradient(90deg, #4c5b5d 0 9px, transparent 9px 14px); }
+    .legend .growth { background: #bd3f32; }
+    .field-value {
+      display: block;
+      inline-size: 100%;
+      min-inline-size: 0;
+      max-inline-size: 100%;
+      min-height: 52px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: #fffefa;
+      color: var(--fg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.25;
+      color-scheme: light;
+    }
+    .field-value[type="date"] {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      height: 52px;
+    }
+    .field-value[type="date"]::-webkit-date-and-time-value {
+      min-width: 0;
+      margin: 0;
+      text-align: left;
+    }
+    .field-value[type="date"]::-webkit-calendar-picker-indicator { margin: 0; }
+    @media (max-width: 767px) {
+      .field-value, .field-value[type="date"] { min-height: 64px; height: 64px; border-radius: 16px; font-size: 18px; }
+    }
+  </style>
+  <style>
+     /* Keep native date controls centred in their full-width iPhone Safari boxes. */
+     .field input[type="date"],
+     .field-value[type="date"] {
+       -webkit-appearance: none;
+       appearance: none;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       margin-inline: auto;
+       text-align: center;
+       text-align-last: center;
+       -webkit-text-size-adjust: 100%;
+     }
+     .field input[type="date"]::-webkit-date-and-time-value,
+     .field-value[type="date"]::-webkit-date-and-time-value {
+       display: block;
+       width: 100%;
+       min-width: 100%;
+       margin: 0;
+       text-align: center;
+     }
+     .field input[type="date"]::-webkit-datetime-edit,
+     .field-value[type="date"]::-webkit-datetime-edit {
+       display: block;
+       width: 100%;
+       padding: 0;
+       text-align: center;
+     }
+     .field input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+     .field-value[type="date"]::-webkit-datetime-edit-fields-wrapper {
+       display: flex;
+       width: 100%;
+       justify-content: center;
+     }
+     @media (max-width: 767px) {
+       .field input[type="date"],
+       .field-value[type="date"] {
+         width: 100%;
+         max-width: 100%;
+       }
+     }
+     @media (max-width: 600px) {
+       .chart-wrap { padding: 12px 4px 12px; }
+       .portfolio-chart { min-height: 0; }
+       .portfolio-chart .chart-axis { font-size: 13px; }
+       .portfolio-chart .chart-marker { font-size: 12px; font-weight: 600; }
+       .portfolio-chart .chart-grid { stroke-width: 1.5; }
+       .portfolio-chart .chart-dot { opacity: .9; }
+     }
+   </style>
+   <style>
+    .appearance-tools{margin-top:20px;text-align:center}.appearance-link{border:0;background:none;padding:8px;color:var(--primary);font:600 11px var(--mono);text-decoration:underline;text-underline-offset:3px;cursor:pointer}.appearance-panel{margin:10px auto 0;max-width:720px;border:1px solid var(--border);border-radius:18px;background:var(--card);padding:18px;text-align:left;box-shadow:var(--shadow)}.appearance-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.appearance-grid input[type="color"]{width:100%;height:42px;padding:4px}.appearance-grid select{width:100%;min-height:42px;border:1px solid var(--border);border-radius:13px;background:#fffefa;padding:10px 11px;outline:none}.appearance-grid .check-field{display:flex;flex-direction:column}.appearance-grid .check-field .check-line{display:flex;align-items:center;gap:8px;min-height:42px;margin:0;border:1px solid var(--border);border-radius:13px;background:#fffefa;padding:10px 11px;color:var(--fg);font:500 11px var(--sans);letter-spacing:0;text-transform:none}.appearance-grid .check-line input{width:17px;height:17px;min-height:0;margin:0;padding:0;accent-color:var(--primary)}.appearance-actions{display:flex;justify-content:flex-end;margin-top:14px}.heading-bold .page-title,.heading-bold .panel-head span,.heading-bold .projection-title strong,.heading-bold .result-value,.heading-bold .holding-name strong,.heading-bold .holding-value strong{font-weight:800!important}.hidden{display:none!important}@media(max-width:767px){.appearance-grid{grid-template-columns:1fr 1fr}}@media(max-width:450px){.appearance-grid{grid-template-columns:1fr}}
+  </style>
+  <style>
+    /*
+     * Appearance font overrides are deliberately kept in variables used by
+     * every typography group.  The page uses both --sans/--serif and --mono
+     * in font shorthands, so changing only body font-family leaves most of
+     * the UI unchanged.
+     */
+    :root { --appearance-font: var(--sans); }
+    body, input, select, textarea { font-family: var(--appearance-font); }
+    .field-value { font-family: var(--appearance-font) !important; }
+    .heading-bold :is(h1, h2, h3, h4, h5, h6, .brand h2, .page-title,
+      .panel-head span, .table-head span, .projection-title strong,
+      .projection-title span, .eyebrow, .result-value, .holding-name strong,
+      .holding-price strong, .holding-value strong) {
+      font-weight: 800 !important;
+    }
+  </style>
+   <style>
+     /*
+      * Keep the selected background as the complete page surface.  Safari can
+      * paint the body only behind its content unless each full-height wrapper
+      * owns the background, especially when the viewport includes safe areas.
+      * Panels deliberately continue to use --card instead.
+      */
+     html,
+     body {
+       min-height: 100%;
+       background: var(--bg) !important;
+     }
+     body {
+       min-height: 100vh;
+       min-height: 100dvh;
+       color: var(--fg);
+     }
+     .app-shell,
+     .main,
+     .content {
+       background: var(--bg);
+     }
+     .app-shell {
+       min-height: 100vh;
+       min-height: 100dvh;
+     }
+     .main,
+     .content {
+       min-height: 100dvh;
+     }
+
+     /*
+      * Every typography surface uses the selected font, including elements
+      * whose earlier rules use --sans, --serif, or --mono shorthands.  The
+      * explicit list also covers SVG labels, native controls, and totals.
+      */
+     body,
+     button,
+     input,
+     select,
+     textarea,
+     h1,
+     h2,
+     h3,
+     h4,
+     h5,
+     h6,
+     label,
+     p,
+     span,
+     strong,
+     small,
+     svg text,
+     .page-title,
+     .panel-head span,
+     .table-head span,
+     .projection-title,
+     .result-value,
+     .holding-name,
+     .holding-price,
+     .holding-value {
+       font-family: var(--appearance-font) !important;
+     }
+     .heading-bold :is(
+       h1, h2, h3, h4, h5, h6,
+       .brand h2,
+       .page-title,
+       .panel-head span,
+       .table-head span,
+       .projection-title strong,
+       .projection-title span,
+       .eyebrow,
+       .field label,
+       .result-value,
+       .holding-name strong,
+       .holding-price strong,
+       .holding-value strong,
+       .day-change
+     ) {
+       font-weight: 800 !important;
+     }
+   </style>
 </head>
 <body>
-<div class="app-shell"><main class="main"><div class="content">
-  <header class="topbar">
-    <div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" role="presentation"><rect x="1" y="1" width="38" height="38" rx="13" fill="#eee9df"/><rect x="9" y="22" width="5" height="10" rx="2.5" fill="#f1784f" transform="rotate(10 11.5 27)"/><rect x="16" y="17" width="5" height="15" rx="2.5" fill="#f1784f" transform="rotate(10 18.5 24.5)"/><rect x="23" y="11" width="5" height="21" rx="2.5" fill="#f1784f" transform="rotate(10 25.5 21.5)"/><path d="M7 29C14 25 19 19 24 17c3-1 5-4 9-9" fill="none" stroke="#f5bd45" stroke-width="2.8" stroke-linecap="round"/></svg></span><div><h1>Pocket Pension</h1><p>by yourpocketapps</p></div></div>
-    <span class="badge">offline copy</span>
-  </header>
-  <section class="page-header">
-    <div><p class="eyebrow">My pension</p><h2 class="page-title" id="portfolio-name">My Pension</h2><p class="hero-note" id="hero-note">Saved prices and offline calculations</p></div>
-    <div class="actions"><button class="button primary" id="refresh-prices">Refresh prices</button><button class="button" id="add-holding">+ Holding</button><button class="button accent" id="add-cash">+ Cash</button></div>
-  </section>
-  <p class="snapshot-note" id="saved-note">Changes are saved in this browser. Prices remain available offline.</p>
-
-  <section class="panel">
-    <div class="panel-head"><h2>Portfolio value</h2><button class="icon-button" id="rename-portfolio">Rename</button><span class="status" id="live-status" aria-live="polite"></span></div>
-    <div style="padding:20px"><div style="font:600 clamp(34px,6vw,58px)/.95 var(--serif)" id="total-value">£0.00</div><div class="hero-note" id="breakdown">Investments £0.00 · Cash &amp; savings £0.00</div></div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-head"><h2>Investment portfolio</h2><button class="icon-button" id="add-holding-2">+ Add</button></div>
-    <div class="table-head"><span>Holding</span><span style="text-align:right">Saved price</span><span style="text-align:right">Value</span><span></span></div>
-    <div id="holdings-list"></div>
-  </section>
-
-  <section class="panel">
-    <div class="panel-head"><h2>Cash &amp; savings</h2><button class="icon-button" id="add-cash-2">+ Add</button></div>
-    <div class="table-head"><span>Account</span><span style="text-align:right">Rate</span><span style="text-align:right">Current value</span><span></span></div>
-    <div id="cash-list"></div>
-  </section>
-
-  <section class="panel" id="projection-panel">
-    <div class="projection-head"><h2>Retirement projection</h2><strong id="projection-headline">Set your assumptions below</strong><button type="button" class="projection-toggle" id="projection-toggle" aria-expanded="true" aria-controls="projection-body" aria-label="Collapse retirement projection"><span id="projection-chevron" aria-hidden="true">⌃</span></button></div>
-    <div class="projection-body" id="projection-body">
-      <div class="field-grid">
-        <div class="field"><label for="projectionStartDate">Projection start date</label><input id="projectionStartDate" type="date"><div class="field-note">Uses the current pension total as the opening value on this date</div></div>
-        <div class="field"><label for="dateOfBirth">Date of birth</label><input id="dateOfBirth" type="date"><div class="field-note">Used to show your age through the projection</div></div>
-        <div class="field"><label for="retirementDate">Date of retirement</label><input id="retirementDate" type="date"><div class="field-note">Contributions run until this date</div></div>
-        <div class="field"><label for="drawdownStartDate">Drawdown start date</label><input id="drawdownStartDate" type="date"><div class="field-note">Can be earlier than retirement</div></div>
-        <div class="field"><label for="drawdownTarget">Drawdown target</label><input id="drawdownTarget" type="number" min="1" step="1"><div class="field-note">Years in retirement</div></div>
-        <div class="field"><label for="annualFundGrowth">Fund growth %</label><input id="annualFundGrowth" type="number" min="0" step="0.1"><div class="field-note">Gross annual growth</div></div>
-        <div class="field"><label for="annualDrawdown">Annual income target</label><input id="annualDrawdown" type="number" min="0" step="100"><div class="field-note">Withdrawal in retirement</div></div>
-        <div class="field"><label for="fundChargesPct">Fund charges %</label><input id="fundChargesPct" type="number" min="0" step="0.001"><div class="field-note">Default 0.100% · deducted in calculations</div></div>
-        <div class="field"><label for="monthlyContribution">Extra monthly top-up</label><input id="monthlyContribution" type="number" min="0" step="10"><label class="check-line" for="continueTopUpPostRetirement"><input id="continueTopUpPostRetirement" type="checkbox"><span>Continue post retirement</span></label><div class="field-note">On top of item contributions</div></div>
-        <div class="field"><label for="lumpSumWithdrawalDate">Lump sum withdrawal date</label><input id="lumpSumWithdrawalDate" type="date"><div class="field-note">One-off withdrawal date</div></div>
-        <div class="field"><label for="lumpSumWithdrawal">Lump sum withdrawal</label><input id="lumpSumWithdrawal" type="number" min="0" step="100"><div class="field-note" id="lump-sum-note">Defaults to 25% of the fund on that date</div></div>
-        <div class="field"><label for="currency">Display currency</label><select id="currency"><option>GBP</option><option>USD</option><option>EUR</option></select><div class="field-note">Saved values are not converted</div></div>
-      </div>
-      <div class="settings-actions"><button class="button primary" id="save-settings">Save projection settings</button></div>
+<div class="app-shell">
+  <main class="main">
+    <div class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" role="presentation">
+    <rect x="1" y="1" width="38" height="38" rx="13" fill="#eee9df"/>
+    <rect x="9" y="22" width="5" height="10" rx="2.5" fill="#f1784f" transform="rotate(10 11.5 27)"/>
+    <rect x="16" y="17" width="5" height="15" rx="2.5" fill="#f1784f" transform="rotate(10 18.5 24.5)"/>
+    <rect x="23" y="11" width="5" height="21" rx="2.5" fill="#f1784f" transform="rotate(10 25.5 21.5)"/>
+    <path d="M7 29C14 25 19 19 24 17c3-1 5-4 9-9" fill="none" stroke="#f5bd45" stroke-width="2.8" stroke-linecap="round"/>
+  </svg></span><div><h2>Pocket ISA</h2></div></div><span class="badge muted">DIRECT DATA</span></div>
+    <div class="content">
+      <header class="page-header">
+        <div>
+          <div class="eyebrow">My Portfolio <span class="badge muted">CLOSED</span></div>
+          <h1 class="page-title">£12,500.00</h1>
+          <div class="day-change positive">↗ +£42.00 <span>(+0.34%)</span><span class="muted">Today</span></div>
+          <p class="snapshot-note">Prices captured 4 Sept 2026; use Refresh prices when online.</p>
+        </div>
+        <div class="actions"><button class="button primary" type="button" id="refresh-prices">Refresh prices</button><span class="button" id="live-status">Prices captured</span></div>
+      </header>
+       <section class="panel">
+         <div class="panel-head"><span>Holdings &amp; cash</span><div class="panel-actions"><button class="icon-button" type="button" id="add-holding">+ Holding</button><button class="icon-button" type="button" id="add-cash">+ Cash</button></div></div>
+         <div class="table-head"><span>Symbol</span><span style="text-align:right">Price</span><span style="text-align:right">Value</span><span></span></div>
+         <div id="portfolio-rows"><div class="holding-row" data-holding-symbol="VUSA.L">
+    <div class="holding-name"><strong>Vanguard S&amp;P 500</strong><span>VUSA.L · 10.00 shares · bought Jan 2025</span></div>
+    <div class="holding-price"><strong>£800.00</strong><span class="positive">+0.50%</span></div>
+    <div class="holding-value"><strong>£8,000.00</strong><span class="positive">+14.3% · +£1,000</span></div>
+  </div><div class="holding-row cash-row" data-cash-label="Cash">
+    <div class="holding-name"><strong>Cash</strong><span>Jan 2025 · £100/mo</span></div>
+    <div class="holding-price"><span>4.5%</span></div>
+    <div class="holding-value"><strong>£4,769.30</strong><span>current balance</span><span class="positive">+£269 growth</span><small>deposit amount: £2,500.00 · total deposited: £4,500.00</small></div>
+  </div></div>
+      </section>
+       <section class="panel projection">
+         <button class="projection-toggle" id="projection-toggle" type="button"><span class="projection-title"><strong>Investment projection</strong><span id="projection-summary-title">£136,473 at maturity · 10 years</span></span><span class="chevron" id="projection-chevron">⌄</span></button>
+        <div class="projection-body" id="projection-body">
+          <div class="input-grid">
+            <div class="field"><label>Projection start date</label><input class="field-value" id="projection-start-date" type="date" value="2025-01-01"><p class="field-note">1 yr 8 mo of history shown</p></div>
+            <div class="field"><label>Starting value (£)</label><input class="field-value" id="projection-start-value" type="number" min="0" step="any" value="" placeholder="9,000"><p class="field-note">Leave blank to auto-calculate</p></div>
+            <div class="field"><label>Additional monthly deposit (£)</label><input class="field-value" id="projection-monthly-deposit" type="number" min="0" step="any" value="500" placeholder="0"></div>
+            <div class="field"><label>Annual growth rate</label><input class="field-value" id="projection-growth-rate" type="number" min="0" max="100" step="0.1" value="7"><p class="field-note" id="projection-net-rate">Net 6.90% after fees</p></div>
+            <div class="field"><label>Annual fund fee</label><input class="field-value" id="projection-fee" type="number" min="0" max="5" step="0.01" value="0.1"></div>
+            <div class="field"><label>Target maturity date</label><input class="field-value" id="projection-target-date" type="date" value="2036-09-04"></div>
+            <div class="field"><label>Lump sum deposit date</label><input class="field-value" id="projection-lump-sum-date" type="date" value="2028-01-01"></div>
+            <div class="field"><label>Lump sum amount (£)</label><input class="field-value" id="projection-lump-sum-amount" type="number" min="0" step="any" value="5000" placeholder="0"></div>
+          </div>
+           <div class="results" id="projection-results"><div class="result-grid"><div class="result-card result-positive"><p class="eyebrow">Value at maturity · Sept 2036</p><p class="result-value positive">£136,473</p><p class="result-note">10 years away · portfolio survives to target.</p><p class="small-note">Total deposited by maturity: £75,000</p></div></div></div>
+        </div>
+      </section>
+       <section class="panel chart-panel" id="chart-panel"><div class="panel-head"><span>Fund value over time</span></div><div class="chart-wrap" id="chart-wrap"><svg class="portfolio-chart" viewBox="0 0 920 280" role="img" aria-label="Portfolio value over time">
+    <line x1="68" x2="900" y1="22" y2="22" class="chart-grid"/>
+      <text x="58" y="26" text-anchor="end" class="chart-axis">£138k</text><line x1="68" x2="900" y1="76" y2="76" class="chart-grid"/>
+      <text x="58" y="80" text-anchor="end" class="chart-axis">£105k</text><line x1="68" x2="900" y1="130" y2="130" class="chart-grid"/>
+      <text x="58" y="134" text-anchor="end" class="chart-axis">£72k</text><line x1="68" x2="900" y1="184" y2="184" class="chart-grid"/>
+      <text x="58" y="188" text-anchor="end" class="chart-axis">£39k</text><line x1="68" x2="900" y1="238" y2="238" class="chart-grid"/>
+      <text x="58" y="242" text-anchor="end" class="chart-axis">£6k</text>
+    <line x1="186.85714285714283" x2="186.85714285714283" y1="22" y2="238" stroke="#8c989b" stroke-width="1" stroke-dasharray="5 5"/>
+      <text x="180.85714285714283" y="34" text-anchor="end" class="chart-marker" fill="#8c989b">Today</text>
+    <line x1="900" x2="900" y1="22" y2="238" stroke="#3d9a67" stroke-width="1" stroke-dasharray="5 5"/>
+      <text x="906" y="34" text-anchor="start" class="chart-marker" fill="#3d9a67">Maturity</text>
+    <line x1="305.71428571428567" x2="305.71428571428567" y1="22" y2="238" stroke="#d79b2f" stroke-width="1" stroke-dasharray="5 5"/>
+      <text x="311.71428571428567" y="34" text-anchor="start" class="chart-marker" fill="#d79b2f">Lump sum deposit</text>
+     <path d="M 68.00 236.94 L 127.43 230.75 L 186.86 228.06" fill="none" stroke="#4d8fe8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+     <path d="M 186.86 227.17 L 246.29 217.36 L 305.71 198.53 L 365.14 186.80 L 424.57 174.28 L 484.00 160.93 L 543.43 146.68 L 602.86 131.47 L 662.29 115.25 L 721.71 97.93 L 781.14 79.46 L 840.57 59.74 L 900.00 38.71" fill="none" stroke="#7b8790" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+     <path d="M 186.86 227.17 L 246.29 217.60 L 305.71 199.16 L 365.14 188.00 L 424.57 176.19 L 484.00 163.71 L 543.43 150.52 L 602.86 136.57 L 662.29 121.83 L 721.71 106.24 L 781.14 89.76 L 840.57 72.34 L 900.00 53.93" fill="none" stroke="#c75c4c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="68" cy="236.94103271937365" r="3.5" fill="#4d8fe8" class="chart-dot"><title>Jan 2025 · Historical average: £6,500</title></circle><circle cx="127.42857142857142" cy="230.75014707878896" r="3.5" fill="#4d8fe8" class="chart-dot"><title>Nov 2025 · Historical average: £10,300</title></circle><circle cx="186.85714285714283" cy="228.06199936642983" r="3.5" fill="#4d8fe8" class="chart-dot"><title>Today · Historical average: £11,950</title></circle><circle cx="186.85714285714283" cy="227.1659501289768" r="3.5" fill="#7b8790" class="chart-dot"><title>Today · Historical-rate projection: £12,500</title></circle><circle cx="186.85714285714283" cy="227.1659501289768" r="3.5" fill="#c75c4c" class="chart-dot"><title>Today · Projection: £12,500</title></circle><circle cx="246.28571428571428" cy="217.35691346369046" r="3.5" fill="#7b8790" class="chart-dot"><title>Jul 2027 · Historical-rate projection: £18,521</title></circle><circle cx="246.28571428571428" cy="217.60159870621084" r="3.5" fill="#c75c4c" class="chart-dot"><title>Jul 2027 · Projection: £18,371</title></circle><circle cx="305.71428571428567" cy="198.52994440457405" r="3.5" fill="#7b8790" class="chart-dot"><title>May 2028 · Historical-rate projection: £30,077</title></circle><circle cx="305.71428571428567" cy="199.16127079888534" r="3.5" fill="#c75c4c" class="chart-dot"><title>May 2028 · Projection: £29,689</title></circle><circle cx="365.14285714285717" cy="186.80063079988784" r="3.5" fill="#7b8790" class="chart-dot"><title>Mar 2029 · Historical-rate projection: £37,276</title></circle><circle cx="365.14285714285717" cy="187.995669809217" r="3.5" fill="#c75c4c" class="chart-dot"><title>Mar 2029 · Projection: £36,543</title></circle><circle cx="424.57142857142856" cy="174.28477138127639" r="3.5" fill="#7b8790" class="chart-dot"><title>Jan 2030 · Historical-rate projection: £44,959</title></circle><circle cx="424.57142857142856" cy="176.19164287872016" r="3.5" fill="#c75c4c" class="chart-dot"><title>Jan 2030 · Projection: £43,788</title></circle><circle cx="484" cy="160.9296218588133" r="3.5" fill="#7b8790" class="chart-dot"><title>Nov 2030 · Historical-rate projection: £53,156</title></circle><circle cx="484" cy="163.71268613426713" r="3.5" fill="#c75c4c" class="chart-dot"><title>Nov 2030 · Projection: £51,448</title></circle><circle cx="543.4285714285713" cy="146.67890100922313" r="3.5" fill="#7b8790" class="chart-dot"><title>Sept 2031 · Historical-rate projection: £61,903</title></circle><circle cx="543.4285714285713" cy="150.52020848686342" r="3.5" fill="#c75c4c" class="chart-dot"><title>Sept 2031 · Projection: £59,546</title></circle><circle cx="602.8571428571429" cy="131.47255349575175" r="3.5" fill="#7b8790" class="chart-dot"><title>Jul 2032 · Historical-rate projection: £71,237</title></circle><circle cx="602.8571428571429" cy="136.5734122889675" r="3.5" fill="#c75c4c" class="chart-dot"><title>Jul 2032 · Projection: £68,106</title></circle><circle cx="662.2857142857143" cy="115.24649678318157" r="3.5" fill="#7b8790" class="chart-dot"><title>May 2033 · Historical-rate projection: £81,197</title></circle><circle cx="662.2857142857143" cy="121.82916716804243" r="3.5" fill="#c75c4c" class="chart-dot"><title>May 2033 · Projection: £77,156</title></circle><circle cx="721.7142857142857" cy="97.93235108144106" r="3.5" fill="#7b8790" class="chart-dot"><title>Mar 2034 · Historical-rate projection: £91,824</title></circle><circle cx="721.7142857142857" cy="106.2418766461719" r="3.5" fill="#c75c4c" class="chart-dot"><title>Mar 2034 · Projection: £86,724</title></circle><circle cx="781.1428571428571" cy="79.45715117973816" r="3.5" fill="#7b8790" class="chart-dot"><title>Jan 2035 · Historical-rate projection: £103,164</title></circle><circle cx="781.1428571428571" cy="89.76333713326194" r="3.5" fill="#c75c4c" class="chart-dot"><title>Jan 2035 · Projection: £96,838</title></circle><circle cx="840.5714285714286" cy="59.743038956830915" r="3.5" fill="#7b8790" class="chart-dot"><title>Nov 2035 · Historical-rate projection: £115,265</title></circle><circle cx="840.5714285714286" cy="72.34258885776569" r="3.5" fill="#c75c4c" class="chart-dot"><title>Nov 2035 · Projection: £107,531</title></circle><circle cx="900" cy="38.706935271611215" r="3.5" fill="#7b8790" class="chart-dot"><title>Sept 2036 · Historical-rate projection: £128,177</title></circle><circle cx="900" cy="53.92575827393596" r="3.5" fill="#c75c4c" class="chart-dot"><title>Sept 2036 · Projection: £118,836</title></circle>
+    <text x="68" y="266" text-anchor="start" class="chart-axis">Jan 2025</text><text x="484" y="266" text-anchor="middle" class="chart-axis">Nov 2030</text><text x="900" y="266" text-anchor="end" class="chart-axis">Sept 2036</text>
+   </svg><div class="legend" id="chart-legend"><span><i class="actual"></i>Portfolio history</span><span><i class="projected"></i>Average-growth forecast (8.1% pa)</span><span><i class="growth"></i>Your projection (6.9% net)</span></div></div></section>
+       <div class="appearance-tools"><button type="button" class="appearance-link" id="appearance-toggle" aria-expanded="false" aria-controls="appearance-panel">Customise appearance</button><div class="appearance-panel hidden" id="appearance-panel"><div class="appearance-grid"><div class="field"><label for="theme-background">Background</label><input id="theme-background" type="color"></div><div class="field"><label for="theme-card">Panels</label><input id="theme-card" type="color"></div><div class="field"><label for="theme-text">Text</label><input id="theme-text" type="color"></div><div class="field"><label for="theme-accent">Accent color</label><input id="theme-accent" type="color"></div><div class="field"><label for="theme-font">Font style</label><select id="theme-font"><option value="classic">Classic</option><option value="modern">Modern</option><option value="rounded">Rounded</option><option value="mono">Monospace</option></select></div><div class="field check-field"><label for="theme-heading-bold">Heading weight</label><label class="check-line" for="theme-heading-bold"><input id="theme-heading-bold" type="checkbox"><span>Bold headings</span></label></div></div><div class="appearance-actions"><button type="button" class="button" id="appearance-reset">Reset appearance</button></div></div></div>
+        <p class="footer-note">This Pocket ISA page keeps your saved portfolio available offline and requests live market data from Finnhub when you click Refresh prices.</p>
     </div>
-    <div class="projection-results"><div class="result-grid" id="results"></div></div>
-  </section>
-
-  <section class="panel chart-panel"><div class="panel-head"><h2>Fund value over time</h2></div><div class="chart-wrap" id="chart-wrap"></div><div class="legend"><span><i class="acc"></i>Fund value</span><span><i class="drawdown-marker"></i>Drawdown start</span><span><i class="retire"></i>Retirement</span><span><i class="lump"></i>Lump sum withdrawal</span></div></section>
-  <div class="appearance-tools"><button type="button" class="appearance-link" id="appearance-toggle" aria-expanded="false">Customise appearance</button><div class="appearance-panel hidden" id="appearance-panel"><div class="appearance-grid"><div class="field"><label for="theme-background">Background</label><input id="theme-background" type="color"></div><div class="field"><label for="theme-card">Panels</label><input id="theme-card" type="color"></div><div class="field"><label for="theme-text">Text</label><input id="theme-text" type="color"></div><div class="field"><label for="theme-accent">Accent</label><input id="theme-accent" type="color"></div><div class="field"><label for="theme-font">Font style</label><select id="theme-font"><option value="classic">Classic</option><option value="modern">Modern</option><option value="rounded">Rounded</option><option value="mono">Monospace</option></select></div><div class="field check-field"><label for="theme-heading-bold">Heading weight</label><label class="check-line" for="theme-heading-bold"><input id="theme-heading-bold" type="checkbox"><span>Bold headings</span></label></div></div><div class="appearance-actions"><button type="button" class="button" id="appearance-reset">Reset appearance</button></div></div></div>
-  <p class="footer">This is a self-contained Pocket Pension page. It works offline, saves edits in this browser, and only contacts the Yahoo-backed service when you search or click Refresh prices.</p>
-</div></main></div>
-<div id="modal-root"></div>
+  </main>
+</div>
+<script src="config.js"></script>
 <script>
-const DATA={
-  apiBaseUrl:"https://pocket-isa.netlify.app",
-  portfolioName:"My Pension",currency:"GBP",
-  holdings:[
-    {id:"vwrp",ticker:"VWRP.L",displayName:"Vanguard FTSE All-World",shares:42,avgCost:85,savedPrice:103.4,quoteCurrency:"GBP",purchaseDate:"2021-04-15",monthlyContribution:150,priceUpdatedAt:"2026-09-04T12:00:00Z"},
-    {id:"hsba",ticker:"HSBA.L",displayName:"HSBC Holdings",shares:180,avgCost:5.2,savedPrice:10.15,quoteCurrency:"GBP",purchaseDate:"2020-11-10",monthlyContribution:50,priceUpdatedAt:"2026-09-04T12:00:00Z"}
-  ],
-  cashItems:[{id:"cash-isa",name:"Cash ISA",amount:5000,annualInterestPct:4.5,forecastRatePct:3.5,depositDate:"2023-01-01",monthlyDeposit:100}],
-  projection:{projectionStartDate:"",dateOfBirth:"",retirementDate:"2044-09-05",drawdownStartDate:"2042-09-05",drawdownTarget:25,annualFundGrowth:6.5,annualDrawdown:18000,fundChargesPct:0.1,monthlyContribution:250,continueTopUpPostRetirement:false,lumpSumWithdrawalDate:"2052-09-05",lumpSumWithdrawal:null},
-  appearance:{background:"#f4f0e7",card:"#faf8f2",text:"#263d40",accent:"#2e7567",font:"classic",headingBold:false}
-};
-const STORAGE_KEY="pocket-pension-standalone-v2";
-const API_BASE=String(DATA.apiBaseUrl||"").replace(/\/$/,"");
-let state=loadState(),modal=null;
-
-function addYears(date,years){const d=new Date(date+"T00:00:00");d.setFullYear(d.getFullYear()+Number(years||0));return d.toISOString().slice(0,10)}
-function loadState(){
-  try{
-    const parsed=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
-    if(parsed){const saved=parsed.projection||{},legacyRetirement=saved.retirementDate||saved.drawdownStartDate||DATA.projection.retirementDate;return {...DATA,...parsed,holdings:Array.isArray(parsed.holdings)?parsed.holdings:DATA.holdings,cashItems:Array.isArray(parsed.cashItems)?parsed.cashItems:DATA.cashItems,projection:{...DATA.projection,...saved,dateOfBirth:typeof saved.dateOfBirth==="string"?saved.dateOfBirth:"",retirementDate:legacyRetirement,drawdownStartDate:saved.retirementDate?saved.drawdownStartDate||saved.retirementDate:legacyRetirement}}}
-    const old=JSON.parse(localStorage.getItem("pocket-pension-standalone-v1")||"null");
-    if(old){
-      const oldYears=old.projection&&old.projection.yearsToRetirement||18;
-      const start=old.projection&&old.projection.drawdownStartDate||addYears(todayISO(),oldYears);
-      return {...DATA,...old,projection:{...DATA.projection,...old.projection,drawdownStartDate:start,drawdownTarget:old.projection&&old.projection.retirementHorizon||25,fundChargesPct:old.projection&&old.projection.fundChargesPct!=null?old.projection.fundChargesPct:.1,lumpSumWithdrawalDate:old.projection&&old.projection.lumpSumWithdrawalDate||addYears(start,8),lumpSumWithdrawal:(old.projection&&old.projection.lumpSumWithdrawal)??null}};
-    }
-  }catch(_){}
-  return JSON.parse(JSON.stringify(DATA));
-}
-function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch(_){}}
-function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
-function n(v){const x=Number(v);return Number.isFinite(x)?x:0}
-function sym(){return state.currency==="USD"?"$":state.currency==="EUR"?"€":"£"}
-function money(v,currency=state.currency){try{return new Intl.NumberFormat("en-GB",{style:"currency",currency,minimumFractionDigits:2,maximumFractionDigits:2}).format(n(v))}catch(_){return sym()+n(v).toFixed(2)}}
-function whole(v){return Math.round(n(v)).toLocaleString("en-GB")}
-function dateText(v,monthOnly=false){if(!v)return"—";const d=new Date(String(v).includes("T")?v:v+"T00:00:00");if(Number.isNaN(d.getTime()))return"—";return d.toLocaleDateString("en-GB",monthOnly?{month:"short",year:"numeric"}:{day:"numeric",month:"short",year:"numeric"})}
-function todayISO(){const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
-function monthlyRate(annual){return n(annual)>0?Math.pow(1+n(annual)/100,1/12)-1:0}
-function monthsBetween(from,to=todayISO()){if(!from||!to)return 0;const a=new Date(from+"T00:00:00"),b=new Date(to+"T00:00:00");return Math.max(0,(b.getFullYear()-a.getFullYear())*12+b.getMonth()-a.getMonth())}
-function ageOn(date){const dob=state.projection.dateOfBirth;if(!dob||!date)return null;const birth=new Date(dob+"T00:00:00"),at=new Date(String(date).includes("T")?date:date+"T00:00:00");if(Number.isNaN(birth.getTime())||Number.isNaN(at.getTime())||at<birth)return null;let age=at.getFullYear()-birth.getFullYear();if(at.getMonth()<birth.getMonth()||(at.getMonth()===birth.getMonth()&&at.getDate()<birth.getDate()))age--;return age}
-function ageText(date){const age=ageOn(date);return age===null?"":` · Age ${age}`}
-function dateAfterMonths(months,from=todayISO()){const d=new Date(String(from).includes("T")?from:from+"T00:00:00");d.setMonth(d.getMonth()+Math.max(0,Math.round(n(months))));return d}
-function grownCash(item){const base=n(item.amount),months=monthsBetween(item.depositDate),r=monthlyRate(item.annualInterestPct);if(months<=0)return base;const factor=r>0?Math.pow(1+r,months):1;const deposits=r>0?n(item.monthlyDeposit)*(1+r)*(factor-1)/r:n(item.monthlyDeposit)*months;return base*factor+deposits}
-function totals(){const investments=state.holdings.reduce((s,h)=>s+n(h.shares)*n(h.savedPrice),0),cash=state.cashItems.reduce((s,c)=>s+grownCash(c),0);return{investments,cash,total:investments+cash}}
-function monthlyContribution(){const p=state.projection;return state.holdings.reduce((s,h)=>s+n(h.monthlyContribution),0)+state.cashItems.reduce((s,c)=>s+n(c.monthlyDeposit),0)+n(p.monthlyContribution)}
-function netGrowth(){return Math.max(0,n(state.projection.annualFundGrowth)-n(state.projection.fundChargesPct))}
-function stepValue(value,monthly,rate,drawdown){const r=monthlyRate(rate);return Math.max(0,(value+monthly)*(1+r)-drawdown)}
-function valueAtMonth(pr,month,includeLump=true){
-  let value=pr.total;
-  for(let m=1;m<=month;m++){
-    value=stepValue(value,m<=pr.retirementMonths?pr.monthly:(pr.continueTopUpPostRetirement?pr.postRetirementMonthly:0),pr.growth,m>pr.drawdownMonths?pr.drawdown:0);
-    if(includeLump&&pr.lumpMonth===m)value=Math.max(0,value-pr.lumpAmount);
+const DATA = {"exportedAt":"2026-09-04T14:00:00.000Z","apiBaseUrl":"","portfolioName":"My Portfolio","displayCurrency":"GBP","currencySymbol":"£","marketState":"CLOSED","totalValue":12500,"totalDayChange":42,"totalDayChangePercent":0.34,"priceAsOf":"2026-09-04T13:58:00.000Z","holdings":[{"symbol":"VUSA.L","name":"Vanguard S&P 500","shares":10,"purchaseDate":"2025-01-15","currentPrice":800,"value":8000,"changePercent":0.5,"gain":1000,"gainPct":14.3,"costBasis":7000,"effectiveShares":10,"effectiveValue":8000,"effectiveGain":1000,"effectiveGainPct":14.3,"depositedFromProjection":0,"quoteAsOf":"2026-09-04T13:58:00.000Z"}],"cashItems":[{"label":"Cash","depositDate":"2025-01-01","depositAmount":2500,"monthlyPurchase":100,"interestRate":4.5,"value":4769.3,"cashGain":269.3,"deposited":4500}],"regularDeposits":null,"projection":{"startDate":"2025-01-01","manualStartValue":"","monthlyDeposit":"500","depositSplit":"50/50","annualGrowthRate":"7","annualFeePct":"0.1","drawdownStartDate":"","monthlyDrawdown":"","targetDate":"2036-09-04","lumpSumDate":"2028-01-01","lumpSumAmount":"5000","inferredStartValue":9000,"netGrowthRate":6.9,"autoGrowthRate":8.1,"monthsSinceStart":20,"valueWhenDrawdownStarts":12500,"valueAtMaturity":136473,"targetMonthsFromNow":120,"targetSurvives":true,"projectionKind":null,"totalMonthsToZero":null,"depletionDate":null,"totalDepositedAtMaturity":75000,"maxSustainableDrawdown":68},"chart":{"points":[{"month":-1,"label":"Aug 2026","histValue":12000,"actualHistValue":11950,"drawValue":null},{"month":0,"label":"Sep 2026","histValue":12500,"actualHistValue":12500,"drawValue":12500},{"month":1,"label":"Oct 2026","histValue":13000,"actualHistValue":null,"drawValue":13000}],"showActual":true,"showProjected":true,"autoGrowthRate":8.1,"monthsSinceStart":20,"monthsUntilDrawdown":120,"targetMonthsFromNow":120,"lumpSumMonths":16,"historical":{"version":3,"key":"2025-01-15||VUSA.L|2025-01-15|10||cash|Cash|2025-01-01|4500|100|4.5","from":"2025-01-15","points":[{"month":-20,"label":"Jan 2025","value":6500},{"month":-10,"label":"Nov 2025","value":10300},{"month":0,"label":"Sep 2026","value":11950}],"rate":8.1}},"appearance":{"background":"#f4f0e7","card":"#faf8f2","text":"#263d40","accent":"#2e7567","font":"classic","headingBold":false}};
+DATA.apiBaseUrl = '';
+const STORAGE_KEY = 'pocket_isa_offline_' + (DATA.portfolioName || 'portfolio');
+// The browser calls the configured serverless relay. The Finnhub key stays
+// server-side; localStorage keeps the latest successful state for offline use.
+let state;
+try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || JSON.parse(JSON.stringify(DATA)); } catch (_) { state = JSON.parse(JSON.stringify(DATA)); }
+  state.chart = state.chart || {};
+  if ((!state.chart.historical || state.chart.historical.version !== 3) && DATA.chart && DATA.chart.historical) {
+    state.chart.historical = Object.assign({}, DATA.chart.historical, { version: 3 });
   }
-  return Math.max(0,value)
+if (!state.chart.historical && DATA.chart && Array.isArray(DATA.chart.points)) {
+  state.chart.historical = {
+      version: 3,
+    key: '',
+    from: '',
+    points: DATA.chart.points
+      .filter(point => Number.isFinite(Number(point.actualHistValue)))
+      .map(point => ({ month: point.month, label: point.label, value: Number(point.actualHistValue) })),
+  };
 }
-function projection(){
-  const p=state.projection,t=totals(),projectionStartDate=p.projectionStartDate||todayISO(),retirementDate=p.retirementDate||addYears(projectionStartDate,18),drawdownDate=p.drawdownStartDate||retirementDate,retirementMonths=monthsBetween(projectionStartDate,retirementDate),drawdownMonths=Math.min(retirementMonths,monthsBetween(projectionStartDate,drawdownDate)),horizon=Math.max(1,Math.round(n(p.drawdownTarget)*12)),monthly=monthlyContribution(),growth=netGrowth(),drawdown=n(p.annualDrawdown)/12;
-  const lumpMonth=p.lumpSumWithdrawalDate?monthsBetween(projectionStartDate,p.lumpSumWithdrawalDate):null,totalMonths=retirementMonths+horizon;
-  const base={total:t.total,investments:t.investments,cash:t.cash,projectionStartDate,retirementDate,drawdownDate,retirementMonths,drawdownMonths,horizon,monthly,postRetirementMonthly:n(p.monthlyContribution),continueTopUpPostRetirement:Boolean(p.continueTopUpPostRetirement),growth,drawdown,lumpMonth,totalMonths,lumpAmount:0};
-  const defaultLump=lumpMonth!==null&&lumpMonth>=0?valueAtMonth(base,lumpMonth,false)*.25:0;
-  const manual=p.lumpSumWithdrawal!==null&&p.lumpSumWithdrawal!==undefined&&p.lumpSumWithdrawal!=="";
-  const lumpAmount=manual?Math.max(0,n(p.lumpSumWithdrawal)):defaultLump;
-  const pr={...base,lumpAmount};
-  const atDrawdownStart=valueAtMonth(pr,drawdownMonths,false),atRetirement=valueAtMonth(pr,retirementMonths,true);
-  const endValue=valueAtMonth(pr,totalMonths,true);
-  const points=[];let depletionMonth=null;
-  for(let m=0;m<=totalMonths;m+=1){const value=valueAtMonth(pr,m,true);if(m>drawdownMonths&&value<=0&&depletionMonth===null)depletionMonth=m;points.push({m,v:value})}
-  const result=drawdown<=0?"no-income":depletionMonth===null?"sustainable":"depletes";
-  const depletionDate=depletionMonth===null?null:dateAfterMonths(depletionMonth,projectionStartDate);
-  return{...pr,defaultLump,manual,atDrawdownStart,atRetirement,endValue,points,result,depletionMonth,depletionDate}
+if (state.projection && state.projection._lumpSumModelVersion !== 2) {
+  state.projection.lumpSumDate = DATA.projection && DATA.projection.lumpSumDate ? DATA.projection.lumpSumDate : (state.projection.lumpSumDate || '');
+  state.projection.lumpSumAmount = DATA.projection && DATA.projection.lumpSumAmount ? DATA.projection.lumpSumAmount : (state.projection.lumpSumAmount || '');
+  state.projection._lumpSumModelVersion = 2;
 }
-function updateInputValues(){
-  const p=state.projection;
-  ["projectionStartDate","dateOfBirth","retirementDate","drawdownStartDate","drawdownTarget","annualFundGrowth","annualDrawdown","fundChargesPct","monthlyContribution","lumpSumWithdrawalDate"].forEach(id=>{const el=document.getElementById(id),key=id;if(el&&document.activeElement!==el)el.value=id==="fundChargesPct"?n(p[key]).toFixed(3):(id==="projectionStartDate"?(p[key]||todayISO()):(p[key]??""))});
-  const pr=projection(),lump=document.getElementById("lumpSumWithdrawal");if(lump&&document.activeElement!==lump)lump.value=pr.manual?p.lumpSumWithdrawal:Math.round(pr.defaultLump);
-  const lumpNote=document.getElementById("lump-sum-note");if(lumpNote)lumpNote.textContent=`Defaults to 25% of the projected fund on that date (${money(pr.defaultLump)}). You can amend it.`;
-  const currency=document.getElementById("currency");if(currency)currency.value=state.currency
-  const continueTopUp=document.getElementById("continueTopUpPostRetirement");if(continueTopUp)continueTopUp.checked=Boolean(p.continueTopUpPostRetirement)
-}
-function render(){
-  const t=totals(),pr=projection();
+const DEFAULT_APPEARANCE = Object.assign({}, DATA.appearance);
+state.appearance = Object.assign({}, DEFAULT_APPEARANCE, state.appearance || {});
+const symbol = "£";
+const money = value => symbol + Number(value || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const whole = value => symbol + Math.round(Number(value || 0)).toLocaleString('en-GB');
+const number = value => Math.max(0, Number.parseFloat(value) || 0);
+const monthsBetween = (from, to) => {
+  if (!from || !to) return 0;
+  const a = new Date(from + 'T00:00:00'), b = new Date(to + 'T00:00:00');
+  return Math.max(0, (b.getFullYear() - a.getFullYear()) * 12 + b.getMonth() - a.getMonth());
+};
+const monthlyRate = annual => annual > 0 ? Math.pow(1 + annual / 100, 1 / 12) - 1 : 0;
+const fundValueAt = (value, monthlyChange, annual, months) => {
+  const rate = monthlyRate(annual);
+  if (!rate) return value - monthlyChange * months;
+  const factor = Math.pow(1 + rate, months);
+  const timing = monthlyChange < 0 ? 1 + rate : 1;
+  return value * factor - monthlyChange * timing * (factor - 1) / rate;
+};
+const cashDepositAmount = item => {
+  const monthlyPurchase = number(item.monthlyPurchase);
+  const months = monthsBetween(item.depositDate, new Date().toISOString().slice(0, 10));
+  if (item.depositAmount != null) return number(item.depositAmount);
+  if (item.deposited != null) return Math.max(0, number(item.deposited) - monthlyPurchase * months);
+  return number(item.value);
+};
+const cashAtToday = item => {
+  const depositAmount = cashDepositAmount(item);
+  const monthlyPurchase = number(item.monthlyPurchase);
+  const annualRate = number(item.interestRate);
+  const months = monthsBetween(item.depositDate, new Date().toISOString().slice(0, 10));
+  const rate = monthlyRate(annualRate);
+  const factor = rate > 0 ? Math.pow(1 + rate, months) : 1;
+  const grownDeposit = depositAmount * factor;
+  const grownMonthlyDeposits = monthlyPurchase > 0
+    ? rate > 0
+      ? monthlyPurchase * (1 + rate) * (factor - 1) / rate
+      : monthlyPurchase * months
+    : 0;
+  const value = grownDeposit + grownMonthlyDeposits;
+  const deposited = depositAmount + monthlyPurchase * months;
+  return Object.assign({}, item, {
+    depositAmount,
+    value,
+    deposited,
+    cashGain: Math.max(0, value - deposited),
+  });
+};
+const fmtDate = value => value ? new Date(value + (value.length === 10 ? 'T00:00:00' : '')).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+const save = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {} };
+const input = id => document.getElementById(id);
+const applyAppearance = () => {
+  const appearance = Object.assign({}, DEFAULT_APPEARANCE, state.appearance || {});
+  const fonts = {
+    classic: '"DM Sans","Trebuchet MS",sans-serif',
+    modern: 'Arial,"Helvetica Neue",sans-serif',
+    rounded: '"Trebuchet MS","Arial Rounded MT Bold",sans-serif',
+    mono: '"DM Mono","Courier New",monospace',
+  };
+  const serifs = {
+    classic: 'Georgia,"Times New Roman",serif',
+    modern: 'Arial,"Helvetica Neue",sans-serif',
+    rounded: '"Trebuchet MS","Arial Rounded MT Bold",sans-serif',
+    mono: '"DM Mono","Courier New",monospace',
+  };
+  const root = document.documentElement.style;
+  root.setProperty('--bg', appearance.background);
+  root.setProperty('--card', appearance.card);
+  root.setProperty('--fg', appearance.text);
+  root.setProperty('--primary', appearance.accent);
+  const selectedFont = fonts[appearance.font] || fonts.classic;
+   // Keep all aliases on the selected family: the page uses font shorthands
+   // through --sans, --serif, and --mono for headings, labels, and totals.
+   root.setProperty('--sans', selectedFont);
+   root.setProperty('--serif', selectedFont);
+   root.setProperty('--mono', selectedFont);
+  root.setProperty('--appearance-font', selectedFont);
+  document.body.classList.toggle('heading-bold', Boolean(appearance.headingBold));
+  ['background', 'card', 'text', 'accent', 'font'].forEach(key => {
+    const control = document.getElementById('theme-' + key);
+    if (control && document.activeElement !== control) control.value = appearance[key];
+  });
+  const bold = document.getElementById('theme-heading-bold');
+  if (bold) bold.checked = Boolean(appearance.headingBold);
+};
+const saveAppearance = () => {
+  state.appearance = {
+    background: document.getElementById('theme-background').value,
+    card: document.getElementById('theme-card').value,
+    text: document.getElementById('theme-text').value,
+    accent: document.getElementById('theme-accent').value,
+    font: document.getElementById('theme-font').value,
+    headingBold: document.getElementById('theme-heading-bold').checked,
+  };
+  save();
   applyAppearance();
-  document.getElementById("portfolio-name").textContent=state.portfolioName;
-  document.getElementById("total-value").textContent=money(t.total);
-  document.getElementById("breakdown").textContent=`Investments ${money(t.investments)} · Cash & savings ${money(t.cash)}`;
-  const times=state.holdings.map(h=>h.priceUpdatedAt).filter(Boolean).sort();
-  document.getElementById("saved-note").textContent=times.length?`Changes are saved in this browser. Prices captured ${dateText(times[times.length-1])}; values remain available offline.`:"Changes are saved in this browser. No live prices captured yet.";
-  document.getElementById("holdings-list").innerHTML=state.holdings.length?state.holdings.map(renderHolding).join(""):`<div class="empty">No holdings yet. Add a fund, ETF or stock to start tracking your pension.</div>`;
-  document.getElementById("cash-list").innerHTML=state.cashItems.length?state.cashItems.map(renderCash).join(""):`<div class="empty">No cash or savings items yet. Add one to include it in your retirement estimate.</div>`;
-  document.getElementById("projection-headline").textContent=`${money(pr.atRetirement)} at retirement · ${dateText(pr.retirementDate)}${ageText(pr.retirementDate)}`;
-  document.getElementById("results").innerHTML=renderResults(pr);
-  document.getElementById("chart-wrap").innerHTML=renderChart(pr);
-  setupChartInteraction(pr);
-  updateInputValues();
-  document.getElementById("modal-root").innerHTML=modal?renderModal():"";
+};
+const googleNumber = value => {
+  const result = Number(String(value == null ? '' : value).replace(/,/g, ''));
+  return Number.isFinite(result) ? result : NaN;
+};
+const marketSymbolParts = value => {
+  const original = String(value || '').trim().toUpperCase();
+  if (!original) return { symbol: '', exchange: '' };
+  if (original.includes(':')) {
+    const parts = original.split(':');
+    return { symbol: parts[1], exchange: parts[0] === 'LON' ? 'LSE' : parts[0] };
+  }
+  if (original.endsWith('.L')) return { symbol: original.slice(0, -2), exchange: 'LSE' };
+  return { symbol: original, exchange: '' };
+};
+const relayRequest = async (path, params) => {
+  const configuredApiBase = String(window.POCKET_ISA_API_BASE || '').replace(/\/+$/, '');
+  const url = new URL(path, configuredApiBase || window.location.origin);
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, value);
+  });
+  let response;
+  try {
+    response = await fetch(url.toString(), { headers: { Accept: 'application/json' } });
+  } catch (_) {
+    throw new Error('The live market-data relay could not be reached. Saved prices remain available offline.');
+  }
+  let payload = null;
+  try { payload = await response.json(); } catch (_) {}
+  if (!response.ok || (payload && payload.error)) {
+    throw new Error(payload && payload.error ? String(payload.error) : 'The market-data relay returned an error.');
+  }
+  return payload;
+};
+const fetchJson = async path => {
+  const parsed = new URL(path, 'https://pocket-isa.invalid');
+  const symbols = String(parsed.searchParams.get('symbols') || '')
+    .split(',').map(item => item.trim().toUpperCase()).filter(Boolean);
+  if (parsed.pathname === '/api/market/quote') {
+    return relayRequest('/api/market/quote', { symbols: symbols.join(',') });
+  }
+  if (parsed.pathname === '/api/market/history-monthly') {
+    const from = parsed.searchParams.get('from') || '';
+    return relayRequest('/api/market/history-monthly', { symbols: symbols.join(','), from });
+  }
+  if (parsed.pathname === '/api/market/search') {
+    const query = parsed.searchParams.get('q') || '';
+    return relayRequest('/api/market/search', { q: query });
+  }
+  throw new Error('Unsupported market-data request');
+};
+const setLiveStatus = (message, error) => {
+  const node = document.getElementById('live-status');
+  if (node) { node.textContent = message; node.classList.toggle('negative', !!error); node.classList.toggle('positive', !error); }
+};
+const holdingHistoryKey = () => {
+  const datedHoldings = (state.holdings || []).map(h => String(h.purchaseDate || '')).filter(Boolean).sort();
+  const from = datedHoldings[0] || '';
+  const holdings = (state.holdings || []).map(h => String(h.symbol || '').toUpperCase() + '|' + String(h.purchaseDate || '') + '|' + String(h.shares || 0)).sort();
+  const cashItems = (state.cashItems || []).map(c => [
+    String(c.label || ''),
+    String(c.depositDate || ''),
+    String(c.depositAmount != null ? c.depositAmount : cashDepositAmount(c)),
+    String(c.monthlyPurchase || 0),
+    String(c.interestRate ?? ''),
+  ].join('|')).sort();
+  return { from, key: [from, ...holdings, ...cashItems.map(item => 'cash|' + item)].join('||') };
+};
+const normalizeCurrency = value => String(value || 'USD') === 'GBp' ? 'GBP' : String(value || 'USD').toUpperCase();
+const fxSymbolsFor = currencies => Array.from(new Set(['GBPUSD=X'].concat(currencies.map(normalizeCurrency).filter(code => code !== 'USD' && code !== 'GBP').map(code => code + 'USD=X'))));
+const usdPerUnit = (currency, rates) => {
+  const code = String(currency || 'USD');
+  if (code === 'GBp') return rates.GBP && rates.GBP > 0 ? rates.GBP / 100 : null;
+  const rate = rates[normalizeCurrency(code)];
+  return rate && rate > 0 ? rate : null;
+};
+const displayRate = (sourceCurrency, targetCurrency, rates) => {
+  if (String(sourceCurrency || 'USD') === String(targetCurrency || 'USD')) return 1;
+  const source = usdPerUnit(sourceCurrency, rates);
+  const target = usdPerUnit(targetCurrency, rates);
+  return source && target ? source / target : 0;
+};
+const addDisplayPrices = async quotes => {
+  const list = Array.isArray(quotes) ? quotes : [];
+  return list.map(q => Object.assign({}, q, {
+    nativePrice: Number(q.price),
+    displayPrice: Number(q.displayPrice != null ? q.displayPrice : q.price),
+  }));
+};
+async function refreshHistoricalData(force) {
+  const identity = holdingHistoryKey();
+  const cached = state.chart && state.chart.historical;
+  if (!force && cached && cached.key === identity.key) return false;
+  if (!identity.from || !state.holdings.length) {
+    state.chart.historical = { version: 3, key: identity.key, from: identity.from, points: [], rate: null };
+    save();
+    return true;
+  }
+  const symbols = state.holdings.map(h => String(h.symbol || '').toUpperCase()).filter(Boolean);
+  const convertedQuotes = await addDisplayPrices(await fetchJson('/api/market/quote?symbols=' + encodeURIComponent(symbols.join(','))));
+  const multipliers = {};
+  (Array.isArray(convertedQuotes) ? convertedQuotes : []).forEach(q => {
+    const native = Number(q.nativePrice);
+    const display = Number(q.displayPrice);
+    if (native > 0 && Number.isFinite(display)) multipliers[String(q.symbol).toUpperCase()] = display / native;
+  });
+  const histories = await fetchJson('/api/market/history-monthly?symbols=' + encodeURIComponent(symbols.join(',')) + '&from=' + encodeURIComponent(identity.from));
+  const historyBySymbol = Object.fromEntries((Array.isArray(histories) ? histories : []).map(item => {
+    const points = Array.isArray(item.points) ? item.points.slice().sort((a, b) => String(a.date).localeCompare(String(b.date))) : [];
+    return [String(item.symbol).toUpperCase(), points];
+  }));
+  let rateValue = 0;
+  let rateWeight = 0;
+  state.holdings.forEach(holding => {
+    const prices = historyBySymbol[String(holding.symbol).toUpperCase()] || [];
+    if (prices.length < 2) return;
+    const earliest = Number(prices[0].close);
+    const latest = Number(prices[prices.length - 1].close);
+    const months = prices.length - 1;
+    const quote = convertedQuotes.find(item => String(item.symbol).toUpperCase() === String(holding.symbol).toUpperCase());
+    const currentValue = number(holding.shares) * number(quote && quote.displayPrice != null ? quote.displayPrice : holding.currentPrice);
+    if (earliest <= 0 || latest <= 0 || months < 1 || currentValue <= 0) return;
+    const cagr = (Math.pow(latest / earliest, 12 / months) - 1) * 100;
+    rateValue += currentValue * cagr;
+    rateWeight += currentValue;
+  });
+  const historicalRate = rateWeight > 0
+    ? Math.max(0, rateValue / rateWeight - number(state.projection.annualFeePct))
+    : null;
+  const today = new Date();
+  const start = new Date(identity.from + 'T00:00:00');
+  const startMonth = (start.getFullYear() - today.getFullYear()) * 12 + start.getMonth() - today.getMonth();
+  const points = [];
+  for (let month = Math.min(0, startMonth); month <= 0; month += 1) {
+    const date = new Date(today);
+    date.setMonth(date.getMonth() + month);
+    const monthKey = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
+    let value = 0;
+    let hasValue = false;
+    state.holdings.forEach(holding => {
+      const purchaseMonth = String(holding.purchaseDate || '').slice(0, 7);
+      if (purchaseMonth && monthKey < purchaseMonth) return;
+      const prices = historyBySymbol[String(holding.symbol).toUpperCase()] || [];
+      let close = null;
+      for (let lookback = 0; lookback <= 3 && close === null; lookback += 1) {
+        const lookupDate = new Date(date);
+        lookupDate.setMonth(lookupDate.getMonth() - lookback);
+        const lookupMonth = lookupDate.getFullYear() + '-' + String(lookupDate.getMonth() + 1).padStart(2, '0');
+        const matching = prices.filter(point => String(point.date).slice(0, 7) === lookupMonth);
+        if (matching.length) close = Number(matching[matching.length - 1].close);
+      }
+      const multiplier = multipliers[String(holding.symbol).toUpperCase()] || 1;
+      if (close !== null && Number.isFinite(close)) {
+        value += number(holding.shares) * close * multiplier;
+        hasValue = true;
+      }
+    });
+    state.cashItems.forEach(item => {
+      if (!item.depositDate || monthKey < String(item.depositDate).slice(0, 7)) return;
+      const depositDate = new Date(String(item.depositDate) + 'T00:00:00');
+      const currentMonths = Math.max(0, (today.getFullYear() - depositDate.getFullYear()) * 12 + today.getMonth() - depositDate.getMonth());
+      const monthsGrown = Math.max(0, (date.getFullYear() - depositDate.getFullYear()) * 12 + date.getMonth() - depositDate.getMonth());
+      const monthlyPurchase = number(item.monthlyPurchase);
+      const deposited = number(item.deposited);
+      const principal = Math.max(0, deposited - monthlyPurchase * currentMonths) || number(item.value);
+      const annualRate = number(item.interestRate);
+      const monthlyRate = annualRate > 0 ? Math.pow(1 + annualRate / 100, 1 / 12) - 1 : 0;
+      const factor = monthlyRate > 0 ? Math.pow(1 + monthlyRate, monthsGrown) : 1;
+      const monthlyValue = monthlyPurchase > 0
+        ? monthlyRate > 0
+          ? monthlyPurchase * (1 + monthlyRate) * (Math.pow(1 + monthlyRate, monthsGrown) - 1) / monthlyRate
+          : monthlyPurchase * monthsGrown
+        : 0;
+      value += principal * factor + monthlyValue;
+      hasValue = true;
+    });
+    if (hasValue) points.push({
+      month,
+      label: date.toLocaleDateString('en-GB', { year: 'numeric', month: 'short' }),
+      value,
+    });
+  }
+  const currentPortfolioValue = state.holdings.reduce((sum, holding) => sum + number(holding.currentPrice) * number(holding.effectiveShares != null ? holding.effectiveShares : holding.shares), 0)
+    + state.cashItems.reduce((sum, item) => sum + number(item.value), 0);
+  const computedTodayValue = points.find(point => point.month === 0)?.value ?? 0;
+  if (computedTodayValue > 0 && currentPortfolioValue > 0 && Math.abs(currentPortfolioValue - computedTodayValue) > 0.01) {
+    const offset = currentPortfolioValue - computedTodayValue;
+    points.forEach(point => { point.value = Math.max(0, point.value + offset); });
+  }
+  state.chart.historical = { version: 3, key: identity.key, from: identity.from, points, rate: historicalRate };
+  save();
+  return true;
 }
-function renderHolding(h){const value=n(h.shares)*n(h.savedPrice),gain=value-n(h.shares)*n(h.avgCost);return`<div class="item-row"><div class="item-name"><strong>${esc(h.displayName||h.ticker)}</strong><span>${esc(h.ticker)} · ${n(h.shares)} units · bought ${dateText(h.purchaseDate,true)}${n(h.monthlyContribution)>0?` · ${money(h.monthlyContribution)}/mo`:""}</span></div><div class="item-price"><strong>${money(h.savedPrice)}</strong><span>saved price · ${dateText(h.priceUpdatedAt)}</span></div><div class="item-value"><strong>${money(value)}</strong><span class="${gain>=0?"positive-text":"negative-text"}">${gain>=0?"+":""}${money(gain)} gain</span></div><div class="item-actions"><button class="icon-button" data-edit-holding="${esc(h.id)}">Edit</button><button class="icon-button danger" data-remove-holding="${esc(h.id)}">Remove</button></div></div>`}
-function renderCash(c){const value=grownCash(c),gain=value-n(c.amount);return`<div class="item-row"><div class="item-name"><strong>${esc(c.name)}</strong><span>Deposited ${money(c.amount)} · since ${dateText(c.depositDate,true)}${n(c.monthlyDeposit)>0?` · ${money(c.monthlyDeposit)}/mo`:""}</span></div><div class="item-price"><strong>${n(c.annualInterestPct).toFixed(1)}%</strong><span>AER · forecast ${n(c.forecastRatePct).toFixed(1)}%</span></div><div class="item-value"><strong>${money(value)}</strong><span class="${gain>=0?"positive-text":"negative-text"}">${gain>=0?"+":""}${money(gain)} growth</span><small>deposit amount: ${money(c.amount)}</small></div><div class="item-actions"><button class="icon-button" data-edit-cash="${esc(c.id)}">Edit</button><button class="icon-button danger" data-remove-cash="${esc(c.id)}">Remove</button></div></div>`}
-function renderResults(pr){
-  const resultText=pr.result==="no-income"?"Set an annual income target to model withdrawals.":pr.result==="sustainable"?`At ${pr.growth.toFixed(2)}% net growth, the pot sustains ${money(pr.drawdown)}/month through the target.`:`Estimated to run out around ${dateText(pr.depletionDate)}.`;
-  const startAge=ageOn(pr.projectionStartDate),retirementAge=ageOn(pr.retirementDate),drawdownAge=ageOn(pr.drawdownDate),endDate=dateAfterMonths(pr.totalMonths,pr.projectionStartDate),endAge=ageOn(endDate),depletionAge=ageOn(pr.depletionDate),lumpAge=ageOn(state.projection.lumpSumWithdrawalDate);
-  return`<div class="result-card positive"><p class="eyebrow">Pot at retirement</p><p class="result-value positive-text">${money(pr.atRetirement)}</p><p class="result-note">${dateText(pr.retirementDate)}${retirementAge===null?"":` · Age ${retirementAge}`} · starts with ${money(pr.total)} on ${dateText(pr.projectionStartDate)}.</p></div><div class="result-card"><p class="eyebrow">Net growth after charges</p><p class="result-value">${pr.growth.toFixed(2)}%</p><p class="result-note">${n(state.projection.annualFundGrowth).toFixed(2)}% growth less ${n(state.projection.fundChargesPct).toFixed(3)}% charges${startAge===null||retirementAge===null?"":` · Age ${startAge} to ${retirementAge}`}.</p></div><div class="result-card ${pr.result==="sustainable"?"positive":pr.result==="depletes"?"warning":""}"><p class="eyebrow">Retirement income result</p><p class="result-value">${pr.result==="no-income"?"—":pr.result==="sustainable"?"Sustainable":"Lasts "+formatMonths(pr.depletionMonth-pr.drawdownMonths)}</p><p class="result-note">${resultText}${pr.result==="depletes"&&depletionAge!==null?` Age ${depletionAge}.`:pr.result==="sustainable"&&endAge!==null?` Through age ${endAge}.`:""}</p></div><div class="result-card"><p class="eyebrow">Value after retirement target</p><p class="result-value">${money(pr.endValue)}</p><p class="result-note">${dateText(endDate)}${endAge===null?"":` · Age ${endAge}`}${pr.lumpAmount>0?` · ${money(pr.lumpAmount)} withdrawn${lumpAge===null?"":` at age ${lumpAge}`}`:""}.</p></div>`
+function projection() {
+  const p = state.projection;
+  const total = state.holdings.reduce((sum, h) => sum + number(h.currentPrice) * number(h.effectiveShares != null ? h.effectiveShares : h.shares), 0) + state.cashItems.reduce((sum, c) => sum + number(c.value), 0);
+  const monthlyDeposit = number(p.monthlyDeposit) + state.cashItems.reduce((sum, c) => sum + number(c.monthlyPurchase), 0);
+  const growthRate = Number.parseFloat(p.annualGrowthRate);
+  const feeRate = Number.parseFloat(p.annualFeePct);
+  const hasValidGrowthRate = Number.isFinite(growthRate) && growthRate >= 0;
+  const netRate = hasValidGrowthRate ? Math.max(0, growthRate - (Number.isFinite(feeRate) && feeRate >= 0 ? feeRate : 0)) : 0;
+  const today = new Date().toISOString().slice(0, 10);
+  const startDate = p.startDate || today;
+  const monthsSinceStart = monthsBetween(startDate, today);
+  const targetMonths = p.targetDate ? monthsBetween(today, p.targetDate) : null;
+  const lumpSumDate = p.lumpSumDate ? p.lumpSumDate : '';
+  const lumpSum = Number.parseFloat(p.lumpSumAmount);
+  const lumpSumMonths = lumpSumDate ? monthsBetween(today, lumpSumDate) : null;
+  const hasLumpSum = Number.isFinite(lumpSum) && lumpSum > 0 && lumpSumMonths !== null;
+  const valueAt = (monthsFromToday, rate) => {
+    // Forecast from the current portfolio total at month zero. Rebuilding
+    // from the historical start date can double-count or omit past deposits
+    // and make maturity disagree with the chart's today anchor.
+    const months = Math.max(0, monthsFromToday);
+    const base = fundValueAt(total, -monthlyDeposit, rate, months);
+    if (!hasLumpSum || lumpSumMonths === null || lumpSumMonths > months) return Math.max(0, base);
+    const beforeLumpSum = fundValueAt(total, -monthlyDeposit, rate, lumpSumMonths);
+    return Math.max(0, fundValueAt(beforeLumpSum + lumpSum, -monthlyDeposit, rate, months - lumpSumMonths));
+  };
+  const maturity = !hasValidGrowthRate || targetMonths === null || total <= 0
+    ? null
+    : valueAt(targetMonths, netRate);
+  return { total, monthlyDeposit, netRate, targetMonths, monthsSinceStart, lumpSumMonths, lumpSum, hasLumpSum, maturity, valueAt };
 }
-function formatMonths(m){if(!Number.isFinite(m)||m<0)return"indefinitely";const y=Math.floor(m/12),mo=Math.floor(m%12);return y===0?`${mo} month${mo===1?"":"s"}`:mo===0?`${y} year${y===1?"":"s"}`:`${y} yr ${mo} mo`}
-function renderChart(pr){
-  const width=920,height=320,left=68,right=20,top=25,bottom=45,plotW=width-left-right,plotH=height-top-bottom,step=Math.max(1,Math.floor(pr.totalMonths/55)),points=[];
-  for(let m=0;m<=pr.totalMonths;m+=step)points.push({m,v:valueAtMonth(pr,m,true)});if(points.at(-1)?.m!==pr.totalMonths)points.push({m:pr.totalMonths,v:pr.endValue});
-  const max=Math.max(1,...points.map(p=>p.v))*1.08,x=m=>left+(m/Math.max(1,pr.totalMonths))*plotW,y=v=>top+(1-v/max)*plotH,path=points.map((p,i)=>`${i?"L":"M"} ${x(p.m).toFixed(1)} ${y(Math.max(0,p.v)).toFixed(1)}`).join(" ");
-  const grids=[0,.25,.5,.75,1].map(f=>{const yy=top+f*plotH,val=max*(1-f);return`<line x1="${left}" x2="${width-right}" y1="${yy}" y2="${yy}" class="chart-grid"/><text x="${left-9}" y="${yy+4}" text-anchor="end" class="chart-axis">${esc(money(val))}</text>`}).join("");
-  const labels=[0,pr.drawdownMonths,pr.retirementMonths,pr.totalMonths].filter((v,i,a)=>v>=0&&v<=pr.totalMonths&&a.indexOf(v)===i).map(m=>{const age=ageOn(dateAfterMonths(m,pr.projectionStartDate));return`<text x="${x(m)}" y="${height-14}" text-anchor="${m===0?"start":m===pr.totalMonths?"end":"middle"}" class="chart-axis">${m===0?"Projection start":m===pr.drawdownMonths?"Drawdown":m===pr.retirementMonths?"Retirement":`${Math.round(m/12)}y`}${age===null?"":` · age ${age}`}</text>`}).join("");
-  const marker=(month,label,value,color,lane=0)=>{if(month===null||month===undefined||month<0||month>pr.totalMonths)return"";const anchor=month>pr.totalMonths*.72?"end":"start",dx=anchor==="end"?-6:6,yy=top+12+lane*29;return`<line x1="${x(month)}" x2="${x(month)}" y1="${top}" y2="${top+plotH}" stroke="${color}" stroke-width="1.5" stroke-dasharray="5 5"/><text x="${x(month)+dx}" y="${yy}" text-anchor="${anchor}" class="chart-marker" fill="${color}"><tspan x="${x(month)+dx}">${esc(label)}</tspan><tspan x="${x(month)+dx}" dy="12" class="chart-marker-value">${esc(money(value))}</tspan></text>`};
-  return`<svg class="pension-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="Retirement projection. Hover or touch the chart for a date and fund value."><g>${grids}</g>${marker(pr.drawdownMonths,"Drawdown start"+ageText(pr.drawdownDate),pr.atDrawdownStart,"var(--blue)",0)}${marker(pr.retirementMonths,"Retirement"+ageText(pr.retirementDate),pr.atRetirement,"var(--accent)",1)}${marker(pr.lumpMonth,"Lump sum"+ageText(state.projection.lumpSumWithdrawalDate),valueAtMonth(pr,pr.lumpMonth,true),"var(--danger)",2)}<path d="${path}" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><g id="chart-tooltip" class="chart-tooltip hidden"><line id="chart-tooltip-line" y1="${top}" y2="${top+plotH}" stroke="var(--fg)" stroke-width="1" stroke-dasharray="3 3"/><circle id="chart-tooltip-dot" r="5" fill="var(--card)" stroke="var(--blue)" stroke-width="3"/><rect id="chart-tooltip-box" width="150" height="42" rx="9" fill="var(--fg)" opacity=".94"/><text id="chart-tooltip-date" y="16" fill="var(--card)" font-size="10" font-family="var(--mono)"></text><text id="chart-tooltip-value" y="32" fill="var(--card)" font-size="12" font-weight="700" font-family="var(--mono)"></text></g><rect class="chart-hit" x="${left}" y="${top}" width="${plotW}" height="${plotH}" fill="transparent"/>${labels}</svg>`
+function renderRows() {
+  const rows = state.holdings.map(h => { const shares = number(h.shares); const valueShares = number(h.effectiveShares != null ? h.effectiveShares : h.shares); const avgCost = h.avgCost != null ? number(h.avgCost) : shares ? number(h.costBasis) / shares : 0; return '<div class="holding-row"><div class="holding-name"><strong>' + esc(h.name) + '</strong><span>' + esc(h.symbol) + ' · ' + shares + ' shares' + (h.purchaseDate ? ' · bought ' + esc(fmtDate(h.purchaseDate)) : '') + '</span></div><div class="holding-price"><strong>' + money(h.currentPrice) + '</strong><span>' + (h.quoteAsOf ? 'updated ' + esc(fmtDate(h.quoteAsOf)) : 'captured price') + '</span></div><div class="holding-value"><strong>' + money(number(h.currentPrice) * valueShares) + '</strong><span>cost ' + money(avgCost * shares) + '</span></div><div class="row-actions"><button class="icon-button" data-edit-holding="' + esc(h.symbol) + '">Edit</button><button class="icon-button danger-button" data-remove-holding="' + esc(h.symbol) + '">Remove</button></div></div>'; }).join('');
+  const cash = state.cashItems.map(c => {
+    const current = cashAtToday(c);
+    return '<div class="holding-row cash-row"><div class="holding-name"><strong>' + esc(c.label) + '</strong><span>' + (c.depositDate ? fmtDate(c.depositDate) : 'tap to set up') + (number(c.monthlyPurchase) ? ' · ' + whole(c.monthlyPurchase) + '/mo' : '') + '</span></div><div class="holding-price"><span>' + (c.interestRate == null ? '—' : Number(c.interestRate).toFixed(1) + '%') + '</span></div><div class="holding-value"><strong>' + money(current.value) + '</strong>' + (current.cashGain > 0 ? '<span>+' + money(current.cashGain) + ' growth</span>' : '') + '<small>deposit amount: ' + money(current.depositAmount) + ' · total deposited: ' + money(current.deposited) + '</small></div><div class="row-actions"><button class="icon-button" data-edit-cash="' + esc(c.label) + '">Edit</button><button class="icon-button danger-button" data-remove-cash="' + esc(c.label) + '">Remove</button></div></div>';
+  }).join('');
+  document.getElementById('portfolio-rows').innerHTML = rows + cash || '<div class="projection-placeholder">No holdings yet. Add one to start your offline portfolio.</div>';
 }
-function setupChartInteraction(pr){
-  const svg=document.querySelector(".pension-chart"),hit=svg?.querySelector(".chart-hit"),tip=svg?.querySelector("#chart-tooltip");if(!svg||!hit||!tip)return;
-  const left=68,right=20,top=25,width=920,height=320,plotW=width-left-right,plotH=height-top-45,max=Math.max(1,...pr.points.map(p=>p.v))*1.08;
-  const show=event=>{const rect=svg.getBoundingClientRect(),clientX=event.touches?.[0]?.clientX??event.clientX,svgX=(clientX-rect.left)*width/rect.width,month=Math.max(0,Math.min(pr.totalMonths,Math.round((svgX-left)/plotW*pr.totalMonths))),value=valueAtMonth(pr,month,true),px=left+(month/Math.max(1,pr.totalMonths))*plotW,py=top+(1-value/max)*plotH,boxX=px>width-190?px-158:px+8;
-    tip.classList.remove("hidden");svg.querySelector("#chart-tooltip-line").setAttribute("x1",px);svg.querySelector("#chart-tooltip-line").setAttribute("x2",px);svg.querySelector("#chart-tooltip-dot").setAttribute("cx",px);svg.querySelector("#chart-tooltip-dot").setAttribute("cy",py);svg.querySelector("#chart-tooltip-box").setAttribute("x",boxX);svg.querySelector("#chart-tooltip-box").setAttribute("y",Math.max(top,py-50));svg.querySelector("#chart-tooltip-date").setAttribute("x",boxX+10);svg.querySelector("#chart-tooltip-date").setAttribute("y",Math.max(top,py-50)+16);svg.querySelector("#chart-tooltip-date").textContent=dateText(dateAfterMonths(month,pr.projectionStartDate));svg.querySelector("#chart-tooltip-value").setAttribute("x",boxX+10);svg.querySelector("#chart-tooltip-value").setAttribute("y",Math.max(top,py-50)+33);svg.querySelector("#chart-tooltip-value").textContent=money(value)};
-  hit.addEventListener("pointermove",show);hit.addEventListener("pointerdown",show);hit.addEventListener("pointerleave",()=>tip.classList.add("hidden"))
+function esc(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' }[c])); }
+function render() {
+  state.cashItems = (state.cashItems || []).map(cashAtToday);
+  const result = projection();
+  const fieldValues = [['projection-start-date','startDate'],['projection-start-value','manualStartValue'],['projection-monthly-deposit','monthlyDeposit'],['projection-growth-rate','annualGrowthRate'],['projection-fee','annualFeePct'],['projection-target-date','targetDate'],['projection-lump-sum-date','lumpSumDate'],['projection-lump-sum-amount','lumpSumAmount']];
+  fieldValues.forEach(pair => { const node = input(pair[0]); if (node && document.activeElement !== node) node.value = state.projection[pair[1]] || ''; });
+  document.querySelector('.page-title').textContent = whole(result.total);
+  document.querySelector('.snapshot-note').textContent = state.priceAsOf ? 'Prices captured ' + fmtDate(state.priceAsOf) + '. Use Refresh prices when online; saved values remain available offline.' : 'No live prices have been captured yet. Use Refresh prices when online.';
+  document.getElementById('projection-net-rate').textContent = 'Net ' + result.netRate.toFixed(2) + '% after fees';
+  const projectionTitle = input('projection-summary-title');
+  if (projectionTitle) projectionTitle.textContent = result.maturity !== null ? whole(result.maturity) + ' at maturity · ' + result.targetMonths + ' months' : (result.monthlyDeposit ? 'Growing with ' + whole(result.monthlyDeposit) + ' monthly deposit' : 'Set projection inputs to forecast');
+  const results = document.getElementById('projection-results');
+  results.innerHTML = result.maturity !== null ? '<div class="result-grid"><div class="result-card result-positive"><p class="eyebrow">Value at maturity</p><p class="result-value positive">' + whole(result.maturity) + '</p><p class="result-note">' + result.targetMonths + ' months away · recalculated offline.</p></div></div>' : '<div class="projection-placeholder">Set a target date to calculate a maturity value offline.</div>';
+  renderRows();
+  renderChart(result);
+  save();
 }
-function openModal(kind,id=null){const existing=kind==="holding"?state.holdings.find(x=>x.id===id)||{}:state.cashItems.find(x=>x.id===id)||{};modal={kind,id,draft:{...existing},results:[],quote:null,status:""};render()}
-function closeModal(){modal=null;render()}
-function renderModal(){
-  if(modal.kind==="holding"){const h=modal.draft||{},results=modal.results||[];return`<div class="modal-backdrop"><form class="modal" id="holding-form"><div class="modal-head"><h2>${modal.id?"Edit":"Add"} holding</h2><button type="button" class="modal-close" data-close-modal>×</button></div><div class="modal-grid"><div class="field full"><label>Ticker / symbol</label><div class="search-line"><input name="ticker" value="${esc(h.ticker||"")}" required><button type="button" class="button" id="search-yahoo">Search Yahoo</button></div><p class="modal-status">${esc(modal.status||"Search by ticker or company name to load a live Yahoo quote.")}</p>${results.length?`<div class="search-results"><select id="quote-result"><option value="">Choose a result</option>${results.map(r=>`<option value="${esc(r.symbol)}">${esc(r.symbol)} — ${esc(r.shortName||r.longName||r.symbol)}</option>`).join("")}</select></div>`:""}</div><div class="field full"><label>Display name</label><input name="displayName" value="${esc(h.displayName||"")}"></div><div class="field"><label>Units / shares</label><input name="shares" type="number" step="any" value="${n(h.shares)||""}" required></div><div class="field"><label>Saved price</label><input name="savedPrice" type="number" step="any" value="${n(h.savedPrice)||""}" required></div><div class="field"><label>Average cost</label><input name="avgCost" type="number" step="any" value="${n(h.avgCost)||""}"></div><div class="field"><label>Monthly contribution</label><input name="monthlyContribution" type="number" step="any" value="${n(h.monthlyContribution)||""}"></div><div class="field"><label>Purchase date</label><input name="purchaseDate" type="date" value="${esc(h.purchaseDate||todayISO())}"></div><div class="field"><label>Quote currency</label><select name="quoteCurrency">${["GBP","USD","EUR"].map(c=>`<option ${c===(h.quoteCurrency||state.currency)?"selected":""}>${c}</option>`).join("")}</select></div></div><div class="modal-actions"><button type="button" class="button" data-close-modal>Cancel</button><button class="button primary">Save holding</button></div></form></div>`}
-  const c=modal.draft||{};return`<div class="modal-backdrop"><form class="modal" id="cash-form"><div class="modal-head"><h2>${modal.id?"Edit":"Add"} cash / savings</h2><button type="button" class="modal-close" data-close-modal>×</button></div><div class="modal-grid"><div class="field full"><label>Name</label><input name="name" value="${esc(c.name||"Cash")}" required></div><div class="field"><label>Deposited amount</label><input name="amount" type="number" step="any" min="0" value="${n(c.amount)||""}" required></div><div class="field"><label>Monthly deposit</label><input name="monthlyDeposit" type="number" step="any" min="0" value="${n(c.monthlyDeposit)||""}"></div><div class="field"><label>Past interest AER %</label><input name="annualInterestPct" type="number" step="0.1" min="0" value="${n(c.annualInterestPct)||""}"></div><div class="field"><label>Future forecast AER %</label><input name="forecastRatePct" type="number" step="0.1" min="0" value="${n(c.forecastRatePct)||""}"></div><div class="field full"><label>Deposit date</label><input name="depositDate" type="date" value="${esc(c.depositDate||todayISO())}"></div></div><div class="modal-actions"><button type="button" class="button" data-close-modal>Cancel</button><button class="button accent">Save cash item</button></div></form></div>`
+function renderChart(result) {
+  const rawHistorical = state.chart && state.chart.historical && Array.isArray(state.chart.historical.points)
+    ? state.chart.historical.points
+    : [];
+  const historical = rawHistorical
+    .filter(point => Number.isFinite(Number(point.month)) && Number(point.month) <= 0)
+    .map(point => ({ month: Number(point.month), label: point.label, value: Number(point.value) }))
+    .filter(point => Number.isFinite(point.value))
+    .sort((a, b) => a.month - b.month);
+  if (historical.length) {
+    const todayPoint = { month: 0, label: 'Today', value: Number(result.total) || 0 };
+    if (historical[historical.length - 1].month === 0) historical[historical.length - 1] = todayPoint;
+    else historical.push(todayPoint);
+  }
+  const horizon = Math.max(12, Math.min(120, result.targetMonths || 60));
+  const step = Math.max(1, Math.floor(horizon / 12));
+  const historicalRate = historical.length > 1
+    ? (Number.isFinite(Number(state.chart.historical.rate)) ? Number(state.chart.historical.rate) : null)
+    : null;
+  const fallbackHistoricalRate = historicalRate === null && historical.length > 1 && Number.isFinite(Number(state.chart.autoGrowthRate))
+    ? Number(state.chart.autoGrowthRate)
+    : historicalRate;
+  const effectiveHistoricalRate = fallbackHistoricalRate !== null
+    ? fallbackHistoricalRate
+    : historical.length > 1
+      ? (function () {
+        const first = historical[0], last = historical[historical.length - 1];
+        const months = Number(last.month) - Number(first.month);
+        return months > 0 && Number(first.value) > 0 && Number(last.value) > 0
+          ? (Math.pow(Number(last.value) / Number(first.value), 12 / months) - 1) * 100
+          : null;
+        })()
+      : null;
+  const future = [];
+  for (let i = 0; i <= horizon; i += step) {
+    const originalValue = result.valueAt(i, result.netRate);
+    const historicalRateValue = effectiveHistoricalRate === null
+      ? null
+      : result.valueAt(i, effectiveHistoricalRate);
+    future.push({
+      month: i,
+      label: i === 0 ? 'Today' : i + ' mo',
+      histValue: historicalRateValue === null ? null : Math.max(0, historicalRateValue),
+      actualHistValue: i === 0 && historical.length ? historical[historical.length - 1].value : null,
+      drawValue: Math.max(0, originalValue),
+    });
+  }
+  const points = historical.map(point => ({ month: point.month, label: point.label, histValue: null, actualHistValue: point.value, drawValue: null }));
+  future.forEach(point => {
+    const existing = points.find(item => item.month === point.month);
+    if (existing) Object.assign(existing, point);
+    else points.push(point);
+  });
+  if (result.hasLumpSum && result.lumpSumMonths !== null && result.lumpSumMonths > 0 && result.lumpSumMonths <= horizon && !points.some(point => point.month === result.lumpSumMonths)) {
+    points.push({
+      month: result.lumpSumMonths,
+      label: result.lumpSumMonths + ' mo',
+      histValue: effectiveHistoricalRate === null ? null : result.valueAt(result.lumpSumMonths, effectiveHistoricalRate),
+      actualHistValue: null,
+      drawValue: result.valueAt(result.lumpSumMonths, result.netRate),
+    });
+  }
+  points.sort((a, b) => a.month - b.month);
+  document.getElementById('chart-wrap').innerHTML = offlineChartSvg(points, { todayMonth: 0, lumpSumMonth: result.hasLumpSum ? result.lumpSumMonths : null }) + '<div class="legend">' +
+    (historical.length > 1 ? '<span><i class="actual"></i>Portfolio history</span>' : '') +
+    (effectiveHistoricalRate !== null ? '<span><i class="projected"></i>Average-growth forecast (' + effectiveHistoricalRate.toFixed(1) + '% pa)</span>' : '') +
+    '<span><i class="growth"></i>Your projection (' + result.netRate.toFixed(1) + '% net)</span></div>';
 }
-function setLiveStatus(message,error=false){const el=document.getElementById("live-status");if(el){el.textContent=message;el.classList.toggle("error",error)}}
-async function fetchJson(path,fresh=false,retry=true){if(!API_BASE)throw new Error("Live market service unavailable.");const separator=path.includes("?")?"&":"?",url=API_BASE+path+(fresh?separator+"_fresh="+Date.now():"");try{const response=await fetch(url,{headers:{Accept:"application/json"},cache:fresh?"no-store":"default"});if(!response.ok){if(retry&&(response.status===429||response.status>=500)){await new Promise(resolve=>setTimeout(resolve,700));return fetchJson(path,true,false)}throw new Error(`Live market request failed (${response.status}).`)}return response.json()}catch(error){if(retry){await new Promise(resolve=>setTimeout(resolve,700));return fetchJson(path,true,false)}throw error}}
-function normalizeCurrency(v){return String(v||"USD")==="GBp"?"GBP":String(v||"USD").toUpperCase()}
-function fxSymbolsFor(currencies,target){const targetCode=normalizeCurrency(target),sourceCodes=Array.from(new Set(currencies.map(normalizeCurrency))),conversionNeeded=sourceCodes.some(code=>code!==targetCode);if(!conversionNeeded)return[];return Array.from(new Set(sourceCodes.concat(targetCode).filter(code=>code!=="USD").map(code=>code+"USD=X")))}
-function usdPerUnit(currency,rates){const code=String(currency||"USD");if(code==="GBp")return rates.GBP&&rates.GBP>0?rates.GBP/100:null;const rate=rates[normalizeCurrency(code)];return rate&&rate>0?rate:null}
-function displayRate(source,target,rates){if(String(source||"USD")===String(target||"USD"))return 1;if(String(source)==="GBp"&&normalizeCurrency(target)==="GBP")return.01;if(normalizeCurrency(source)==="GBP"&&String(target)==="GBp")return 100;const s=usdPerUnit(source,rates),t=usdPerUnit(target,rates);return s&&t?s/t:0}
-async function addDisplayPrices(quotes,fresh=false){const list=Array.isArray(quotes)?quotes:[],fxSymbols=fxSymbolsFor(list.map(q=>q.currency),state.currency),fxQuotes=fxSymbols.length?await fetchJson("/api/market/quote?symbols="+encodeURIComponent(fxSymbols.join(",")),fresh):[],rates={USD:1};(Array.isArray(fxQuotes)?fxQuotes:[]).forEach(q=>{const m=String(q.symbol||"").match(/^([A-Z]{3})USD=X$/i);if(m&&n(q.price)>0)rates[m[1].toUpperCase()]=n(q.price)});return list.map(q=>({...q,nativePrice:n(q.price),displayPrice:n(q.price)*displayRate(q.currency,state.currency,rates)}))}
-const DEFAULT_APPEARANCE={...DATA.appearance};
-function applyAppearance(){const a={...DEFAULT_APPEARANCE,...state.appearance},fonts={classic:'"DM Sans","Trebuchet MS",sans-serif',modern:'Arial,"Helvetica Neue",sans-serif',rounded:'"Trebuchet MS","Arial Rounded MT Bold",sans-serif',mono:'"DM Mono","Courier New",monospace'},serifs={classic:'Georgia,"Times New Roman",serif',modern:'Arial,"Helvetica Neue",sans-serif',rounded:'"Trebuchet MS","Arial Rounded MT Bold",sans-serif',mono:'"DM Mono","Courier New",monospace'},selected=fonts[a.font]||fonts.classic,root=document.documentElement.style;root.setProperty("--bg",a.background);root.setProperty("--card",a.card);root.setProperty("--fg",a.text);root.setProperty("--primary",a.accent);root.setProperty("--sans",selected);root.setProperty("--serif",a.font==="classic"?serifs.classic:selected);root.setProperty("--mono",selected);document.body.classList.toggle("heading-bold",Boolean(a.headingBold));["background","card","text","accent","font"].forEach(key=>{const el=document.getElementById("theme-"+key);if(el&&document.activeElement!==el)el.value=a[key]});const bold=document.getElementById("theme-heading-bold");if(bold)bold.checked=Boolean(a.headingBold)}
-function saveAppearance(){state.appearance={background:document.getElementById("theme-background").value,card:document.getElementById("theme-card").value,text:document.getElementById("theme-text").value,accent:document.getElementById("theme-accent").value,font:document.getElementById("theme-font").value,headingBold:document.getElementById("theme-heading-bold").checked};saveState();applyAppearance()}
-async function quoteFor(symbol){const quotes=await addDisplayPrices(await fetchJson("/api/market/quote?symbols="+encodeURIComponent(symbol)));return quotes[0]||null}
-async function refreshPrices(){
-  const button=document.getElementById("refresh-prices");if(!state.holdings.length){setLiveStatus("Add a holding first",true);return}
-  button.disabled=true;button.textContent="Refreshing…";setLiveStatus("Fetching Yahoo prices…");
-  try{const quotes=await addDisplayPrices(await fetchJson("/api/market/quote?symbols="+encodeURIComponent(state.holdings.map(h=>h.ticker).join(",")),true),true),bySymbol=Object.fromEntries(quotes.map(q=>[String(q.symbol).toUpperCase(),q]));let updated=0;state.holdings=state.holdings.map(h=>{const q=bySymbol[String(h.ticker).toUpperCase()];if(!q||!Number.isFinite(q.displayPrice))return h;updated++;return{...h,displayName:h.displayName||q.shortName||q.longName||h.ticker,savedPrice:q.displayPrice,nativePrice:q.nativePrice,sourceCurrency:q.currency,quoteCurrency:state.currency,priceUpdatedAt:q.asOf||new Date().toISOString(),dayChangePercent:n(q.changePercent)}});saveState();render();const closed=quotes.length&&quotes.every(q=>String(q.marketState||"").toUpperCase()!=="REGULAR");setLiveStatus(`${updated} price${updated===1?"":"s"} refreshed${closed?" · latest available close":""}`)}catch(error){setLiveStatus(error.message||"Live refresh unavailable",true)}finally{button.disabled=false;button.textContent="Refresh prices"}
+function offlineChartSvg(points, markers) {
+  if (points.length < 2) return '<div class="chart-empty">Add projection inputs to draw the portfolio graph.</div>';
+  const mobile = typeof window !== 'undefined' && ('matchMedia' in window
+    ? window.matchMedia('(max-width: 600px)').matches
+    : window.innerWidth <= 600);
+  const width = mobile ? 390 : 920;
+  const height = mobile ? 350 : 280;
+  const left = mobile ? 61 : 68;
+  const right = mobile ? 12 : 20;
+  const top = mobile ? 46 : 22;
+  const bottom = mobile ? 70 : 42;
+  const values = points.flatMap(p => [p.actualHistValue, p.histValue, p.drawValue]).filter(Number.isFinite);
+  const min = Math.max(0, Math.floor(Math.min.apply(null, values) * .9));
+  const max = Math.max(min + 1, Math.ceil(Math.max.apply(null, values) * 1.08));
+  const minMonth = Math.min.apply(null, points.map(point => Number(point.month)));
+  const maxMonth = Math.max.apply(null, points.map(point => Number(point.month)));
+  const x = i => left + (Number(points[i].month) - minMonth) / Math.max(1, maxMonth - minMonth) * (width - left - right);
+  const y = value => top + (1 - (value - min) / (max - min)) * (height - top - bottom);
+  const compactMoney = value => {
+    const amount = Math.abs(Number(value) || 0);
+    const suffix = amount >= 1000000 ? 'm' : amount >= 1000 ? 'k' : '';
+    const unit = suffix === 'm' ? 1000000 : suffix === 'k' ? 1000 : 1;
+    let text = (amount / unit).toFixed(suffix ? (amount / unit >= 10 ? 0 : 1) : 0).replace(/\.0$/, '');
+    return (Number(value) < 0 ? '-' : '') + symbol + (suffix ? text + suffix : Number(text).toLocaleString('en-GB'));
+  };
+  const path = key => {
+    const paths = [];
+    let current = '';
+    points.forEach((point, i) => {
+      const rawValue = point[key];
+      const value = rawValue === null || rawValue === undefined ? NaN : Number(rawValue);
+      if (!Number.isFinite(value)) { if (current) paths.push(current); current = ''; return; }
+      current += (current ? ' L' : 'M') + ' ' + x(i).toFixed(2) + ' ' + y(value).toFixed(2);
+    });
+    if (current) paths.push(current);
+    return paths.map(item => '<path d="' + item + '" fill="none" stroke-linecap="round" stroke-linejoin="round"/>').join('');
+  };
+  const grid = [0, .25, .5, .75, 1].map(f => {
+    const lineY = top + f * (height - top - bottom);
+    const value = min + (max - min) * (1 - f);
+    return '<line x1="' + left + '" x2="' + (width - right) + '" y1="' + lineY + '" y2="' + lineY + '" class="chart-grid"/><text x="' + (left - 9) + '" y="' + (lineY + 4) + '" text-anchor="end" class="chart-axis">' + esc(mobile ? compactMoney(value) : whole(value)) + '</text>';
+  }).join('');
+  const labelCandidates = [0, points.findIndex(point => Number(point.month) === 0), Math.floor((points.length - 1) / 2), points.length - 1]
+    .filter(index => index >= 0 && index < points.length)
+    .filter((index, i, list) => list.indexOf(index) === i);
+  const selectedLabels = [];
+  labelCandidates.forEach(index => {
+    const first = index === 0, last = index === points.length - 1;
+    const anchor = first ? 'start' : last ? 'end' : 'middle';
+    const labelWidth = String(points[index].label || '').length * (mobile ? 4.6 : 4) + (first || last ? 0 : 8);
+    const start = x(index) - (anchor === 'end' ? labelWidth : anchor === 'middle' ? labelWidth / 2 : 0);
+    const end = start + labelWidth;
+    if (!mobile || selectedLabels.every(item => end + 8 < item.start || start - 8 > item.end)) {
+      selectedLabels.push({ index, start, end });
+    }
+  });
+  const labels = selectedLabels.map(item => {
+    const i = item.index, first = i === 0, last = i === points.length - 1;
+    return '<text x="' + x(i) + '" y="' + (height - 18) + '" text-anchor="' + (first ? 'start' : last ? 'end' : 'middle') + '" class="chart-axis">' + esc(points[i].label) + '</text>';
+  }).join('');
+  const marker = (month, label, color, lane) => {
+    if (month === null || month === undefined || !Number.isFinite(Number(month))) return '';
+    let bestIndex = 0, bestDistance = Infinity;
+    points.forEach((point, index) => { const distance = Math.abs(Number(point.month) - Number(month)); if (distance < bestDistance) { bestDistance = distance; bestIndex = index; } });
+    const markerX = x(bestIndex);
+    const point = points[bestIndex];
+    const markerValue = Number.isFinite(Number(point.drawValue)) ? point.drawValue
+      : Number.isFinite(Number(point.actualHistValue)) ? point.actualHistValue : point.histValue;
+    const anchor = markerX < left + 52 ? 'start' : markerX > width - (mobile ? 112 : 145) ? 'end' : markerX > width * .63 ? 'end' : 'start';
+    const dx = anchor === 'end' ? -7 : 7;
+    const markerY = top + 15 + lane * (mobile ? 32 : 26);
+    const strokeWidth = mobile ? 2 : 1;
+    return '<line x1="' + markerX + '" x2="' + markerX + '" y1="' + top + '" y2="' + (height - bottom) + '" stroke="' + color + '" stroke-width="' + strokeWidth + '" stroke-dasharray="5 5"/><text x="' + (markerX + dx) + '" y="' + markerY + '" text-anchor="' + anchor + '" class="chart-marker" fill="' + color + '"><tspan x="' + (markerX + dx) + '">' + esc(label) + '</tspan>' + (Number.isFinite(Number(markerValue)) ? '<tspan x="' + (markerX + dx) + '" dy="14" class="chart-marker-value">' + esc(money(markerValue)) + '</tspan>' : '') + '</text>';
+  };
+  const dots = points.map((p, i) => {
+    const items = [];
+    const actualValue = p.actualHistValue === null || p.actualHistValue === undefined ? NaN : Number(p.actualHistValue);
+    const drawValue = p.drawValue === null || p.drawValue === undefined ? NaN : Number(p.drawValue);
+    const radius = mobile ? 5 : 4;
+    if (Number.isFinite(actualValue)) items.push('<circle cx="' + x(i) + '" cy="' + y(actualValue) + '" r="' + radius + '" fill="#2f75c8" class="chart-dot"><title>' + esc(p.label) + ' · Portfolio history: ' + esc(whole(actualValue)) + '</title></circle>');
+    if (Number.isFinite(drawValue)) items.push('<circle cx="' + x(i) + '" cy="' + y(drawValue) + '" r="' + radius + '" fill="#bd3f32" class="chart-dot"><title>' + esc(p.label) + ' · Your projection: ' + esc(whole(drawValue)) + '</title></circle>');
+    return items.join('');
+  }).join('');
+  return '<svg class="portfolio-chart" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Portfolio value over time">' + grid +
+    marker(markers && markers.todayMonth, 'Today', '#8c989b', 0) +
+    marker(markers && markers.lumpSumMonth, 'Lump sum deposit', '#d79b2f', 1) +
+    '<g stroke="#2f75c8" stroke-width="' + (mobile ? '5' : '4') + '">' + path('actualHistValue') + '</g>' +
+    '<g stroke="#4c5b5d" stroke-width="' + (mobile ? '4.5' : '3.5') + '" stroke-dasharray="' + (mobile ? '9 6' : '10 6') + '">' + path('histValue') + '</g>' +
+    '<g stroke="#bd3f32" stroke-width="' + (mobile ? '5' : '4') + '">' + path('drawValue') + '</g>' +
+    dots + labels + '</svg>';
 }
-async function searchYahoo(){
-  const form=document.getElementById("holding-form"),formData=new FormData(form),query=String(formData.get("ticker")||"").trim();if(!query)return;
-  modal.draft={...modal.draft,ticker:query,displayName:String(formData.get("displayName")||modal.draft.displayName||""),shares:n(formData.get("shares")),savedPrice:n(formData.get("savedPrice")),avgCost:n(formData.get("avgCost")),monthlyContribution:n(formData.get("monthlyContribution")),purchaseDate:String(formData.get("purchaseDate")||modal.draft.purchaseDate||todayISO()),quoteCurrency:String(formData.get("quoteCurrency")||state.currency)};
-  modal.status="Searching Yahoo…";modal.results=[];render();
-  try{const results=await fetchJson("/api/market/search?q="+encodeURIComponent(query));modal.results=Array.isArray(results)?results:[];modal.status=modal.results.length?`Choose a result, then save the holding.`:`No symbols found for “${query}”.`;render()}catch(error){modal.status=error.message||"Yahoo search unavailable.";render()}
+function wireProjection() {
+  const fields = [['projection-start-date','startDate'],['projection-start-value','manualStartValue'],['projection-monthly-deposit','monthlyDeposit'],['projection-growth-rate','annualGrowthRate'],['projection-fee','annualFeePct'],['projection-target-date','targetDate'],['projection-lump-sum-date','lumpSumDate'],['projection-lump-sum-amount','lumpSumAmount']];
+  fields.forEach(pair => { const node = input(pair[0]); if (node) node.addEventListener('input', () => { state.projection[pair[1]] = node.value; render(); }); });
 }
-async function selectQuote(symbol){
-  if(!symbol)return;modal.status="Loading live quote…";render();
-  try{const q=await quoteFor(symbol);if(!q)throw new Error("No live quote found.");modal.draft={...modal.draft,ticker:q.symbol,displayName:modal.draft.displayName||q.shortName||q.longName||q.symbol,savedPrice:q.displayPrice,nativePrice:q.nativePrice,sourceCurrency:q.currency,quoteCurrency:state.currency,priceUpdatedAt:q.asOf||new Date().toISOString()};modal.quote=q;modal.status=`Yahoo quote loaded · ${money(q.displayPrice)}`;render()}catch(error){modal.status=error.message||"Quote unavailable.";render()}
+function manualRefreshPrices() {
+  const now = new Date().toISOString();
+  let updated = 0;
+  state.holdings = state.holdings.map(holding => {
+    const answer = window.prompt(
+      'Live market data is unavailable. Enter the current ' + (DATA.displayCurrency || 'display-currency') + ' price for ' + holding.symbol + ' (Cancel to leave unchanged):',
+      String(holding.currentPrice == null ? '' : holding.currentPrice)
+    );
+    if (answer === null) return holding;
+    const value = Number.parseFloat(String(answer).replace(/,/g, ''));
+    if (!Number.isFinite(value) || value < 0) return holding;
+    updated += 1;
+    return Object.assign({}, holding, {
+      currentPrice: value,
+      nativePrice: value,
+      quoteCurrency: DATA.displayCurrency || holding.quoteCurrency,
+      quoteAsOf: now,
+      changePercent: null,
+    });
+  });
+  if (updated) {
+    state.priceAsOf = now;
+    render();
+    setLiveStatus(updated + ' price' + (updated === 1 ? '' : 's') + ' saved manually · live data unavailable', true);
+  }
+  return updated;
 }
-function saveHolding(form){
-  const f=new FormData(form),id=modal.id||"holding-"+Date.now(),old=state.holdings.find(h=>h.id===id)||{},item={...old,id,ticker:String(f.get("ticker")||"").trim().toUpperCase(),displayName:String(f.get("displayName")||f.get("ticker")||"").trim(),shares:n(f.get("shares")),savedPrice:n(f.get("savedPrice")),avgCost:n(f.get("avgCost")),monthlyContribution:n(f.get("monthlyContribution")),purchaseDate:String(f.get("purchaseDate")||""),quoteCurrency:String(f.get("quoteCurrency")||state.currency),priceUpdatedAt:modal.quote?.asOf||old.priceUpdatedAt||new Date().toISOString(),nativePrice:modal.quote?.nativePrice??old.nativePrice,sourceCurrency:modal.quote?.currency??old.sourceCurrency};state.holdings=modal.id?state.holdings.map(h=>h.id===id?item:h):[...state.holdings,item];saveState();modal=null;render()}
-function saveCash(form){
-  const f=new FormData(form),id=modal.id||"cash-"+Date.now(),old=state.cashItems.find(c=>c.id===id)||{},item={...old,id,name:String(f.get("name")||"Cash").trim(),amount:n(f.get("amount")),monthlyDeposit:n(f.get("monthlyDeposit")),annualInterestPct:n(f.get("annualInterestPct")),forecastRatePct:n(f.get("forecastRatePct")),depositDate:String(f.get("depositDate")||"")};state.cashItems=modal.id?state.cashItems.map(c=>c.id===id?item:c):[...state.cashItems,item];saveState();modal=null;render()}
-document.addEventListener("click",event=>{
-  const t=event.target.closest("button");if(!t)return;
-  if(t.id==="add-holding"||t.id==="add-holding-2")openModal("holding");
-  if(t.id==="add-cash"||t.id==="add-cash-2")openModal("cash");
-  if(t.id==="refresh-prices")void refreshPrices();
-  if(t.id==="appearance-toggle"){const panel=document.getElementById("appearance-panel"),open=panel.classList.toggle("hidden")===false;t.setAttribute("aria-expanded",String(open));t.textContent=open?"Hide appearance settings":"Customise appearance"}
-  if(t.id==="appearance-reset"){state.appearance={...DEFAULT_APPEARANCE};saveState();applyAppearance()}
-  if(t.id==="projection-toggle")toggleProjection();
-  if(t.id==="search-yahoo"){event.preventDefault();void searchYahoo()}
-  if(t.id==="rename-portfolio"){const name=prompt("Portfolio name",state.portfolioName);if(name&&name.trim()){state.portfolioName=name.trim();saveState();render()}}
-  if(t.dataset.editHolding)openModal("holding",t.dataset.editHolding);
-  if(t.dataset.editCash)openModal("cash",t.dataset.editCash);
-  if(t.dataset.removeHolding&&confirm("Remove this holding?")){state.holdings=state.holdings.filter(h=>h.id!==t.dataset.removeHolding);saveState();render()}
-  if(t.dataset.removeCash&&confirm("Remove this cash item?")){state.cashItems=state.cashItems.filter(c=>c.id!==t.dataset.removeCash);saveState();render()}
-  if(t.hasAttribute("data-close-modal"))closeModal()
+async function refreshPrices() {
+  const button = document.getElementById('refresh-prices');
+  if (!state.holdings.length) { setLiveStatus('Add a holding first', true); return; }
+  if (button) { button.disabled = true; button.textContent = 'Refreshing…'; }
+  setLiveStatus('Fetching live market prices…', false);
+  try {
+    const rawQuotes = await fetchJson('/api/market/quote?symbols=' + encodeURIComponent(state.holdings.map(h => h.symbol).join(',')));
+    const quotes = await addDisplayPrices(rawQuotes);
+    const bySymbol = Object.fromEntries((Array.isArray(quotes) ? quotes : []).map(q => [String(q.symbol).toUpperCase(), q]));
+    let updated = 0;
+    state.holdings = state.holdings.map(holding => {
+      const quote = bySymbol[String(holding.symbol).toUpperCase()];
+      if (!quote || !Number.isFinite(Number(quote.displayPrice))) return holding;
+      updated += 1;
+      return Object.assign({}, holding, { name: holding.name || quote.shortName || quote.longName || holding.symbol, currentPrice: Number(quote.displayPrice), nativePrice: Number(quote.nativePrice), quoteCurrency: quote.currency || holding.quoteCurrency, changePercent: Number(quote.changePercent) || 0, quoteAsOf: quote.asOf || new Date().toISOString() });
+    });
+    const times = state.holdings.map(h => h.quoteAsOf).filter(Boolean).sort();
+    state.priceAsOf = times[times.length - 1] || new Date().toISOString();
+    if (Array.isArray(quotes) && quotes[0] && quotes[0].marketState) state.marketState = quotes[0].marketState;
+    render();
+    if (updated === 0) throw new Error('No matching live prices were returned. Your saved prices are unchanged.');
+    let historyUpdated = true;
+    try {
+      await refreshHistoricalData(true);
+    } catch (_) {
+      historyUpdated = false;
+    }
+    render();
+    setLiveStatus(updated + ' price' + (updated === 1 ? '' : 's') + ' refreshed' + (historyUpdated ? ' · graph updated' : ' · graph history unchanged'), false);
+  } catch (error) {
+    const manuallyUpdated = manualRefreshPrices();
+    if (!manuallyUpdated) setLiveStatus(error && error.message ? error.message : 'Live refresh unavailable', true);
+  } finally {
+    if (button) { button.disabled = false; button.textContent = 'Refresh prices'; }
+  }
+}
+async function addHolding(existing) {
+  let selected = existing || null;
+  let quote = null;
+  try {
+    const query = window.prompt(existing ? 'Enter ticker to edit' : 'Enter ticker or company name', existing ? existing.symbol : '');
+    if (!query) return;
+    const results = await fetchJson('/api/market/search?q=' + encodeURIComponent(marketSymbolParts(query.trim()).symbol || query.trim()));
+    if (!Array.isArray(results) || results.length === 0) throw new Error('No symbols found for "' + query + '".');
+    const choices = results.slice(0, 8).map((item, index) => (index + 1) + '. ' + item.symbol + ' — ' + (item.shortName || item.longName || item.symbol)).join('\n');
+    const choice = Number(window.prompt(choices + '\n\nEnter a result number:', '1'));
+    if (!Number.isInteger(choice) || choice < 1 || choice > Math.min(8, results.length)) return;
+    const match = results[choice - 1];
+    selected = Object.assign({}, existing || {}, { symbol: match.symbol, name: (existing && existing.name) || match.shortName || match.longName || match.symbol });
+    const quoteResults = await fetchJson('/api/market/quote?symbols=' + encodeURIComponent(match.symbol));
+    const convertedQuotes = await addDisplayPrices(quoteResults);
+    quote = Array.isArray(convertedQuotes) ? convertedQuotes[0] : null;
+  } catch (error) {
+    setLiveStatus(error && error.message ? error.message : 'Symbol search unavailable; enter details manually.', true);
+    const fallbackSymbol = window.prompt('Symbol (live search unavailable)', existing ? existing.symbol : '');
+    if (!fallbackSymbol) return;
+    selected = Object.assign({}, existing || {}, { symbol: fallbackSymbol.trim().toUpperCase() });
+  }
+  const symbolValue = selected.symbol.trim().toUpperCase();
+  const nameValue = window.prompt('Name', selected.name || symbolValue); if (!nameValue) return;
+  const sharesValue = window.prompt('Shares', selected.shares || '1');
+  const today = new Date();
+  const todayIso = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+  const purchaseDateValue = window.prompt('Purchase date', selected.purchaseDate || todayIso);
+  if (!purchaseDateValue) return;
+  const defaultPrice = quote && quote.displayPrice != null ? quote.displayPrice : (selected.currentPrice || '0');
+  const priceValue = window.prompt('Current price (' + (quote && quote.currency ? (DATA.displayCurrency || 'GBP') + ', converted from ' + quote.currency : 'captured quote') + ')', defaultPrice);
+  const costValue = window.prompt('Average cost per share', selected.avgCost != null ? selected.avgCost : priceValue);
+  const item = Object.assign({}, selected, { symbol: symbolValue, name: nameValue.trim(), shares: number(sharesValue), purchaseDate: purchaseDateValue, currentPrice: number(priceValue), nativePrice: quote ? Number(quote.nativePrice) : selected.nativePrice, quoteCurrency: quote ? quote.currency : selected.quoteCurrency, avgCost: number(costValue), changePercent: quote ? Number(quote.changePercent) || 0 : (selected.changePercent || null), quoteAsOf: quote ? quote.asOf : selected.quoteAsOf });
+  if (existing) state.holdings = state.holdings.map(h => h.symbol === existing.symbol ? item : h); else state.holdings.push(item);
+  save();
+  try {
+    await refreshHistoricalData(true);
+  } catch (error) {
+    setLiveStatus(error && error.message ? 'Saved holding; historical refresh unavailable' : 'Saved holding; historical refresh unavailable', true);
+  }
+  render();
+  if (!document.getElementById('live-status').classList.contains('negative')) {
+    setLiveStatus(quote ? 'Saved with live market price and historical data' : 'Saved with captured price and historical data', !quote);
+  }
+}
+async function addCash(existing) {
+  const label = window.prompt('Cash label', existing ? existing.label : 'Cash'); if (!label) return;
+  const today = new Date();
+  const todayIso = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+  const date = window.prompt('Deposit date', existing && existing.depositDate ? existing.depositDate : todayIso);
+  if (!date) return;
+  const value = window.prompt('Deposit amount', existing ? cashDepositAmount(existing) : '0');
+  const monthly = window.prompt('Monthly deposit (optional)', existing ? existing.monthlyPurchase : '0');
+  const rate = window.prompt('Interest rate % (optional)', existing && existing.interestRate != null ? existing.interestRate : '0');
+  const item = cashAtToday(Object.assign({}, existing || {}, { label: label.trim(), depositAmount: number(value), monthlyPurchase: number(monthly), interestRate: number(rate), depositDate: date }));
+  if (existing) state.cashItems = state.cashItems.map(c => c.label === existing.label ? item : c); else state.cashItems.push(item);
+  try {
+    await refreshHistoricalData(true);
+  } catch (_) {
+    setLiveStatus('Saved cash; historical refresh unavailable', true);
+  }
+  render();
+}
+document.getElementById('projection-toggle').addEventListener('click', function () { const open = document.getElementById('projection-body').classList.toggle('open'); document.getElementById('projection-chevron').textContent = open ? '⌃' : '⌄'; });
+document.getElementById('refresh-prices').addEventListener('click', () => { void refreshPrices(); });
+document.getElementById('add-holding').addEventListener('click', () => { void addHolding(); });
+document.getElementById('add-cash').addEventListener('click', () => { void addCash(); });
+document.getElementById('appearance-toggle').addEventListener('click', function () {
+  const panel = document.getElementById('appearance-panel');
+  const open = panel.classList.toggle('hidden') === false;
+  this.setAttribute('aria-expanded', String(open));
+  this.textContent = open ? 'Hide appearance settings' : 'Customise appearance';
 });
-document.addEventListener("change",event=>{if(event.target.id==="quote-result")void selectQuote(event.target.value)});
-document.addEventListener("input",event=>{if(event.target.id?.startsWith("theme-"))saveAppearance()});
-document.addEventListener("submit",event=>{if(event.target.id==="holding-form"){event.preventDefault();saveHolding(event.target)}if(event.target.id==="cash-form"){event.preventDefault();saveCash(event.target)}});
-function toggleProjection(){const body=document.getElementById("projection-body"),toggle=document.getElementById("projection-toggle"),collapsed=body.classList.toggle("collapsed");toggle.setAttribute("aria-expanded",String(!collapsed));toggle.setAttribute("aria-label",collapsed?"Expand retirement projection":"Collapse retirement projection");document.getElementById("projection-chevron").textContent=collapsed?"⌄":"⌃"}
-document.getElementById("save-settings").addEventListener("click",()=>{
-  const ids=["projectionStartDate","dateOfBirth","retirementDate","drawdownStartDate","drawdownTarget","annualFundGrowth","annualDrawdown","fundChargesPct","monthlyContribution","lumpSumWithdrawalDate"];
-  ids.forEach(id=>{const input=document.getElementById(id);state.projection[id]=input.type==="date"?input.value:n(input.value)});
-  state.projection.continueTopUpPostRetirement=document.getElementById("continueTopUpPostRetirement").checked;
-  const current=projection(),entered=n(document.getElementById("lumpSumWithdrawal").value);state.projection.lumpSumWithdrawal=Math.abs(entered-current.defaultLump)<.01?null:entered;state.currency=document.getElementById("currency").value;saveState();render();setLiveStatus("Projection settings saved")
+document.getElementById('appearance-reset').addEventListener('click', () => {
+  state.appearance = Object.assign({}, DEFAULT_APPEARANCE);
+  save();
+  applyAppearance();
 });
-document.getElementById("lumpSumWithdrawalDate").addEventListener("change",event=>{
-  state.projection.lumpSumWithdrawalDate=event.target.value;
-  state.projection.lumpSumWithdrawal=null;
-  const pr=projection(),lump=document.getElementById("lumpSumWithdrawal");
-  if(lump)lump.value=Math.round(pr.defaultLump);
-  saveState();render();setLiveStatus("Lump sum updated to 25% of the projected fund. You can amend the amount.")
+['theme-background', 'theme-card', 'theme-text', 'theme-accent', 'theme-heading-bold'].forEach(id => {
+  document.getElementById(id).addEventListener('input', saveAppearance);
 });
+document.getElementById('theme-font').addEventListener('change', saveAppearance);
+document.addEventListener('click', event => {
+  const el = event.target.closest('button'); if (!el) return;
+  if (el.dataset.editHolding) { void addHolding(state.holdings.find(h => h.symbol === el.dataset.editHolding)); }
+  if (el.dataset.removeHolding && window.confirm('Remove this holding from the offline copy?')) {
+    state.holdings = state.holdings.filter(h => h.symbol !== el.dataset.removeHolding);
+    void refreshHistoricalData(true).then(() => render()).catch(() => render());
+  }
+  if (el.dataset.editCash) { void addCash(state.cashItems.find(c => c.label === el.dataset.editCash)); }
+  if (el.dataset.removeCash && window.confirm('Remove this cash item from the offline copy?')) {
+    state.cashItems = state.cashItems.filter(c => c.label !== el.dataset.removeCash);
+    void refreshHistoricalData(true).then(() => render()).catch(() => render());
+  }
+});
+wireProjection();
+applyAppearance();
+let chartResizeTimer = null;
+function scheduleChartResize() {
+  clearTimeout(chartResizeTimer);
+  chartResizeTimer = setTimeout(() => {
+    if (!document.getElementById('chart-wrap')) return;
+    renderChart(projection());
+  }, 120);
+}
+window.addEventListener('resize', scheduleChartResize, { passive: true });
+window.addEventListener('orientationchange', scheduleChartResize, { passive: true });
 render();
 </script>
 </body>
