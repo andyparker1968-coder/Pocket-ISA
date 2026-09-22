@@ -451,12 +451,14 @@ const marketSymbolParts = value => {
 const relayRequest = async (path, params) => {
   const configuredApiBase = String(DATA.apiBaseUrl || '').replace(/\/+$/, '');
   const url = new URL(path, configuredApiBase || window.location.origin);
-  Object.entries(params || {}).forEach(([key, value]) => {
+  const requestParams = Object.assign({}, params || {});
+  if (path === '/api/market/quote') requestParams._ = String(Date.now());
+  Object.entries(requestParams).forEach(([key, value]) => {
     if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, value);
   });
   let response;
   try {
-    response = await fetch(url.toString(), { headers: { Accept: 'application/json' } });
+    response = await fetch(url.toString(), { cache: 'no-store', headers: { Accept: 'application/json' } });
   } catch (_) {
     throw new Error('The live market-data relay could not be reached. Saved prices remain available offline.');
   }
