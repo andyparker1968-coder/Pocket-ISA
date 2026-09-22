@@ -902,8 +902,10 @@ function setupChartInteraction(points) {
     if (!Number.isFinite(value)) return;
     const px = left + (pointMonth - minMonth) / Math.max(1, maxMonth - minMonth) * plotWidth;
     const py = top + (1 - (value - min) / (max - min)) * plotHeight;
-    const boxX = px > width - 175 ? px - 158 : px + 8;
-    const boxY = Math.max(top, py - 50);
+    const boxWidth = 194;
+    const boxHeight = 78;
+    const boxX = px > width - 215 ? px - 202 : px + 8;
+    const boxY = Math.max(top, py - 88);
     tip.classList.remove('hidden');
     svg.querySelector('#chart-tooltip-line').setAttribute('x1', px);
     svg.querySelector('#chart-tooltip-line').setAttribute('x2', px);
@@ -911,12 +913,27 @@ function setupChartInteraction(points) {
     svg.querySelector('#chart-tooltip-dot').setAttribute('cy', py);
     svg.querySelector('#chart-tooltip-box').setAttribute('x', boxX);
     svg.querySelector('#chart-tooltip-box').setAttribute('y', boxY);
+    svg.querySelector('#chart-tooltip-box').setAttribute('width', boxWidth);
+    svg.querySelector('#chart-tooltip-box').setAttribute('height', boxHeight);
     svg.querySelector('#chart-tooltip-date').setAttribute('x', boxX + 10);
     svg.querySelector('#chart-tooltip-date').setAttribute('y', boxY + 16);
     svg.querySelector('#chart-tooltip-date').textContent = point.label || 'Month ' + pointMonth;
-    svg.querySelector('#chart-tooltip-value').setAttribute('x', boxX + 10);
-    svg.querySelector('#chart-tooltip-value').setAttribute('y', boxY + 33);
-    svg.querySelector('#chart-tooltip-value').textContent = money(value);
+    const valueNode = svg.querySelector('#chart-tooltip-value');
+    valueNode.setAttribute('x', boxX + 10);
+    valueNode.setAttribute('y', boxY + 31);
+    valueNode.setAttribute('font-size', '10');
+    while (valueNode.firstChild) valueNode.removeChild(valueNode.firstChild);
+    [
+      ['Predicted value', point.drawValue],
+      ['Average growth', point.histValue],
+      ['Portfolio history', point.actualHistValue],
+    ].filter(item => item[1] !== null && item[1] !== undefined && Number.isFinite(Number(item[1]))).forEach((item, index) => {
+      const row = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+      row.setAttribute('x', boxX + 10);
+      row.setAttribute('dy', index === 0 ? 0 : 15);
+      row.textContent = item[0] + ': ' + money(item[1]);
+      valueNode.appendChild(row);
+    });
   };
   const hide = event => {
     if (!event || event.pointerType !== 'touch') tip.classList.add('hidden');
