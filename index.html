@@ -240,6 +240,22 @@
   .chart-marker-value { font-size: 9px; }
   .chart-hit { cursor: crosshair; touch-action: none; }
   .chart-tooltip { pointer-events: none; }
+  /* Match customise controls to the app's rounded input fields. */
+  .appearance-grid input[type="color"],
+  .appearance-grid select,
+  .appearance-grid .check-line {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--card);
+    color: var(--fg);
+  }
+  .appearance-grid input[type="color"] {
+    min-height: 44px;
+    padding: 4px;
+  }
+  .appearance-grid select {
+    min-height: 44px;
+  }
 </style>
  </head>
 <body>
