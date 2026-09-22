@@ -236,6 +236,11 @@
    }
    .brand-mark svg { display: none !important; }
  </style>
+<style>
+  .chart-marker-value { font-size: 9px; }
+  .chart-hit { cursor: crosshair; touch-action: none; }
+  .chart-tooltip { pointer-events: none; }
+</style>
  </head>
 <body>
 <div class="app-shell">
@@ -698,7 +703,7 @@ function renderChart(result) {
     if (historical[historical.length - 1].month === 0) historical[historical.length - 1] = todayPoint;
     else historical.push(todayPoint);
   }
-  const horizon = Math.max(12, Math.min(120, result.targetMonths || 60));
+  const horizon = Math.max(12, result.targetMonths || 60);
   const step = Math.max(1, Math.floor(horizon / 12));
   const historicalRate = historical.length > 1
     ? (Number.isFinite(Number(state.chart.historical.rate)) ? Number(state.chart.historical.rate) : null)
@@ -747,10 +752,11 @@ function renderChart(result) {
     });
   }
   points.sort((a, b) => a.month - b.month);
-  document.getElementById('chart-wrap').innerHTML = offlineChartSvg(points, { todayMonth: 0, lumpSumMonth: result.hasLumpSum ? result.lumpSumMonths : null }) + '<div class="legend">' +
+  document.getElementById('chart-wrap').innerHTML = offlineChartSvg(points, { todayMonth: 0, maturityMonth: result.targetMonths, lumpSumMonth: result.hasLumpSum ? result.lumpSumMonths : null }) + '<div class="legend">' +
     (historical.length > 1 ? '<span><i class="actual"></i>Portfolio history</span>' : '') +
     (effectiveHistoricalRate !== null ? '<span><i class="projected"></i>Average-growth forecast (' + effectiveHistoricalRate.toFixed(1) + '% pa)</span>' : '') +
     '<span><i class="growth"></i>Your projection (' + result.netRate.toFixed(1) + '% net)</span></div>';
+  setupChartInteraction(points);
 }
 function offlineChartSvg(points, markers) {
   if (points.length < 2) return '<div class="chart-empty">Add projection inputs to draw the portfolio graph.</div>';
@@ -838,10 +844,90 @@ function offlineChartSvg(points, markers) {
   return '<svg class="portfolio-chart" viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Portfolio value over time">' + grid +
     marker(markers && markers.todayMonth, 'Today', '#8c989b', 0) +
     marker(markers && markers.lumpSumMonth, 'Lump sum deposit', '#d79b2f', 1) +
+    marker(markers && markers.maturityMonth, 'Maturity', '#3d9a67', 2) +
     '<g stroke="#2f75c8" stroke-width="' + (mobile ? '5' : '4') + '">' + path('actualHistValue') + '</g>' +
     '<g stroke="#4c5b5d" stroke-width="' + (mobile ? '4.5' : '3.5') + '" stroke-dasharray="' + (mobile ? '9 6' : '10 6') + '">' + path('histValue') + '</g>' +
     '<g stroke="#bd3f32" stroke-width="' + (mobile ? '5' : '4') + '">' + path('drawValue') + '</g>' +
-    dots + labels + '</svg>';
+    dots +
+    '<g id="chart-tooltip" class="chart-tooltip hidden"><line id="chart-tooltip-line" y1="' + top + '" y2="' + (height - bottom) + '" stroke="#263d40" stroke-width="1" stroke-dasharray="3 3"/><circle id="chart-tooltip-dot" r="' + (mobile ? 6 : 5) + '" fill="#faf8f2" stroke="#263d40" stroke-width="' + (mobile ? 3 : 2) + '"/><rect id="chart-tooltip-box" width="150" height="42" rx="9" fill="#263d40" opacity=".94"/><text id="chart-tooltip-date" y="16" fill="#faf8f2" font-size="10" font-family="var(--mono)"></text><text id="chart-tooltip-value" y="32" fill="#faf8f2" font-size="12" font-weight="700" font-family="var(--mono)"></text></g>' +
+    '<rect class="chart-hit" x="' + left + '" y="' + top + '" width="' + (width - left - right) + '" height="' + (height - top - bottom) + '" fill="transparent"/>' +
+    labels + '</svg>';
+}
+function setupChartInteraction(points) {
+  const svg = document.querySelector('#chart-wrap .portfolio-chart');
+  const hit = svg && svg.querySelector('.chart-hit');
+  const tip = svg && svg.querySelector('#chart-tooltip');
+  if (!svg || !hit || !tip || !points.length) return;
+  const mobile = typeof window !== 'undefined' && ('matchMedia' in window
+    ? window.matchMedia('(max-width: 600px)').matches
+    : window.innerWidth <= 600);
+  const width = mobile ? 390 : 920;
+  const height = mobile ? 350 : 280;
+  const left = mobile ? 61 : 68;
+  const right = mobile ? 12 : 20;
+  const top = mobile ? 46 : 22;
+  const bottom = mobile ? 70 : 42;
+  const plotWidth = width - left - right;
+  const plotHeight = height - top - bottom;
+  const values = points.flatMap(point => [point.actualHistValue, point.histValue, point.drawValue])
+    .map(Number).filter(Number.isFinite);
+  if (!values.length) return;
+  const min = Math.max(0, Math.floor(Math.min.apply(null, values) * .9));
+  const max = Math.max(min + 1, Math.ceil(Math.max.apply(null, values) * 1.08));
+  const minMonth = Math.min.apply(null, points.map(point => Number(point.month)));
+  const maxMonth = Math.max.apply(null, points.map(point => Number(point.month)));
+  const monthAt = clientX => {
+    const rect = svg.getBoundingClientRect();
+    const svgX = (clientX - rect.left) * width / rect.width;
+    const fraction = Math.max(0, Math.min(1, (svgX - left) / plotWidth));
+    return minMonth + fraction * Math.max(1, maxMonth - minMonth);
+  };
+  const show = event => {
+    const clientX = Number(event.clientX);
+    if (!Number.isFinite(clientX)) return;
+    const month = monthAt(clientX);
+    let bestIndex = 0;
+    let bestDistance = Infinity;
+    points.forEach((point, index) => {
+      const distance = Math.abs(Number(point.month) - month);
+      if (distance < bestDistance) { bestDistance = distance; bestIndex = index; }
+    });
+    const point = points[bestIndex];
+    const pointMonth = Number(point.month);
+    const value = pointMonth <= 0 && Number.isFinite(Number(point.actualHistValue))
+      ? Number(point.actualHistValue)
+      : Number.isFinite(Number(point.drawValue))
+        ? Number(point.drawValue)
+        : Number(point.histValue);
+    if (!Number.isFinite(value)) return;
+    const px = left + (pointMonth - minMonth) / Math.max(1, maxMonth - minMonth) * plotWidth;
+    const py = top + (1 - (value - min) / (max - min)) * plotHeight;
+    const boxX = px > width - 175 ? px - 158 : px + 8;
+    const boxY = Math.max(top, py - 50);
+    tip.classList.remove('hidden');
+    svg.querySelector('#chart-tooltip-line').setAttribute('x1', px);
+    svg.querySelector('#chart-tooltip-line').setAttribute('x2', px);
+    svg.querySelector('#chart-tooltip-dot').setAttribute('cx', px);
+    svg.querySelector('#chart-tooltip-dot').setAttribute('cy', py);
+    svg.querySelector('#chart-tooltip-box').setAttribute('x', boxX);
+    svg.querySelector('#chart-tooltip-box').setAttribute('y', boxY);
+    svg.querySelector('#chart-tooltip-date').setAttribute('x', boxX + 10);
+    svg.querySelector('#chart-tooltip-date').setAttribute('y', boxY + 16);
+    svg.querySelector('#chart-tooltip-date').textContent = point.label || 'Month ' + pointMonth;
+    svg.querySelector('#chart-tooltip-value').setAttribute('x', boxX + 10);
+    svg.querySelector('#chart-tooltip-value').setAttribute('y', boxY + 33);
+    svg.querySelector('#chart-tooltip-value').textContent = money(value);
+  };
+  const hide = event => {
+    if (!event || event.pointerType !== 'touch') tip.classList.add('hidden');
+  };
+  hit.addEventListener('pointermove', show);
+  hit.addEventListener('pointerdown', event => {
+    if (hit.setPointerCapture && event.pointerId !== undefined) hit.setPointerCapture(event.pointerId);
+    show(event);
+  });
+  hit.addEventListener('pointerleave', hide);
+  hit.addEventListener('pointercancel', () => tip.classList.add('hidden'));
 }
 function wireProjection() {
   const fields = [['projection-start-date','startDate'],['projection-start-value','manualStartValue'],['projection-monthly-deposit','monthlyDeposit'],['projection-growth-rate','annualGrowthRate'],['projection-fee','annualFeePct'],['projection-target-date','targetDate'],['projection-lump-sum-date','lumpSumDate'],['projection-lump-sum-amount','lumpSumAmount']];
