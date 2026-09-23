@@ -695,12 +695,17 @@ function marketStatePresentation(value) {
   if (key === 'PRE') return ['PRE-MARKET', 'warm'];
   if (key === 'POST') return ['AFTER HOURS', 'warm'];
   const symbol = String((state.holdings || [])[0]?.symbol || '').toUpperCase();
+  const market = symbol.endsWith('.L')
+    ? { timeZone: 'Europe/London', open: 8 * 60, close: 16 * 60 + 30 }
+    : /^[A-Z]{1,5}(?:-[A-Z])?$/.test(symbol)
+      ? { timeZone: 'America/New_York', open: 9 * 60 + 30, close: 16 * 60 }
+      : null;
   const quoteTime = Date.parse(state.priceAsOf || '');
-  const londonDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' });
-  const quoteIsFromToday = Number.isFinite(quoteTime) && londonDate.format(new Date(quoteTime)) === londonDate.format(new Date());
-  if (symbol.endsWith('.L') && quoteIsFromToday) {
+  const marketDate = market && new Intl.DateTimeFormat('en-CA', { timeZone: market.timeZone, year: 'numeric', month: '2-digit', day: '2-digit' });
+  const quoteIsFromToday = Boolean(market && Number.isFinite(quoteTime) && marketDate.format(new Date(quoteTime)) === marketDate.format(new Date()));
+  if (market && quoteIsFromToday) {
     const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
-      timeZone: 'Europe/London',
+      timeZone: market.timeZone,
       weekday: 'short',
       hour: '2-digit',
       minute: '2-digit',
@@ -708,7 +713,7 @@ function marketStatePresentation(value) {
     }).formatToParts(new Date()));
     const weekday = parts.weekday;
     const minutes = Number(parts.hour) * 60 + Number(parts.minute);
-    if (!['Sat', 'Sun'].includes(weekday) && minutes >= 8 * 60 && minutes < 16 * 60 + 30) return ['OPEN', 'positive'];
+    if (!['Sat', 'Sun'].includes(weekday) && minutes >= market.open && minutes < market.close) return ['OPEN', 'positive'];
   }
   return ['CLOSED', 'muted'];
 }
