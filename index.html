@@ -696,7 +696,9 @@ function marketStatePresentation(value) {
   if (key === 'POST') return ['AFTER HOURS', 'warm'];
   const symbol = String((state.holdings || [])[0]?.symbol || '').toUpperCase();
   const quoteTime = Date.parse(state.priceAsOf || '');
-  if (symbol.endsWith('.L') && Number.isFinite(quoteTime) && Date.now() - quoteTime < 30 * 60 * 1000) {
+  const londonDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' });
+  const quoteIsFromToday = Number.isFinite(quoteTime) && londonDate.format(new Date(quoteTime)) === londonDate.format(new Date());
+  if (symbol.endsWith('.L') && quoteIsFromToday) {
     const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
       timeZone: 'Europe/London',
       weekday: 'short',
