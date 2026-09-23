@@ -271,7 +271,7 @@
     <div class="content">
       <header class="page-header">
         <div>
-          <div class="eyebrow">My Portfolio <span class="badge muted">CLOSED</span></div>
+          <div class="eyebrow">My Portfolio <span id="market-state-badge" class="badge muted">CLOSED</span></div>
           <h1 class="page-title">£12,500.00</h1>
           <div class="day-change positive">↗ +£42.00 <span>(+0.34%)</span><span class="muted">Today</span></div>
           <p class="snapshot-note">Prices captured 4 Sept 2026; use Refresh prices when online.</p>
@@ -689,12 +689,39 @@ function renderRows() {
   document.getElementById('portfolio-rows').innerHTML = rows + cash || '<div class="projection-placeholder">No holdings yet. Add one to start your offline portfolio.</div>';
 }
 function esc(value) { return String(value == null ? '' : value).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' }[c])); }
+function marketStatePresentation(value) {
+  const key = String(value || '').toUpperCase();
+  if (key === 'REGULAR' || key === 'OPEN') return ['OPEN', 'positive'];
+  if (key === 'PRE') return ['PRE-MARKET', 'warm'];
+  if (key === 'POST') return ['AFTER HOURS', 'warm'];
+  const symbol = String((state.holdings || [])[0]?.symbol || '').toUpperCase();
+  const quoteTime = Date.parse(state.priceAsOf || '');
+  if (symbol.endsWith('.L') && Number.isFinite(quoteTime) && Date.now() - quoteTime < 30 * 60 * 1000) {
+    const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/London',
+      weekday: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).formatToParts(new Date()));
+    const weekday = parts.weekday;
+    const minutes = Number(parts.hour) * 60 + Number(parts.minute);
+    if (!['Sat', 'Sun'].includes(weekday) && minutes >= 8 * 60 && minutes < 16 * 60 + 30) return ['OPEN', 'positive'];
+  }
+  return ['CLOSED', 'muted'];
+}
 function render() {
   state.cashItems = (state.cashItems || []).map(cashAtToday);
   const result = projection();
   const fieldValues = [['projection-start-date','startDate'],['projection-start-value','manualStartValue'],['projection-monthly-deposit','monthlyDeposit'],['projection-growth-rate','annualGrowthRate'],['projection-fee','annualFeePct'],['projection-target-date','targetDate'],['projection-lump-sum-date','lumpSumDate'],['projection-lump-sum-amount','lumpSumAmount']];
   fieldValues.forEach(pair => { const node = input(pair[0]); if (node && document.activeElement !== node) node.value = state.projection[pair[1]] || ''; });
   document.querySelector('.page-title').textContent = whole(result.total);
+  const marketBadge = document.getElementById('market-state-badge');
+  if (marketBadge) {
+    const [label, tone] = marketStatePresentation(state.marketState);
+    marketBadge.textContent = label;
+    marketBadge.className = 'badge ' + tone;
+  }
   document.querySelector('.snapshot-note').textContent = state.priceAsOf ? 'Prices captured ' + fmtDate(state.priceAsOf) + '. Use Refresh prices when online; saved values remain available offline.' : 'No live prices have been captured yet. Use Refresh prices when online.';
   document.getElementById('projection-net-rate').textContent = 'Net ' + result.netRate.toFixed(2) + '% after fees';
   const projectionTitle = input('projection-summary-title');
