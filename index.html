@@ -273,7 +273,7 @@
         <div>
           <div class="eyebrow">My Portfolio <span id="market-state-badge" class="badge muted">CLOSED</span></div>
           <h1 class="page-title">£12,500.00</h1>
-          <div class="day-change positive">↗ +£42.00 <span>(+0.34%)</span><span class="muted">Today</span></div>
+          <div class="day-change muted" id="day-change" aria-live="polite"><span id="day-change-icon">—</span><span id="day-change-amount">—</span><span id="day-change-percent">(—)</span><span class="muted">Today</span></div>
           <p class="snapshot-note">Prices captured 4 Sept 2026; use Refresh prices when online.</p>
         </div>
         <div class="actions"><button class="button primary" type="button" id="refresh-prices">Refresh prices</button><span class="button" id="live-status">Prices captured</span></div>
@@ -407,6 +407,31 @@ const cashAtToday = item => {
   });
 };
 const fmtDate = value => value ? new Date(value + (value.length === 10 ? 'T00:00:00' : '')).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+const fmtDateTime = value => {
+  const date = new Date(value || '');
+  return Number.isNaN(date.getTime()) ? fmtDate(value) : date.toLocaleString('en-GB', {
+    day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+  });
+};
+function portfolioDayChange() {
+  const holdings = state.holdings || [];
+  if (!holdings.length) return null;
+  let currentValue = 0, previousValue = 0, counted = 0;
+  for (const holding of holdings) {
+    const currentPrice = Number(holding.currentPrice);
+    const changePercent = holding.changePercent == null ? NaN : Number(holding.changePercent);
+    const shares = number(holding.effectiveShares != null ? holding.effectiveShares : holding.shares);
+    if (!Number.isFinite(currentPrice) || currentPrice <= 0 || !Number.isFinite(changePercent) || changePercent <= -100) return null;
+    const current = currentPrice * shares;
+    const previous = current / (1 + changePercent / 100);
+    currentValue += current;
+    previousValue += previous;
+    counted += 1;
+  }
+  if (!counted || previousValue <= 0) return null;
+  const change = currentValue - previousValue;
+  return { amount: change, percent: change / previousValue * 100 };
+}
 const save = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {} };
 const input = id => document.getElementById(id);
 const applyAppearance = () => {
@@ -732,7 +757,24 @@ function render() {
     marketBadge.textContent = label;
     marketBadge.className = 'badge ' + tone;
   }
-  document.querySelector('.snapshot-note').textContent = state.priceAsOf ? 'Prices captured ' + fmtDate(state.priceAsOf) + '. Use Refresh prices when online; saved values remain available offline.' : 'No live prices have been captured yet. Use Refresh prices when online.';
+  const daily = portfolioDayChange();
+  const dailyNode = document.getElementById('day-change');
+  if (dailyNode) {
+    dailyNode.classList.remove('positive', 'negative', 'muted');
+    if (!daily) {
+      dailyNode.classList.add('muted');
+      document.getElementById('day-change-icon').textContent = '—';
+      document.getElementById('day-change-amount').textContent = '—';
+      document.getElementById('day-change-percent').textContent = '(—)';
+    } else {
+      const sign = daily.amount > 0 ? '+' : daily.amount < 0 ? '−' : '';
+      dailyNode.classList.add(daily.amount > 0 ? 'positive' : daily.amount < 0 ? 'negative' : 'muted');
+      document.getElementById('day-change-icon').textContent = daily.amount > 0 ? '↗' : daily.amount < 0 ? '↘' : '→';
+      document.getElementById('day-change-amount').textContent = sign + money(Math.abs(daily.amount));
+      document.getElementById('day-change-percent').textContent = '(' + sign + Math.abs(daily.percent).toFixed(2) + '%)';
+    }
+  }
+  document.querySelector('.snapshot-note').textContent = state.priceAsOf ? 'Prices captured ' + fmtDateTime(state.priceAsOf) + '. Use Refresh prices when online; saved values remain available offline.' : 'No live prices have been captured yet. Use Refresh prices when online.';
   document.getElementById('projection-net-rate').textContent = 'Net ' + result.netRate.toFixed(2) + '% after fees';
   const projectionTitle = input('projection-summary-title');
   if (projectionTitle) projectionTitle.textContent = result.maturity !== null ? whole(result.maturity) + ' at maturity · ' + result.targetMonths + ' months' : (result.monthlyDeposit ? 'Growing with ' + whole(result.monthlyDeposit) + ' monthly deposit' : 'Set projection inputs to forecast');
@@ -1044,7 +1086,8 @@ async function refreshPrices() {
       const quote = bySymbol[String(holding.symbol).toUpperCase()];
       if (!quote || !Number.isFinite(Number(quote.displayPrice))) return holding;
       updated += 1;
-      return Object.assign({}, holding, { name: holding.name || quote.shortName || quote.longName || holding.symbol, currentPrice: Number(quote.displayPrice), nativePrice: Number(quote.nativePrice), quoteCurrency: quote.currency || holding.quoteCurrency, changePercent: Number(quote.changePercent) || 0, quoteAsOf: quote.asOf || new Date().toISOString() });
+      const changePercent = quote.changePercent == null || !Number.isFinite(Number(quote.changePercent)) ? null : Number(quote.changePercent);
+      return Object.assign({}, holding, { name: holding.name || quote.shortName || quote.longName || holding.symbol, currentPrice: Number(quote.displayPrice), nativePrice: Number(quote.nativePrice), quoteCurrency: quote.currency || holding.quoteCurrency, changePercent, quoteAsOf: quote.asOf || new Date().toISOString() });
     });
     const times = state.holdings.map(h => h.quoteAsOf).filter(Boolean).sort();
     state.priceAsOf = times[times.length - 1] || new Date().toISOString();
@@ -1058,7 +1101,10 @@ async function refreshPrices() {
       historyUpdated = false;
     }
     render();
-    setLiveStatus(updated + ' price' + (updated === 1 ? '' : 's') + ' refreshed' + (historyUpdated ? ' · graph updated' : ' · graph history unchanged'), false);
+    const marketLabel = marketStatePresentation(state.marketState)[0].toLowerCase();
+    const marketNote = marketLabel === 'open' ? 'market open' : 'market closed · latest available quote';
+    const quoteTime = state.priceAsOf ? ' at ' + fmtDateTime(state.priceAsOf) : '';
+    setLiveStatus(updated + ' price' + (updated === 1 ? '' : 's') + ' refreshed · ' + marketNote + quoteTime + (historyUpdated ? ' · graph updated' : ' · graph history unchanged'), false);
   } catch (error) {
     const manuallyUpdated = manualRefreshPrices();
     if (!manuallyUpdated) setLiveStatus(error && error.message ? error.message : 'Live refresh unavailable', true);
