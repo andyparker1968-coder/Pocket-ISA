@@ -1,29 +1,86 @@
-# Pocket Crypto v2.0.0.4
+# Pocket ISA + Cloudflare Yahoo Finance relay
 
-Pocket Crypto is a standalone copy of Pocket ISA with Bitcoin (`BTC-GBP`) as its default holding. Quotes and monthly history are requested in pounds sterling. Display currency defaults to GBP; choose GBP, USD, or EUR in the projection settings.
+App version 2.0.0.3.
 
-## Install files
+This version uses:
 
-This ZIP contains exactly three files at its root:
+```text
+Static hosting → Cloudflare Worker → Yahoo Finance
+```
 
-- `index.html` — the self-contained app, including its embedded browser favicon
-- `README.md` — these notes
-- `apple-touch-icon.png` — the single external icon for iPhone/iPad bookmarks
+The Pocket ISA page remains public, and Yahoo Finance is called only from the
+Cloudflare Worker. Yahoo never receives a browser request from iPhone Safari.
 
-Upload `index.html` and `apple-touch-icon.png` together to your static host. The browser favicon is embedded; iOS uses the separate Apple touch icon for a Home Screen bookmark.
+## Cloudflare relay
 
-## Prices and historical chart
+The relay is:
 
-When opened online, the app requests crypto quotes and monthly market history from the Yahoo Finance relay used by Pocket ISA. It then saves the latest portfolio and chart data in this browser for offline viewing. Use **Refresh prices** to update them. An internet connection is needed to populate live price and historical data on first use. A live price refresh converts quotes into the selected display currency.
+```text
+https://yahoo-proxy.andyparker1968.workers.dev
+```
 
-As in Pocket Pension, changing display currency does not convert saved holdings, cash values, or projection inputs. Refresh prices to update live quotes; review saved amounts before relying on projections in a different currency.
+No Yahoo or Finnhub API key is needed.
 
-When adding a crypto holding, GBP pairs are only placed first after the relay confirms they have a live quote. If no GBP pair exists, the USD pair is first and its quote is converted to the selected display currency. Unit prices in the holding list show up to five decimal places.
+## Static frontend
 
-Tap a holding name or symbol to open its past-24-hours graph and daily gain/loss percentage. This feature requires the included `/api/market/history-day` endpoint in the Yahoo relay; deploy the accompanying relay update once. The history chart below the portfolio remains portfolio-wide, not Bitcoin-only.
+Put `index.html` and `apple-touch-icon.png` together at the root of the static
+host. The in-app logo embeds a retina-sized copy of the Apple Touch artwork, so
+it works without a separate image URL. The 180 × 180 PNG is used for the Home
+Screen icon; the browser favicon also has an embedded fallback. No `icons/`
+folder is needed. The Cloudflare Worker URL is embedded directly in `index.html`,
+so no `config.js` file is needed.
 
-The graph and quote display use the selected display currency. Saved values remain available offline; live daily chart data requires an internet connection.
+The default appearance uses a white background, light-grey panels (`#eef0f2`),
+black text, the blue accent, Rounded font, and bold labels and totals. The
+lighter panels and darker supporting text improve contrast; on phones the
+portfolio table keeps its Symbol heading on one line and the layout uses more of
+the available screen. The appearance panel saves any other choices with this
+browser's Pocket ISA data.
 
-## Projections
+When embedding the app in a Squarespace code block, the in-app logo already
+works without an image URL. Upload `apple-touch-icon.png` to Squarespace, set it
+as the site's iOS icon, or add this tag to Squarespace's head code injection
+with the image's public URL:
 
-The projection controls, calculation logic, and starting assumptions are unchanged from Pocket ISA. Forecasts are estimates, not a promise of future returns.
+```html
+<link rel="apple-touch-icon" sizes="180x180" href="https://YOUR-PUBLIC-ICON-URL">
+```
+
+The HTML code block cannot set the page's head icon. After changing the icon,
+remove the old Home Screen shortcut and add it again so iOS fetches the new
+image.
+
+The browser calls:
+
+```text
+GET /api/market/quote?symbols=VUSA.L
+GET /api/market/search?q=Vanguard
+GET /api/market/history-monthly?symbols=VUSA.L&from=2025-01-01
+GET /api/market/history-day?symbols=VUSA.L
+```
+
+The Worker caches quotes briefly, monthly history for longer, and search
+results for a few minutes. The browser stores the latest successful portfolio
+state locally for offline viewing.
+
+Today's gain and percentage are recalculated from the latest saved/refreshed
+holding quotes whenever the page renders. Cash is excluded from the daily
+market move. The displayed quote timestamp helps distinguish an unchanged
+market close from a failed refresh.
+
+## Data coverage
+
+Yahoo Finance data may be delayed, rate-limited, or changed without notice.
+London-listed symbols such as `VUSA.L` are requested server-side and Yahoo's
+`GBp` pence prices are converted to pounds for the Pocket ISA display.
+Quotes priced in USD or EUR are converted to GBP before they are saved or
+displayed. After installing this update, use **Refresh prices** to replace any
+older cached foreign-currency prices.
+
+Tap a holding's name or ticker to open a 24-hour graph built from live 5-minute
+market data, with the current price and daily gain/loss amount and percentage.
+This uses the `/api/market/history-day` route on the existing Cloudflare relay;
+the relay update has already been deployed.
+
+Documentation:
+https://finance.yahoo.com/
