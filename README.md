@@ -70,6 +70,9 @@ market close from a failed refresh.
 Yahoo Finance data may be delayed, rate-limited, or changed without notice.
 London-listed symbols such as `VUSA.L` are requested server-side and Yahoo's
 `GBp` pence prices are converted to pounds for the Pocket ISA display.
+Quotes priced in USD or EUR are converted to GBP before they are saved or
+displayed. After installing this update, use **Refresh prices** to replace any
+older cached foreign-currency prices.
 
 Documentation:
 https://finance.yahoo.com/

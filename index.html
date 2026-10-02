@@ -447,12 +447,14 @@ Object.assign(DATA.appearance, {
 let state;
 try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || JSON.parse(JSON.stringify(DATA)); } catch (_) { state = JSON.parse(JSON.stringify(DATA)); }
   state.chart = state.chart || {};
-  if ((!state.chart.historical || state.chart.historical.version !== 3) && DATA.chart && DATA.chart.historical) {
-    state.chart.historical = Object.assign({}, DATA.chart.historical, { version: 3 });
+  if (state.chart.historical && state.chart.historical.version !== 4) {
+    state.chart.historical = Object.assign({}, state.chart.historical, { version: 4, key: '' });
+  } else if (!state.chart.historical && DATA.chart && DATA.chart.historical) {
+    state.chart.historical = Object.assign({}, DATA.chart.historical, { version: 4, key: '' });
   }
 if (!state.chart.historical && DATA.chart && Array.isArray(DATA.chart.points)) {
   state.chart.historical = {
-      version: 3,
+      version: 4,
     key: '',
     from: '',
     points: DATA.chart.points
@@ -671,7 +673,12 @@ const holdingHistoryKey = () => {
   return { from, key: [from, ...holdings, ...cashItems.map(item => 'cash|' + item)].join('||') };
 };
 const normalizeCurrency = value => String(value || 'USD') === 'GBp' ? 'GBP' : String(value || 'USD').toUpperCase();
-const fxSymbolsFor = currencies => Array.from(new Set(['GBPUSD=X'].concat(currencies.map(normalizeCurrency).filter(code => code !== 'USD' && code !== 'GBP').map(code => code + 'USD=X'))));
+const fxSymbolsFor = (currencies, targetCurrency) => {
+  const target = normalizeCurrency(targetCurrency);
+  const sources = Array.from(new Set(currencies.map(normalizeCurrency)));
+  if (!sources.some(code => code !== target)) return [];
+  return Array.from(new Set(sources.concat(target).filter(code => code !== 'USD').map(code => code + 'USD=X')));
+};
 const usdPerUnit = (currency, rates) => {
   const code = String(currency || 'USD');
   if (code === 'GBp') return rates.GBP && rates.GBP > 0 ? rates.GBP / 100 : null;
@@ -680,23 +687,40 @@ const usdPerUnit = (currency, rates) => {
 };
 const displayRate = (sourceCurrency, targetCurrency, rates) => {
   if (String(sourceCurrency || 'USD') === String(targetCurrency || 'USD')) return 1;
+  if (String(sourceCurrency) === 'GBp' && normalizeCurrency(targetCurrency) === 'GBP') return 0.01;
+  if (normalizeCurrency(sourceCurrency) === 'GBP' && String(targetCurrency) === 'GBp') return 100;
   const source = usdPerUnit(sourceCurrency, rates);
   const target = usdPerUnit(targetCurrency, rates);
   return source && target ? source / target : 0;
 };
 const addDisplayPrices = async quotes => {
   const list = Array.isArray(quotes) ? quotes : [];
-  return list.map(q => Object.assign({}, q, {
-    nativePrice: Number(q.price),
-    displayPrice: Number(q.displayPrice != null ? q.displayPrice : q.price),
-  }));
+  const targetCurrency = DATA.displayCurrency || 'GBP';
+  const fxSymbols = fxSymbolsFor(list.map(q => q.currency), targetCurrency);
+  const fxQuotes = fxSymbols.length
+    ? await fetchJson('/api/market/quote?symbols=' + encodeURIComponent(fxSymbols.join(',')))
+    : [];
+  const rates = { USD: 1 };
+  (Array.isArray(fxQuotes) ? fxQuotes : []).forEach(q => {
+    const match = String(q.symbol || '').match(/^([A-Z]{3})USD=X$/i);
+    if (match && Number(q.price) > 0) rates[match[1].toUpperCase()] = Number(q.price);
+  });
+  return list.map(q => {
+    const nativePrice = Number(q.price);
+    const rate = displayRate(q.currency, targetCurrency, rates);
+    if (!(rate > 0)) throw new Error('Could not convert ' + (q.currency || 'quote') + ' prices to ' + targetCurrency + '.');
+    return Object.assign({}, q, {
+      nativePrice,
+      displayPrice: nativePrice * rate,
+    });
+  });
 };
 async function refreshHistoricalData(force) {
   const identity = holdingHistoryKey();
   const cached = state.chart && state.chart.historical;
   if (!force && cached && cached.key === identity.key) return false;
   if (!identity.from || !state.holdings.length) {
-    state.chart.historical = { version: 3, key: identity.key, from: identity.from, points: [], rate: null };
+    state.chart.historical = { version: 4, key: identity.key, from: identity.from, points: [], rate: null };
     save();
     return true;
   }
@@ -791,7 +815,7 @@ async function refreshHistoricalData(force) {
     const offset = currentPortfolioValue - computedTodayValue;
     points.forEach(point => { point.value = Math.max(0, point.value + offset); });
   }
-  state.chart.historical = { version: 3, key: identity.key, from: identity.from, points, rate: historicalRate };
+  state.chart.historical = { version: 4, key: identity.key, from: identity.from, points, rate: historicalRate };
   save();
   return true;
 }
@@ -1181,7 +1205,8 @@ function manualRefreshPrices() {
     return Object.assign({}, holding, {
       currentPrice: value,
       nativePrice: value,
-      quoteCurrency: DATA.displayCurrency || holding.quoteCurrency,
+      sourceCurrency: DATA.displayCurrency || holding.sourceCurrency || holding.quoteCurrency,
+      quoteCurrency: DATA.displayCurrency || 'GBP',
       quoteAsOf: now,
       changePercent: null,
     });
@@ -1208,7 +1233,7 @@ async function refreshPrices() {
       if (!quote || !Number.isFinite(Number(quote.displayPrice))) return holding;
       updated += 1;
       const changePercent = quote.changePercent == null || !Number.isFinite(Number(quote.changePercent)) ? null : Number(quote.changePercent);
-      return Object.assign({}, holding, { name: holding.name || quote.shortName || quote.longName || holding.symbol, currentPrice: Number(quote.displayPrice), nativePrice: Number(quote.nativePrice), quoteCurrency: quote.currency || holding.quoteCurrency, changePercent, quoteAsOf: quote.asOf || new Date().toISOString() });
+      return Object.assign({}, holding, { name: holding.name || quote.shortName || quote.longName || holding.symbol, currentPrice: Number(quote.displayPrice), nativePrice: Number(quote.nativePrice), sourceCurrency: quote.currency || holding.sourceCurrency || holding.quoteCurrency, quoteCurrency: DATA.displayCurrency || 'GBP', changePercent, quoteAsOf: quote.asOf || new Date().toISOString() });
     });
     const times = state.holdings.map(h => h.quoteAsOf).filter(Boolean).sort();
     state.priceAsOf = times[times.length - 1] || new Date().toISOString();
@@ -1265,7 +1290,7 @@ async function addHolding(existing) {
   const defaultPrice = quote && quote.displayPrice != null ? quote.displayPrice : (selected.currentPrice || '0');
   const priceValue = window.prompt('Current price (' + (quote && quote.currency ? (DATA.displayCurrency || 'GBP') + ', converted from ' + quote.currency : 'captured quote') + ')', defaultPrice);
   const costValue = window.prompt('Average cost per share', selected.avgCost != null ? selected.avgCost : priceValue);
-  const item = Object.assign({}, selected, { symbol: symbolValue, name: nameValue.trim(), shares: number(sharesValue), purchaseDate: purchaseDateValue, currentPrice: number(priceValue), nativePrice: quote ? Number(quote.nativePrice) : selected.nativePrice, quoteCurrency: quote ? quote.currency : selected.quoteCurrency, avgCost: number(costValue), changePercent: quote ? Number(quote.changePercent) || 0 : (selected.changePercent || null), quoteAsOf: quote ? quote.asOf : selected.quoteAsOf });
+  const item = Object.assign({}, selected, { symbol: symbolValue, name: nameValue.trim(), shares: number(sharesValue), purchaseDate: purchaseDateValue, currentPrice: number(priceValue), nativePrice: quote ? Number(quote.nativePrice) : selected.nativePrice, sourceCurrency: quote ? quote.currency : selected.sourceCurrency || selected.quoteCurrency, quoteCurrency: DATA.displayCurrency || 'GBP', avgCost: number(costValue), changePercent: quote ? Number(quote.changePercent) || 0 : (selected.changePercent || null), quoteAsOf: quote ? quote.asOf : selected.quoteAsOf });
   if (existing) state.holdings = state.holdings.map(h => h.symbol === existing.symbol ? item : h); else state.holdings.push(item);
   save();
   try {
