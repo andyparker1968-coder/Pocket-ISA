@@ -1,5 +1,7 @@
 # Pocket ISA + Cloudflare Yahoo Finance relay
 
+App version 2.0.0.2.
+
 This version uses:
 
 ```text

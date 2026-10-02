@@ -1190,13 +1190,17 @@ function wireProjection() {
   const fields = [['projection-start-date','startDate'],['projection-start-value','manualStartValue'],['projection-monthly-deposit','monthlyDeposit'],['projection-growth-rate','annualGrowthRate'],['projection-fee','annualFeePct'],['projection-target-date','targetDate'],['projection-lump-sum-date','lumpSumDate'],['projection-lump-sum-amount','lumpSumAmount']];
   fields.forEach(pair => { const node = input(pair[0]); if (node) node.addEventListener('input', () => { state.projection[pair[1]] = node.value; render(); }); });
 }
-function manualRefreshPrices() {
+function manualRefreshPrices(failureReason) {
   const now = new Date().toISOString();
   let updated = 0;
   state.holdings = state.holdings.map(holding => {
+    const displayCurrency = DATA.displayCurrency || 'GBP';
+    const savedCurrencyMatches = String(holding.quoteCurrency || '').toUpperCase() === displayCurrency;
+    const defaultValue = savedCurrencyMatches && holding.currentPrice != null ? String(holding.currentPrice) : '';
+    const reason = failureReason ? ' Refresh failed: ' + String(failureReason).slice(0, 120) + '.' : '';
     const answer = window.prompt(
-      'Live market data is unavailable. Enter the current ' + (DATA.displayCurrency || 'display-currency') + ' price for ' + holding.symbol + ' (Cancel to leave unchanged):',
-      String(holding.currentPrice == null ? '' : holding.currentPrice)
+      'Live refresh failed.' + reason + ' Enter the current ' + displayCurrency + ' price for ' + holding.symbol + ' (Cancel to leave unchanged):',
+      defaultValue
     );
     if (answer === null) return holding;
     const value = Number.parseFloat(String(answer).replace(/,/g, ''));
@@ -1214,7 +1218,7 @@ function manualRefreshPrices() {
   if (updated) {
     state.priceAsOf = now;
     render();
-    setLiveStatus(updated + ' price' + (updated === 1 ? '' : 's') + ' saved manually · live data unavailable', true);
+    setLiveStatus(updated + ' price' + (updated === 1 ? '' : 's') + ' saved manually · live refresh failed: ' + String(failureReason || 'unavailable').slice(0, 120), true);
   }
   return updated;
 }
@@ -1252,8 +1256,9 @@ async function refreshPrices() {
     const quoteTime = state.priceAsOf ? ' at ' + fmtDateTime(state.priceAsOf) : '';
     setLiveStatus(updated + ' price' + (updated === 1 ? '' : 's') + ' refreshed · ' + marketNote + quoteTime + (historyUpdated ? ' · graph updated' : ' · graph history unchanged'), false);
   } catch (error) {
-    const manuallyUpdated = manualRefreshPrices();
-    if (!manuallyUpdated) setLiveStatus(error && error.message ? error.message : 'Live refresh unavailable', true);
+    const reason = error && error.message ? error.message : 'Live refresh unavailable';
+    const manuallyUpdated = manualRefreshPrices(reason);
+    if (!manuallyUpdated) setLiveStatus(reason, true);
   } finally {
     if (button) { button.disabled = false; button.textContent = 'Refresh prices'; }
   }
@@ -1368,7 +1373,7 @@ window.addEventListener('orientationchange', scheduleChartResize, { passive: tru
 render();
 </script>
 <footer style="box-sizing:border-box;max-width:1200px;margin:24px auto 0;padding:16px 12px;border-top:1px solid rgba(100,110,110,.22);color:var(--muted-fg,var(--muted,#68726d));font:11px/1.5 sans-serif;text-align:center">
-  Copyright &copy; 2026 <a href="https://yourpocketapps.com" style="color:inherit;text-decoration:none">YourPocketApps.com</a>. All rights reserved. &middot; Version 2.0.0.1
+  Copyright &copy; 2026 <a href="https://yourpocketapps.com" style="color:inherit;text-decoration:none">YourPocketApps.com</a>. All rights reserved. &middot; Version 2.0.0.2
 </footer>
 </body>
 </html>
